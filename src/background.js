@@ -23,7 +23,7 @@ api.runtime.onMessage.addListener((msg, _sender, send) => {
   }
   if (msg?.type === 'enable-site') {
     const id = 'site-' + msg.origin;
-    api.scripting.registerContentScripts([{ id, matches: [msg.origin + '/*'], js: ['src/content.js'], runAt: 'document_idle' }])
+    api.scripting.registerContentScripts([{ id, matches: [msg.origin + '/*'], js: ['content.js'], runAt: 'document_idle' }])
       .then(() => send({ ok: true }), err => send({ ok: false, error: String(err) }));
     return true;
   }

@@ -16,7 +16,7 @@ async function show() {
     p.textContent = `${formatPrice(v.history.at(-1).p, v.currency || 'EUR')} (30d low ${formatPrice(low, v.currency || 'EUR')})`;
     li.append(name, p); return li;
   }));
-  if (!items.length) list.innerHTML = '<li>No prices tracked yet.</li>';
+  if (!items.length) { const li = document.createElement('li'); li.textContent = 'No prices tracked yet.'; list.append(li); }
 }
 
 document.getElementById('clear').onclick = async () => {
@@ -30,7 +30,7 @@ document.getElementById('enable').onclick = async () => {
   const granted = await api.permissions.request({ origins: [origin + '/*'] });
   if (!granted) return;
   const res = await api.runtime.sendMessage({ type: 'enable-site', origin });
-  await api.scripting.executeScript({ target: { tabId: tab.id }, files: ['src/content.js'] });
+  await api.scripting.executeScript({ target: { tabId: tab.id }, files: ['content.js'] });
   document.getElementById('enable').textContent = res?.ok ? 'Enabled on this site' : 'Already enabled';
 };
 

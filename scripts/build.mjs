@@ -18,8 +18,7 @@ export function manifest(browser) {
     permissions: ['storage', 'scripting', 'activeTab'],
     host_permissions: SHOP_MATCHES,
     optional_host_permissions: ['https://*/*'],
-    content_scripts: [{ matches: SHOP_MATCHES, js: ['src/content.js'], run_at: 'document_idle' }],
-    web_accessible_resources: [{ resources: ['src/content-main.js', 'src/core/*.js'], matches: ['https://*/*'] }],
+    content_scripts: [{ matches: SHOP_MATCHES, js: ['content.js'], run_at: 'document_idle' }],
   };
   if (browser === 'chrome') m.background = { service_worker: 'src/background.js', type: 'module' };
   else {
@@ -28,6 +27,13 @@ export function manifest(browser) {
       data_collection_permissions: { required: ['none'] } } };
   }
   return m;
+}
+
+// Content scripts cannot be ES modules, so inline the core modules into one classic script.
+export function bundleContent() {
+  const order = ['price', 'history', 'verdict', 'sparkline', 'extract'].map(n => `src/core/${n}.js`).concat('src/content-main.js');
+  const body = order.map(f => `// ${f}\n` + readFileSync(f, 'utf8').replace(/^import .*$/gm, '').replace(/^export /gm, '')).join('\n');
+  return `(() => {\n${body}\n})();\n`;
 }
 
 function files(dir) {
@@ -56,6 +62,7 @@ function zip(entries) {
 if (import.meta.url === `file://${process.argv[1]}`) {
   rmSync('dist', { recursive: true, force: true }); mkdirSync('dist');
   const src = [...files('src'), ...files('icons'), 'LICENSE'].map(f => [f, readFileSync(f)]);
+  src.push(['content.js', Buffer.from(bundleContent())]);
   for (const b of ['chrome', 'firefox']) {
     const out = `dist/truediscount-${b}-${pkg.version}.zip`;
     writeFileSync(out, zip([['manifest.json', Buffer.from(JSON.stringify(manifest(b), null, 2))], ...src]));
