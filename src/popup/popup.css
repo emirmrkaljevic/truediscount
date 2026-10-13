@@ -1,0 +1,7 @@
+body{font:13px system-ui,sans-serif;width:320px;margin:12px;color:#0f172a}
+h1{font-size:16px;margin:0 0 4px}h2{font-size:13px;margin:12px 0 4px}
+.s{color:#64748b;font-size:11px;margin:0 0 8px}ul{list-style:none;padding:0;margin:0;max-height:260px;overflow:auto}
+li{padding:4px 0;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;gap:8px}
+li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+button{margin-top:6px;padding:5px 10px;border:1px solid #cbd5e1;background:#f8fafc;border-radius:6px;cursor:pointer}
+.danger{color:#b91c1c}
