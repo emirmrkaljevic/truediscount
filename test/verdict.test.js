@@ -7,7 +7,7 @@ const now = Date.UTC(2026, 10, 27, 12);
 const hist = (pairs) => pairs.reduce((h, [d, p]) => addPoint(h, p, now - d * DAY), []);
 
 test('keeps lowest price per day and drops old points', () => {
-  let h = addPoint([], 10, now); h = addPoint(h, 8, now); h = addPoint(h, 5, now - 200 * DAY);
+  let h = addPoint([], 5, now - 200 * DAY); h = addPoint(h, 10, now); h = addPoint(h, 8, now);
   assert.equal(h.length, 1); assert.equal(h[0].p, 8);
 });
 
