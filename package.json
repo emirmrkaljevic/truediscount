@@ -3,6 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "scripts": { "test": "node --test test/", "build": "node scripts/build.mjs" },
-  "license": "MIT"
+  "scripts": {
+    "test": "node --test test/",
+    "build": "node scripts/build.mjs"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "linkedom": "^0.18.13"
+  }
 }
