@@ -48,7 +48,7 @@ async function run() {
   if (sig === lastSig) return;
   lastSig = sig;
   const { history } = await api.runtime.sendMessage({ type: 'record', key, info: { ...info, host: location.hostname } });
-  render(info, evaluate({ price: info.price, oldPrice: info.oldPrice, history }), history);
+  render(info, evaluate({ price: info.price, oldPrice: info.oldPrice, oldKind: info.oldKind, history }), history);
 }
 
 run();

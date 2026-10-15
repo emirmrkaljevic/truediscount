@@ -1,12 +1,12 @@
 import { lowestInWindow, trackedSince, DAY } from './history.js';
 
 // status: 'real' | 'inflated' | 'higher' | 'nodata' | 'nodiscount'
-export function evaluate({ price, oldPrice, history = [], now = Date.now() }) {
+export function evaluate({ price, oldPrice, oldKind = 'previous', history = [], now = Date.now() }) {
   const low30 = lowestInWindow(history, now, 30);
   const since = trackedSince(history);
   const days = since ? Math.floor((now - since) / DAY) : 0;
   const claimed = oldPrice && oldPrice > price ? Math.round((1 - price / oldPrice) * 100) : 0;
-  const res = { price, oldPrice, low30, days, claimedPct: claimed, realPct: null };
+  const res = { price, oldPrice, oldKind, low30, days, claimedPct: claimed, realPct: null };
   if (low30 == null) return { ...res, status: claimed ? 'nodata' : 'nodiscount' };
   res.realPct = Math.round((1 - price / low30) * 100);
   if (price > low30) return { ...res, status: 'higher' };
@@ -16,6 +16,11 @@ export function evaluate({ price, oldPrice, history = [], now = Date.now() }) {
 }
 
 export function message(v, fmt = x => x.toFixed(2)) {
+  const base = baseMessage(v, fmt);
+  return v.oldKind === 'rrp' && v.claimedPct ? `${base} Note: the crossed-out price is the manufacturer's RRP, not an earlier shop price.` : base;
+}
+
+function baseMessage(v, fmt) {
   switch (v.status) {
     case 'real': return `Discount looks real: lowest price we saw in 30 days was ${fmt(v.low30)}.`;
     case 'inflated': return `Shop claims -${v.claimedPct}%, but we saw ${fmt(v.low30)} in the last 30 days. Real saving: ${Math.max(v.realPct, 0)}%.`;
