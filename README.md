@@ -9,17 +9,21 @@ Under the EU Omnibus Directive (2019/2161), a shop announcing a price reduction 
 - 🟠 **Cheaper recently**: today's price is higher than the 30-day low
 - Mini price graph for every tracked product
 
+![truediscount flags a -50% Black Friday deal that was the same price two weeks earlier](docs/screenshot.png)
+
 ## Privacy
 
 Local-first. Prices are stored only in your browser (`storage.local`). No account, no analytics, no network requests, no personal data. Clear everything from the popup at any time.
 
 ## Supported shops
 
-Built-in: Amazon (DE, FR, IT, ES, NL, PL, SE, BE), Zalando, MediaMarkt / Saturn, Otto, eMAG, Allegro, bol.com.
+Built-in (MediaMarkt and Zalando checked against live product pages in October 2026): Amazon (DE, FR, IT, ES, NL, PL, SE, BE), Zalando, MediaMarkt / Saturn, Otto, eMAG, Allegro, bol.com.
 
 Any other shop: open the popup and click **Enable on this site**. Works on pages with schema.org `Product` data (JSON-LD), Open Graph price tags or common strike-through price markup.
 
 ## Limitations
+
+When a shop crosses out the manufacturer's recommended retail price (RRP/UVP) rather than its own earlier price, the badge says so: RRP comparisons are not covered by the 30-day rule.
 
 History starts when you first visit a product, so a fresh install has no data yet. The verdict is informational and based only on prices seen in your browser; it is not a legal assessment.
 
