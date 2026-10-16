@@ -9,10 +9,11 @@ const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
 export function manifest(browser) {
   const m = {
     manifest_version: 3,
-    name: 'truediscount: is that discount real?',
+    name: '__MSG_extName__',
+    default_locale: 'en',
     short_name: 'truediscount',
     version: pkg.version,
-    description: 'Shows if a shop discount is real by comparing the old price with the lowest price of the last 30 days (EU Omnibus rule).',
+    description: '__MSG_extDescription__',
     icons: { 16: 'icons/icon16.png', 32: 'icons/icon32.png', 48: 'icons/icon48.png', 128: 'icons/icon128.png' },
     action: { default_popup: 'src/popup/popup.html', default_icon: { 16: 'icons/icon16.png', 32: 'icons/icon32.png' } },
     permissions: ['storage', 'scripting', 'activeTab'],
@@ -31,7 +32,7 @@ export function manifest(browser) {
 
 // Content scripts cannot be ES modules, so inline the core modules into one classic script.
 export function bundleContent() {
-  const order = ['price', 'history', 'verdict', 'sparkline', 'extract'].map(n => `src/core/${n}.js`).concat('src/content-main.js');
+  const order = ['price', 'history', 'strings', 'verdict', 'sparkline', 'extract'].map(n => `src/core/${n}.js`).concat('src/content-main.js');
   const body = order.map(f => `// ${f}\n` + readFileSync(f, 'utf8').replace(/^import .*$/gm, '').replace(/^export /gm, '')).join('\n');
   return `(() => {\n${body}\n})();\n`;
 }
@@ -61,7 +62,7 @@ function zip(entries) {
 
 if (import.meta.url === `file://${process.argv[1]}`) {
   rmSync('dist', { recursive: true, force: true }); mkdirSync('dist');
-  const src = [...files('src'), ...files('icons'), 'LICENSE'].map(f => [f, readFileSync(f)]);
+  const src = [...files('src'), ...files('icons'), ...files('_locales'), 'LICENSE'].map(f => [f, readFileSync(f)]);
   src.push(['content.js', Buffer.from(bundleContent())]);
   for (const b of ['chrome', 'firefox']) {
     const out = `dist/truediscount-${b}-${pkg.version}.zip`;

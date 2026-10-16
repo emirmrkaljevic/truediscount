@@ -1,0 +1,121 @@
+{
+  "extName": {
+    "message": "truediscount: Ist der Rabatt echt?"
+  },
+  "extDescription": {
+    "message": "Zeigt, ob ein Rabatt echt ist: Vergleich des alten Preises mit dem niedrigsten Preis der letzten 30 Tage (EU-Omnibus-Regel)."
+  },
+  "labelReal": {
+    "message": "Echter Rabatt"
+  },
+  "labelInflated": {
+    "message": "Aufgeblähter Rabatt"
+  },
+  "labelHigher": {
+    "message": "Kürzlich günstiger"
+  },
+  "labelNodata": {
+    "message": "Noch kein Verlauf"
+  },
+  "labelNodiscount": {
+    "message": "Preis wird verfolgt"
+  },
+  "msgReal": {
+    "message": "Rabatt wirkt echt: der niedrigste Preis der letzten 30 Tage war $p1$.",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      }
+    }
+  },
+  "msgInflated": {
+    "message": "Der Shop wirbt mit -$p1$%, aber wir haben in den letzten 30 Tagen $p2$ gesehen. Echte Ersparnis: $p3$%.",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      },
+      "p2": {
+        "content": "$2"
+      },
+      "p3": {
+        "content": "$3"
+      }
+    }
+  },
+  "msgHigher": {
+    "message": "Kürzlich war es günstiger: $p1$ in den letzten 30 Tagen.",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      }
+    }
+  },
+  "msgNodata": {
+    "message": "Der Shop wirbt mit -$p1$%. Noch kein Verlauf, die Aufzeichnung beginnt jetzt.",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      }
+    }
+  },
+  "msgLowest": {
+    "message": "Niedrigster Preis der letzten 30 Tage: $p1$.",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      }
+    }
+  },
+  "msgTracking": {
+    "message": "Dieser Preis wird ab heute aufgezeichnet."
+  },
+  "msgRrp": {
+    "message": "Hinweis: Der durchgestrichene Preis ist die UVP des Herstellers, kein früherer Shop-Preis."
+  },
+  "basedOnDays": {
+    "message": "Basiert auf Preisen, die dieser Browser in $p1$ Tag(en) gesehen hat.",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      }
+    }
+  },
+  "basedOn": {
+    "message": "Basiert auf Preisen, die dieser Browser gesehen hat."
+  },
+  "close": {
+    "message": "Schließen"
+  },
+  "popupPrivacy": {
+    "message": "Preise werden nur in diesem Browser gespeichert. Es wird nichts gesendet."
+  },
+  "popupEnable": {
+    "message": "Auf dieser Seite aktivieren"
+  },
+  "popupEnabled": {
+    "message": "Auf dieser Seite aktiviert"
+  },
+  "popupAlready": {
+    "message": "Bereits aktiviert"
+  },
+  "popupRecent": {
+    "message": "Zuletzt verfolgt"
+  },
+  "popupEmpty": {
+    "message": "Noch keine Preise verfolgt."
+  },
+  "popupLow": {
+    "message": "30-Tage-Tief $p1$",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupClear": {
+    "message": "Alle Daten löschen"
+  },
+  "popupConfirmClear": {
+    "message": "Den gesamten gespeicherten Preisverlauf löschen?"
+  }
+}

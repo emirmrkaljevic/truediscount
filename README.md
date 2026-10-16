@@ -15,11 +15,15 @@ Under the EU Omnibus Directive (2019/2161), a shop announcing a price reduction 
 
 Local-first. Prices are stored only in your browser (`storage.local`). No account, no analytics, no network requests, no personal data. Clear everything from the popup at any time.
 
+## Languages
+
+English and German. The extension follows your browser language. Translations are in `_locales/<lang>/messages.json`; pull requests for more EU languages are welcome.
+
 ## Supported shops
 
 Built-in (MediaMarkt and Zalando checked against live product pages in October 2026): Amazon (DE, FR, IT, ES, NL, PL, SE, BE), Zalando, MediaMarkt / Saturn, Otto, eMAG, Allegro, bol.com.
 
-Any other shop: open the popup and click **Enable on this site**. Works on pages with schema.org `Product` data (JSON-LD), Open Graph price tags or common strike-through price markup.
+Any other shop: open the popup and click **Enable on this site**. Works on pages with schema.org `Product` data (JSON-LD, including `StrikethroughPrice` / `ListPrice`), Open Graph price tags, strike-through markup, or labelled reference prices such as "statt", "UVP", "van", "przed obniżką" or "PRP".
 
 ## Limitations
 

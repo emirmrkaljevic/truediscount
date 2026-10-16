@@ -1,3 +1,4 @@
+import { makeT } from './strings.js';
 import { lowestInWindow, trackedSince, DAY } from './history.js';
 
 // status: 'real' | 'inflated' | 'higher' | 'nodata' | 'nodiscount'
@@ -15,17 +16,17 @@ export function evaluate({ price, oldPrice, oldKind = 'previous', history = [], 
   return { ...res, status: 'real' };
 }
 
-export function message(v, fmt = x => x.toFixed(2)) {
-  const base = baseMessage(v, fmt);
-  return v.oldKind === 'rrp' && v.claimedPct ? `${base} Note: the crossed-out price is the manufacturer's RRP, not an earlier shop price.` : base;
+export function message(v, fmt = x => x.toFixed(2), t = makeT()) {
+  const base = baseMessage(v, fmt, t);
+  return v.oldKind === 'rrp' && v.claimedPct ? `${base} ${t('msgRrp')}` : base;
 }
 
-function baseMessage(v, fmt) {
+function baseMessage(v, fmt, t) {
   switch (v.status) {
-    case 'real': return `Discount looks real: lowest price we saw in 30 days was ${fmt(v.low30)}.`;
-    case 'inflated': return `Shop claims -${v.claimedPct}%, but we saw ${fmt(v.low30)} in the last 30 days. Real saving: ${Math.max(v.realPct, 0)}%.`;
-    case 'higher': return `It was cheaper recently: ${fmt(v.low30)} in the last 30 days.`;
-    case 'nodata': return `Shop claims -${v.claimedPct}%. No history yet; tracking starts now.`;
-    default: return v.low30 != null ? `Lowest price seen in 30 days: ${fmt(v.low30)}.` : 'Tracking this price from today.';
+    case 'real': return t('msgReal', [fmt(v.low30)]);
+    case 'inflated': return t('msgInflated', [v.claimedPct, fmt(v.low30), Math.max(v.realPct, 0)]);
+    case 'higher': return t('msgHigher', [fmt(v.low30)]);
+    case 'nodata': return t('msgNodata', [v.claimedPct]);
+    default: return v.low30 != null ? t('msgLowest', [fmt(v.low30)]) : t('msgTracking');
   }
 }

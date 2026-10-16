@@ -3,10 +3,12 @@ import { evaluate, message } from './core/verdict.js';
 import { sparkline } from './core/sparkline.js';
 import { formatPrice } from './core/price.js';
 import { addPoint } from './core/history.js';
+import { makeT } from './core/strings.js';
 
 const api = globalThis.browser ?? globalThis.chrome;
 const COLORS = { real: '#15803d', inflated: '#b91c1c', higher: '#c2410c', nodata: '#475569', nodiscount: '#475569' };
-const LABELS = { real: 'Real discount', inflated: 'Inflated discount', higher: 'Cheaper recently', nodata: 'No history yet', nodiscount: 'Price tracked' };
+const t = makeT(api.i18n?.getMessage?.bind(api.i18n));
+const LABEL_KEYS = { real: 'labelReal', inflated: 'labelInflated', higher: 'labelHigher', nodata: 'labelNodata', nodiscount: 'labelNodiscount' };
 
 const TEMPLATE = `
     <div hidden></div><style>
@@ -24,16 +26,18 @@ function render(info, v, history) {
   const host = document.createElement('div');
   host.id = 'truediscount-host';
   const root = host.attachShadow({ mode: 'closed' });
-  const fmt = x => formatPrice(x, info.currency || 'EUR');
+  const fmt = x => formatPrice(x, info.currency || 'EUR', document.documentElement.lang || navigator.language);
   const box = document.createElement('div');
   box.className = 'box';
   box.style.setProperty('--c', COLORS[v.status]);
   box.append(...new DOMParser().parseFromString(TEMPLATE, 'text/html').body.childNodes);
-    box.querySelector('.t span').textContent = LABELS[v.status];
-  box.querySelector('.m').textContent = message(v, fmt);
+    box.querySelector('.t span').textContent = t(LABEL_KEYS[v.status]);
+  box.querySelector('.m').textContent = message(v, fmt, t);
   const svg = sparkline(addPoint(history.map(p => ({ ...p })), info.price), { color: COLORS[v.status] });
   if (svg) box.querySelector('.g').append(new DOMParser().parseFromString(svg, 'image/svg+xml').documentElement);
-  box.querySelector('.s').textContent = v.days ? `Based on prices seen in this browser over ${v.days} day(s).` : 'Based on prices seen in this browser.';
+  box.querySelector('.s').textContent = v.days ? t('basedOnDays', [v.days]) : t('basedOn');
+  box.querySelector('button').title = t('close');
+  box.querySelector('button').setAttribute('aria-label', t('close'));
   box.querySelector('button').onclick = () => host.remove();
   root.appendChild(box);
   document.documentElement.appendChild(host);
@@ -53,5 +57,5 @@ async function run() {
 
 run();
 // Single-page shops change the product without reloading.
-let t; new MutationObserver(() => { clearTimeout(t); t = setTimeout(run, 1200); })
+let timer; new MutationObserver(() => { clearTimeout(timer); timer = setTimeout(run, 1200); })
   .observe(document.body, { childList: true, subtree: true });
