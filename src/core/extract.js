@@ -32,8 +32,15 @@ export function fromJsonLd(doc) {
   for (const p of products) {
     let offer = [].concat(p.offers || [])[0];
     if (offer && offer['@type'] === 'AggregateOffer') offer = { price: offer.lowPrice, priceCurrency: offer.priceCurrency };
-    const price = parsePrice(offer?.price ?? offer?.priceSpecification?.price);
-    if (price != null) return { name: p.name, sku: p.sku || p.gtin13 || p.mpn || null, price, currency: offer.priceCurrency || null };
+    const specs = [].concat(offer?.priceSpecification || []);
+    const sale = specs.find(x => !x.priceType || /SalePrice/i.test(x.priceType));
+    const list = specs.find(x => /StrikethroughPrice|ListPrice|MSRP/i.test(x.priceType || ''));
+    const price = parsePrice(offer?.price ?? sale?.price);
+    if (price != null) return {
+      name: p.name, sku: p.sku || p.gtin13 || p.mpn || null, price,
+      currency: offer.priceCurrency || sale?.priceCurrency || null,
+      listPrice: parsePrice(list?.price), listKind: /MSRP/i.test(list?.priceType || '') ? 'rrp' : 'previous',
+    };
   }
   return null;
 }
@@ -66,13 +73,18 @@ export const ADAPTERS = [
   { id: 'bol', host: /(^|\.)bol\.com$/, old: ['.buy-block__list-price', '[data-test="list-price"]'] },
 ];
 
-const GENERIC_OLD = ['del', 's', '[class*="old-price"]', '[class*="oldPrice"]', '[class*="price-old"]', '[class*="was-price"]', '[class*="strike"]', '[class*="crossed"]'];
+// Text labels shops put next to a reference price, in the main EU languages.
+const OLD_LABEL = /(?<!\p{L})(statt|vorher|bisher|uvp|was|previously|rrp|list price|prix (?:de référence|barré)|avant|prezzo (?:consigliato|precedente)|antes|pvpr|van|adviesprijs|przed obniżką|cena regularna|pret (?:vechi|întreg)|prp|eredeti ár|lowest price)(?!\p{L})/iu;
+const GENERIC_PRICE = ['[itemprop="price"]', '[data-price]', '[class*="current-price"]', '[class*="sale-price"]', '[class*="final-price"]', '[class*="product-price"]'];
+
+const GENERIC_OLD = ['[style*="line-through"]', '[data-old-price]', '[class*="regular-price"]', '[class*="list-price"]', 'del', 's', '[class*="old-price"]', '[class*="oldPrice"]', '[class*="price-old"]', '[class*="was-price"]', '[class*="strike"]', '[class*="crossed"]'];
 
 export function extract(doc, host) {
   const adapter = ADAPTERS.find(a => a.host.test(host)) || null;
   const base = fromJsonLd(doc) || fromMicrodata(doc) || {};
   let price = base.price ?? null;
-  if (adapter?.price) price = parsePrice(text(doc, adapter.price)) ?? price;
+  if (adapter?.price) price = firstPrice(text(doc, adapter.price)) ?? price;
+  if (price == null) price = genericPrice(doc);
   if (price == null) return null;
   const sels = [...(adapter?.old || []), ...GENERIC_OLD];
   let oldPrice = null, oldKind = null;
@@ -88,8 +100,34 @@ export function extract(doc, host) {
     }
     if (oldPrice) break;
   }
+  if (!oldPrice) {
+    const labelled = labelledOldPrice(doc, price);
+    if (labelled) [oldPrice, oldKind] = labelled;
+  }
+  if (!oldPrice && base.listPrice > price) [oldPrice, oldKind] = [base.listPrice, base.listKind];
   const name = (adapter?.name && text(doc, adapter.name)?.trim()) || base.name || null;
   return { adapter: adapter?.id || 'generic', name, sku: base.sku || null, price, oldPrice, oldKind, currency: base.currency || 'EUR' };
+}
+
+function genericPrice(doc) {
+  for (const s of GENERIC_PRICE) {
+    const el = doc.querySelector(s);
+    if (!el || el.closest('del, s')) continue;
+    const v = parsePrice(el.getAttribute('content') || el.getAttribute('data-price')) ?? firstPrice(el.textContent);
+    if (v) return v;
+  }
+  return null;
+}
+
+// Short elements such as "statt 49,99 €" or "UVP: 299 €".
+function labelledOldPrice(doc, price) {
+  for (const el of doc.querySelectorAll('span, p, div, small, li')) {
+    const t = el.textContent;
+    if (t.length > 60 || !OLD_LABEL.test(t)) continue;
+    const v = firstPrice(t.replace(OLD_LABEL, ' '));
+    if (v && v > price && v < price * 20) return [v, /uvp|rrp|consigliato|pvpr|adviesprijs|prp/i.test(t) ? 'rrp' : 'previous'];
+  }
+  return null;
 }
 
 export function productKey(url) {
