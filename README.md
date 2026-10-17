@@ -49,8 +49,12 @@ Load unpacked: unzip a package and use `chrome://extensions` (Developer mode) or
 
 Adding a shop: add an adapter to `src/core/extract.js`, its host to `src/hosts.js`, and a fixture test.
 
-## Support
+## Support my work
+
+[![Get a SkinToScan pack](https://img.shields.io/badge/%E2%98%95_Support_me-Get_a_SkinToScan_pack-ff5f5f?style=for-the-badge)](https://skintoscan.com/#packages)
+
+If you find this useful, you can support me by getting a SkinToScan pack, my other project. It's a one-time purchase that directly funds my open-source work.
 
 Website: https://emirmrkaljevic.github.io/truediscount/
 
-truediscount is free and open source (MIT). If it saves you money, consider [GitHub Sponsors](https://github.com/sponsors/emirmrkaljevic). A Pro version with price-drop alerts, longer history and export is planned.
+truediscount is free and open source (MIT). A Pro version with price-drop alerts, longer history and export is planned.
