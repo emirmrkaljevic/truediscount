@@ -51,4 +51,6 @@ Adding a shop: add an adapter to `src/core/extract.js`, its host to `src/hosts.j
 
 ## Support
 
+Website: https://emirmrkaljevic.github.io/truediscount/
+
 truediscount is free and open source (MIT). If it saves you money, consider [GitHub Sponsors](https://github.com/sponsors/emirmrkaljevic). A Pro version with price-drop alerts, longer history and export is planned.
