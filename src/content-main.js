@@ -35,7 +35,7 @@ function render(info, v, history) {
   box.querySelector('.m').textContent = message(v, fmt, t);
   const svg = sparkline(addPoint(history.map(p => ({ ...p })), info.price), { color: COLORS[v.status] });
   if (svg) box.querySelector('.g').append(new DOMParser().parseFromString(svg, 'image/svg+xml').documentElement);
-  box.querySelector('.s').textContent = v.days ? t('basedOnDays', [v.days]) : t('basedOn');
+  box.querySelector('.s').textContent = v.source === 'shop' && !v.days ? t('basedOnShop') : v.days ? t('basedOnDays', [v.days]) : t('basedOn');
   box.querySelector('button').title = t('close');
   box.querySelector('button').setAttribute('aria-label', t('close'));
   box.querySelector('button').onclick = () => host.remove();
@@ -48,11 +48,11 @@ async function run() {
   const info = extract(document, location.hostname);
   if (!info) return;
   const key = productKey(location.href);
-  const sig = key + info.price + info.oldPrice;
+  const sig = key + info.price + info.oldPrice + info.shopLow30;
   if (sig === lastSig) return;
   lastSig = sig;
   const { history } = await api.runtime.sendMessage({ type: 'record', key, info: { ...info, host: location.hostname } });
-  render(info, evaluate({ price: info.price, oldPrice: info.oldPrice, oldKind: info.oldKind, history }), history);
+  render(info, evaluate({ price: info.price, oldPrice: info.oldPrice, oldKind: info.oldKind, shopLow30: info.shopLow30, history }), history);
 }
 
 run();

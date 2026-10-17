@@ -11,6 +11,12 @@ Under the EU Omnibus Directive (2019/2161), a shop announcing a price reduction 
 
 ![truediscount flags a -50% Black Friday deal that was the same price two weeks earlier](docs/screenshot.png)
 
+### Works on the first visit
+
+Many EU shops already print their own "lowest price in the last 30 days" next to a sale. truediscount reads that disclosure (in English, German, French, Italian, Spanish, Dutch, Polish, Romanian, Czech, Croatian and more) and compares it with the crossed-out price, so you get a verdict before any history has been recorded.
+
+![First visit: the shop's own 30-day low equals today's price, so the -50% is inflated](docs/first-visit.png)
+
 ## Privacy
 
 Local-first. Prices are stored only in your browser (`storage.local`). No account, no analytics, no network requests, no personal data. Clear everything from the popup at any time.
@@ -29,7 +35,7 @@ Any other shop: open the popup and click **Enable on this site**. Works on pages
 
 When a shop crosses out the manufacturer's recommended retail price (RRP/UVP) rather than its own earlier price, the badge says so: RRP comparisons are not covered by the 30-day rule.
 
-History starts when you first visit a product, so a fresh install has no data yet. The verdict is informational and based only on prices seen in your browser; it is not a legal assessment.
+Your own history starts when you first visit a product. Until then the verdict relies on the shop's 30-day disclosure, when there is one. The verdict is informational and based only on prices seen in your browser; it is not a legal assessment.
 
 ## Development
 

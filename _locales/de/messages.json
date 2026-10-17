@@ -117,5 +117,25 @@
   },
   "popupConfirmClear": {
     "message": "Den gesamten gespeicherten Preisverlauf löschen?"
+  },
+  "msgSourceShop": {
+    "message": "(Diesen 30-Tage-Tiefstpreis gibt der Shop selbst an.)"
+  },
+  "basedOnShop": {
+    "message": "Basiert auf dem vom Shop angegebenen 30-Tage-Tiefstpreis."
+  },
+  "msgInflatedShop": {
+    "message": "Der Shop wirbt mit -$p1$%, gibt aber selbst $p2$ als niedrigsten Preis der letzten 30 Tage an. Echte Ersparnis: $p3$%.",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      },
+      "p2": {
+        "content": "$2"
+      },
+      "p3": {
+        "content": "$3"
+      }
+    }
   }
 }

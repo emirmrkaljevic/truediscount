@@ -74,7 +74,7 @@ export const ADAPTERS = [
 ];
 
 // Text labels shops put next to a reference price, in the main EU languages.
-const OLD_LABEL = /(?<!\p{L})(statt|vorher|bisher|uvp|was|previously|rrp|list price|prix (?:de référence|barré)|avant|prezzo (?:consigliato|precedente)|antes|pvpr|van|adviesprijs|przed obniżką|cena regularna|pret (?:vechi|întreg)|prp|eredeti ár|lowest price)(?!\p{L})/iu;
+const OLD_LABEL = /(?<!\p{L})(statt|vorher|bisher|uvp|was|previously|rrp|list price|prix (?:de référence|barré)|avant|prezzo (?:consigliato|precedente)|antes|pvpr|van|adviesprijs|przed obniżką|cena regularna|pret (?:vechi|întreg)|prp|eredeti ár)(?!\p{L})/iu;
 const GENERIC_PRICE = ['[itemprop="price"]', '[data-price]', '[class*="current-price"]', '[class*="sale-price"]', '[class*="final-price"]', '[class*="product-price"]'];
 
 const GENERIC_OLD = ['[style*="line-through"]', '[data-old-price]', '[class*="regular-price"]', '[class*="list-price"]', 'del', 's', '[class*="old-price"]', '[class*="oldPrice"]', '[class*="price-old"]', '[class*="was-price"]', '[class*="strike"]', '[class*="crossed"]'];
@@ -106,7 +106,8 @@ export function extract(doc, host) {
   }
   if (!oldPrice && base.listPrice > price) [oldPrice, oldKind] = [base.listPrice, base.listKind];
   const name = (adapter?.name && text(doc, adapter.name)?.trim()) || base.name || null;
-  return { adapter: adapter?.id || 'generic', name, sku: base.sku || null, price, oldPrice, oldKind, currency: base.currency || 'EUR' };
+  const shopLow30 = shopLowest30(doc, price);
+  return { adapter: adapter?.id || 'generic', name, sku: base.sku || null, price, oldPrice, oldKind, shopLow30, currency: base.currency || 'EUR' };
 }
 
 function genericPrice(doc) {
@@ -126,6 +127,35 @@ function labelledOldPrice(doc, price) {
     if (t.length > 60 || !OLD_LABEL.test(t)) continue;
     const v = firstPrice(t.replace(OLD_LABEL, ' '));
     if (v && v > price && v < price * 20) return [v, /uvp|rrp|consigliato|pvpr|adviesprijs|prp/i.test(t) ? 'rrp' : 'previous'];
+  }
+  return null;
+}
+
+// Omnibus disclosures: "Niedrigster Preis der letzten 30 Tage: 49,99 €" and the like.
+const LOW_WORD = /(lowest|30-day low|niedrigste|tiefstpreis|günstigste|bestpreis|le plus bas|più basso|más bajo|mais baixo|laagste|najniższa|cel mai mic|nejnižší|najniža|najnižja|legalacsonyabb|lägsta|laveste|alhaisin|nižšia|nejnižší)/iu;
+const DAYS_30 = /30[\s\u00a0-]*(?:tage?n?|days?|derniers jours|jours|giorni|días|dias|dagen|dagarna|dage|päivän|dni|dní|dnů|de zile|zile|dana|dni|nap)/giu;
+const SKIP = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEMPLATE']);
+
+const isLow30Label = t => t.length <= 160 && LOW_WORD.test(t) && /30/.test(t);
+const priceIn = t => firstPrice(t.replace(DAYS_30, ' ').replace(/\(\s*30\s*\)/g, ' '));
+
+export function shopLowest30(doc, price) {
+  const ok = v => v && v >= price * 0.2 && v <= price * 20;
+  const clean = el => el.textContent.replace(/\s+/g, ' ').trim();
+  // Walk text nodes only and climb to the smallest element holding the whole label.
+  const walker = doc.createTreeWalker(doc.body, 4);
+  const seen = new Set();
+  for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+    if (!LOW_WORD.test(node.nodeValue)) continue;
+    let el = node.parentElement;
+    if (!el || SKIP.has(el.tagName)) continue;
+    for (let i = 0; i < 3 && el.parentElement && !isLow30Label(clean(el)) && clean(el.parentElement).length <= 160; i++) el = el.parentElement;
+    if (seen.has(el) || !isLow30Label(clean(el))) continue;
+    seen.add(el);
+    let v = priceIn(clean(el));
+    if (!ok(v) && el.nextElementSibling) v = priceIn(el.nextElementSibling.textContent);
+    if (!ok(v) && el.parentElement && el.parentElement.textContent.length <= 200) v = priceIn(el.parentElement.textContent);
+    if (ok(v)) return v;
   }
   return null;
 }

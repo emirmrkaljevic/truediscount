@@ -117,5 +117,25 @@
   },
   "popupConfirmClear": {
     "message": "Delete all stored price history?"
+  },
+  "msgSourceShop": {
+    "message": "(The shop itself discloses this 30-day lowest price.)"
+  },
+  "basedOnShop": {
+    "message": "Based on the shop's own 30-day lowest price disclosure."
+  },
+  "msgInflatedShop": {
+    "message": "Shop claims -$p1$%, but its own lowest price in the last 30 days was $p2$. Real saving: $p3$%.",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      },
+      "p2": {
+        "content": "$2"
+      },
+      "p3": {
+        "content": "$3"
+      }
+    }
   }
 }
