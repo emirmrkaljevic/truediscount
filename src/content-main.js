@@ -56,6 +56,13 @@ async function run() {
 }
 
 run();
+
+// Answer the popup's "Report a problem" request with what was detected on this page.
+api.runtime.onMessage.addListener((msg, _sender, send) => {
+  if (msg?.type !== 'diagnose') return;
+  const info = extract(document, location.hostname);
+  send(info && { adapter: info.adapter, price: info.price, oldPrice: info.oldPrice, shopLow30: info.shopLow30 });
+});
 // Single-page shops change the product without reloading.
 let timer; new MutationObserver(() => { clearTimeout(timer); timer = setTimeout(run, 1200); })
   .observe(document.body, { childList: true, subtree: true });

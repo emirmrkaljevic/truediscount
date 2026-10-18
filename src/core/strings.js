@@ -27,6 +27,8 @@ export const EN = {
   "popupRecent": "Recently tracked",
   "popupEmpty": "No prices tracked yet.",
   "popupLow": "30d low $1",
+  "popupReport": "Report a problem",
+  "popupReportHint": "Opens a GitHub issue with only the shop's domain and what was detected. You can review it before sending.",
   "popupClear": "Clear all data",
   "popupConfirmClear": "Delete all stored price history?"
 };

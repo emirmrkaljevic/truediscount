@@ -1,6 +1,7 @@
 import { formatPrice } from '../core/price.js';
 import { lowestInWindow } from '../core/history.js';
 import { makeT } from '../core/strings.js';
+import { reportUrl, summarizeDetection } from '../core/report.js';
 
 const api = globalThis.browser ?? globalThis.chrome;
 const list = document.getElementById('list');
@@ -35,6 +36,16 @@ document.getElementById('enable').onclick = async () => {
   const res = await api.runtime.sendMessage({ type: 'enable-site', origin });
   await api.scripting.executeScript({ target: { tabId: tab.id }, files: ['content.js'] });
   document.getElementById('enable').textContent = t(res?.ok ? 'popupEnabled' : 'popupAlready');
+};
+
+document.getElementById('report').onclick = async () => {
+  const [tab] = await api.tabs.query({ active: true, currentWindow: true });
+  let info;
+  try { info = await api.tabs.sendMessage(tab.id, { type: 'diagnose' }); } catch { info = undefined; }
+  const browser = navigator.userAgent.includes('Firefox') ? 'Firefox' : 'Chrome';
+  const url = reportUrl({ pageUrl: tab?.url || '', version: api.runtime.getManifest().version, browser, detection: summarizeDetection(info) });
+  await api.tabs.create({ url });
+  window.close();
 };
 
 show();

@@ -5,3 +5,4 @@ li{padding:4px 0;border-bottom:1px solid #e2e8f0;display:flex;justify-content:sp
 li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 button{margin-top:6px;padding:5px 10px;border:1px solid #cbd5e1;background:#f8fafc;border-radius:6px;cursor:pointer}
 .danger{color:#b91c1c}
+.row{display:flex;gap:8px;flex-wrap:wrap}

@@ -137,5 +137,11 @@
         "content": "$3"
       }
     }
+  },
+  "popupReport": {
+    "message": "Report a problem"
+  },
+  "popupReportHint": {
+    "message": "Opens a GitHub issue with only the shop's domain and what was detected. You can review it before sending."
   }
 }

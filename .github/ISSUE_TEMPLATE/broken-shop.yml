@@ -1,0 +1,50 @@
+name: Shop not detected correctly
+description: The badge is missing, shows the wrong price or misses a crossed-out price on a shop.
+title: "Shop not detected correctly: "
+labels: [shop]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping! A product link from the shop makes it possible to add a test page and fix detection.
+        Please don't include personal data (order numbers, account pages, links with session or tracking parameters).
+  - type: input
+    id: shop
+    attributes:
+      label: Shop
+      description: Domain of the shop
+      placeholder: fnac.com
+    validations:
+      required: true
+  - type: input
+    id: product
+    attributes:
+      label: Product page link (optional)
+      description: A public product page where the problem happens. Remove anything after "?" if you can.
+  - type: dropdown
+    id: problem
+    attributes:
+      label: What goes wrong?
+      options:
+        - No badge at all
+        - Wrong current price
+        - Crossed-out price not recognised
+        - "\"Lowest price in 30 days\" label not recognised"
+        - Wrong verdict
+        - Something else
+    validations:
+      required: true
+  - type: input
+    id: detected
+    attributes:
+      label: What the extension detected
+      description: Filled in automatically when you use "Report a problem" in the popup.
+  - type: input
+    id: version
+    attributes:
+      label: Extension version and browser
+  - type: textarea
+    id: details
+    attributes:
+      label: Details
+      description: Shown prices, screenshot, anything that helps.

@@ -137,5 +137,11 @@
         "content": "$3"
       }
     }
+  },
+  "popupReport": {
+    "message": "Problem melden"
+  },
+  "popupReportHint": {
+    "message": "Öffnet ein GitHub-Issue nur mit der Shop-Domain und dem Erkennungsergebnis. Sie können es vor dem Absenden prüfen."
   }
 }
