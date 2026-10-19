@@ -63,4 +63,6 @@ Adding a shop: add an adapter to `src/core/extract.js`, its host to `src/hosts.j
 
 Website: https://emirmrkaljevic.github.io/truediscount/
 
+Read more: [Catching fake Black Friday discounts with a 400-line browser extension (and the EU's 30-day rule)](https://dev.to/emirmrkaljevic/catching-fake-black-friday-discounts-with-a-400-line-browser-extension-and-the-eus-30-day-rule-541e) on DEV.
+
 truediscount is free and open source (MIT). A Pro version with price-drop alerts, longer history and export is planned.
