@@ -16,7 +16,7 @@ export function manifest(browser) {
     description: '__MSG_extDescription__',
     icons: { 16: 'icons/icon16.png', 32: 'icons/icon32.png', 48: 'icons/icon48.png', 128: 'icons/icon128.png' },
     action: { default_popup: 'src/popup/popup.html', default_icon: { 16: 'icons/icon16.png', 32: 'icons/icon32.png' } },
-    permissions: ['storage', 'scripting', 'activeTab'],
+    permissions: ['storage', 'scripting', 'activeTab', 'notifications'],
     host_permissions: SHOP_MATCHES,
     optional_host_permissions: ['https://*/*'],
     content_scripts: [{ matches: SHOP_MATCHES, js: ['content.js'], run_at: 'document_idle' }],
@@ -32,7 +32,7 @@ export function manifest(browser) {
 
 // Content scripts cannot be ES modules, so inline the core modules into one classic script.
 export function bundleContent() {
-  const order = ['price', 'history', 'strings', 'verdict', 'sparkline', 'extract'].map(n => `src/core/${n}.js`).concat('src/content-main.js');
+  const order = ['price', 'history', 'strings', 'watch', 'verdict', 'sparkline', 'extract'].map(n => `src/core/${n}.js`).concat('src/content-main.js');
   const body = order.map(f => `// ${f}\n` + readFileSync(f, 'utf8').replace(/^import .*$/gm, '').replace(/^export /gm, '')).join('\n');
   return `(() => {\n${body}\n})();\n`;
 }

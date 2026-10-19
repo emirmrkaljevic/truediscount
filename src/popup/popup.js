@@ -11,10 +11,16 @@ for (const el of document.querySelectorAll('[data-i18n]')) el.textContent = t(el
 async function show() {
   const all = await api.storage.local.get(null);
   const items = Object.entries(all).filter(([, v]) => v?.history?.length)
-    .sort((a, b) => b[1].history.at(-1).t - a[1].history.at(-1).t).slice(0, 30);
+    .sort((a, b) => (!!b[1].watch - !!a[1].watch) || b[1].history.at(-1).t - a[1].history.at(-1).t).slice(0, 30);
   list.replaceChildren(...items.map(([k, v]) => {
     const li = document.createElement('li');
     const name = document.createElement('span'); name.textContent = v.name || k; name.title = k;
+    if (v.watch) {
+      const hit = v.history.at(-1).p <= v.watch.target;
+      name.textContent = (hit ? '✅ ' : '🔔 ') + name.textContent;
+      name.title = `${k} · ${t('watchActive', [formatPrice(v.watch.target, v.currency || 'EUR')])}`;
+      if (hit) li.className = 'hit';
+    }
     const p = document.createElement('span');
     const low = lowestInWindow(v.history, Date.now(), 30, false);
     p.textContent = `${formatPrice(v.history.at(-1).p, v.currency || 'EUR')} (${t('popupLow', [formatPrice(low, v.currency || 'EUR')])})`;

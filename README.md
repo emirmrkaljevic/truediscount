@@ -11,6 +11,7 @@ Under the EU Omnibus Directive (2019/2161), a shop announcing a price reduction 
 - 🔴 **Inflated discount**: the shop claims -50%, but the product was cheaper a week ago
 - 🟠 **Cheaper recently**: today's price is higher than the 30-day low
 - Mini price graph for every tracked product
+- 🔔 **Price alerts**: set a target price on the badge and get a browser notification when a visit records a price at or below it
 
 ![truediscount flags a -50% Black Friday deal that was the same price two weeks earlier](docs/screenshot.png)
 
@@ -19,6 +20,10 @@ Under the EU Omnibus Directive (2019/2161), a shop announcing a price reduction 
 Many EU shops already print their own "lowest price in the last 30 days" next to a sale. truediscount reads that disclosure (in English, German, French, Italian, Spanish, Dutch, Polish, Romanian, Czech, Croatian and more) and compares it with the crossed-out price, so you get a verdict before any history has been recorded.
 
 ![First visit: the shop's own 30-day low equals today's price, so the -50% is inflated](docs/first-visit.png)
+
+### Price alerts
+
+Click **Alert me below** on the badge (10% under today's price by default, editable). Watched products are listed first in the popup, and the toolbar icon shows how many are at or below their target. Prices are checked whenever you open the product page; the extension never loads shop pages in the background.
 
 ## Privacy
 

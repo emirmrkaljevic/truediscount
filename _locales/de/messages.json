@@ -143,5 +143,39 @@
   },
   "popupReportHint": {
     "message": "Öffnet ein GitHub-Issue nur mit der Shop-Domain und dem Erkennungsergebnis. Sie können es vor dem Absenden prüfen."
+  },
+  "watchPrompt": {
+    "message": "Alarm unter"
+  },
+  "watchSet": {
+    "message": "Setzen"
+  },
+  "watchRemove": {
+    "message": "Entfernen"
+  },
+  "watchActive": {
+    "message": "Alarm unter $p1$",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      }
+    }
+  },
+  "alertTitle": {
+    "message": "Preis unter Ihrem Zielpreis"
+  },
+  "alertBody": {
+    "message": "$p1$ kostet jetzt $p2$ (Ihr Ziel: $p3$).",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      },
+      "p2": {
+        "content": "$2"
+      },
+      "p3": {
+        "content": "$3"
+      }
+    }
   }
 }

@@ -143,5 +143,39 @@
   },
   "popupReportHint": {
     "message": "Opens a GitHub issue with only the shop's domain and what was detected. You can review it before sending."
+  },
+  "watchPrompt": {
+    "message": "Alert me below"
+  },
+  "watchSet": {
+    "message": "Set"
+  },
+  "watchRemove": {
+    "message": "Remove"
+  },
+  "watchActive": {
+    "message": "Alert below $p1$",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      }
+    }
+  },
+  "alertTitle": {
+    "message": "Price dropped below your target"
+  },
+  "alertBody": {
+    "message": "$p1$ is now $p2$ (your target: $p3$).",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      },
+      "p2": {
+        "content": "$2"
+      },
+      "p3": {
+        "content": "$3"
+      }
+    }
   }
 }
