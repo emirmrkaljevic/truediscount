@@ -13,7 +13,7 @@ Under the EU Omnibus Directive (2019/2161), a shop announcing a price reduction 
 - Mini price graph for every tracked product
 - 🔔 **Price alerts**: set a target price on the badge and get a browser notification when a visit records a price at or below it
 
-![truediscount flags a -50% Black Friday deal that was the same price two weeks earlier](docs/screenshot.png)
+![truediscount on a product page: flags an inflated -50% deal, shows the 30-day price graph and sets a price alert](docs/demo.gif)
 
 ### Works on the first visit
 
@@ -24,6 +24,26 @@ Many EU shops already print their own "lowest price in the last 30 days" next to
 ### Price alerts
 
 Click **Alert me below** on the badge (10% under today's price by default, editable). Watched products are listed first in the popup, and the toolbar icon shows how many are at or below their target. Prices are checked whenever you open the product page; the extension never loads shop pages in the background.
+
+## Install in 60 seconds
+
+truediscount is not in the browser stores yet, so you load it yourself. It takes about a minute.
+
+**Chrome, Edge, Brave, Opera, Vivaldi**
+1. Download `truediscount-chrome-<version>.zip` from the [latest release](https://github.com/emirmrkaljevic/truediscount/releases/latest) and unzip it.
+2. Open `chrome://extensions` (Edge: `edge://extensions`, Brave: `brave://extensions`).
+3. Turn on **Developer mode** (top right; in Edge it is in the left sidebar).
+4. Click **Load unpacked** and select the unzipped folder.
+5. Pin the truediscount icon from the puzzle-piece menu and open any product page on a supported shop.
+
+Keep the folder where it is: the browser loads the extension from it. To update, unzip the new version over it and click the reload icon on the extension card.
+
+**Firefox**
+1. Download `truediscount-firefox-<version>.zip` from the [latest release](https://github.com/emirmrkaljevic/truediscount/releases/latest) (no need to unzip).
+2. Open `about:debugging#/runtime/this-firefox`.
+3. Click **Load Temporary Add-on…** and select the zip.
+
+Temporary add-ons are removed when Firefox restarts. A signed version on addons.mozilla.org is on the way. Until then, Firefox Developer Edition, Nightly and ESR can keep it installed: set `xpinstall.signatures.required` to `false` in `about:config`, then install the zip from `about:addons` → gear menu → **Install Add-on From File**.
 
 ## Privacy
 
@@ -55,7 +75,7 @@ npm test        # unit tests on HTML fixtures
 npm run build   # dist/truediscount-chrome-<v>.zip and dist/truediscount-firefox-<v>.zip
 ```
 
-Load unpacked: unzip a package and use `chrome://extensions` (Developer mode) or `about:debugging` in Firefox.
+To try a local build, follow [Install in 60 seconds](#install-in-60-seconds) with the zips from `dist/`.
 
 Adding a shop: add an adapter to `src/core/extract.js`, its host to `src/hosts.js`, and a fixture test.
 
