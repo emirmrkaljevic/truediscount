@@ -177,5 +177,47 @@
         "content": "$3"
       }
     }
+  },
+  "popupBackup": {
+    "message": "Backup / restore"
+  },
+  "backupTitle": {
+    "message": "truediscount: backup and restore"
+  },
+  "backupIntro": {
+    "message": "Save your local price history to a JSON file, or load one from another browser or computer. Imported prices are merged with the ones already here (one price per day, last 90 days)."
+  },
+  "backupExport": {
+    "message": "Export history"
+  },
+  "backupImport": {
+    "message": "Import history"
+  },
+  "backupExported": {
+    "message": "Exported $p1$ product(s).",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      }
+    }
+  },
+  "backupImported": {
+    "message": "Imported: $p1$ new product(s), $p2$ merged.",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      },
+      "p2": {
+        "content": "$2"
+      }
+    }
+  },
+  "backupError": {
+    "message": "Import failed: $p1$",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      }
+    }
   }
 }

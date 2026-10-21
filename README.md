@@ -12,6 +12,7 @@ Under the EU Omnibus Directive (2019/2161), a shop announcing a price reduction 
 - 🟠 **Cheaper recently**: today's price is higher than the 30-day low
 - Mini price graph for every tracked product
 - 🔔 **Price alerts**: set a target price on the badge and get a browser notification when a visit records a price at or below it
+- 💾 **Backup and restore**: export your local price history to a JSON file and import it in another browser
 
 ![truediscount on a product page: flags an inflated -50% deal, shows the 30-day price graph and sets a price alert](docs/demo.gif)
 
@@ -24,6 +25,10 @@ Many EU shops already print their own "lowest price in the last 30 days" next to
 ### Price alerts
 
 Click **Alert me below** on the badge (10% under today's price by default, editable). Watched products are listed first in the popup, and the toolbar icon shows how many are at or below their target. Prices are checked whenever you open the product page; the extension never loads shop pages in the background.
+
+### Backup and restore
+
+Open the popup and click **Backup / restore**. **Export history** saves a `truediscount-history-YYYY-MM-DD.json` file; **Import history** loads one, for example on a new computer or in a second browser. Imports are validated and merged with what is already stored: one price per product per day (the lowest wins), last 90 days only. Your local names and alerts are kept. The file never leaves your computer unless you move it.
 
 ## Install in 60 seconds
 
@@ -47,7 +52,7 @@ Temporary add-ons are removed when Firefox restarts. A signed version on addons.
 
 ## Privacy
 
-Local-first. Prices are stored only in your browser (`storage.local`). No account, no analytics, no network requests, no personal data. Clear everything from the popup at any time.
+Local-first. Prices are stored only in your browser (`storage.local`). No account, no analytics, no network requests, no personal data. Clear everything from the popup at any time, or export it to a file you control.
 
 ## Languages
 

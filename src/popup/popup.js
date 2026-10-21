@@ -55,3 +55,9 @@ document.getElementById('report').onclick = async () => {
 };
 
 show();
+
+// File pickers close the popup in some browsers, so backup and restore live in their own tab.
+document.getElementById('backup').onclick = async () => {
+  await api.tabs.create({ url: api.runtime.getURL('src/popup/backup.html') });
+  window.close();
+};

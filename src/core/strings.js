@@ -1,5 +1,13 @@
 // English strings, used when the browser i18n API is not available (tests).
 export const EN = {
+  "popupBackup": "Backup / restore",
+  "backupTitle": "truediscount: backup and restore",
+  "backupIntro": "Save your local price history to a JSON file, or load one from another browser or computer. Imported prices are merged with the ones already here (one price per day, last 90 days).",
+  "backupExport": "Export history",
+  "backupImport": "Import history",
+  "backupExported": "Exported $1 product(s).",
+  "backupImported": "Imported: $1 new product(s), $2 merged.",
+  "backupError": "Import failed: $1",
   "extName": "truediscount: is that discount real?",
   "extDescription": "Shows if a shop discount is real by comparing the old price with the lowest price of the last 30 days (EU Omnibus rule).",
   "labelReal": "Real discount",
