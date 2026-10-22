@@ -24,8 +24,8 @@ export function manifest(browser) {
   if (browser === 'chrome') m.background = { service_worker: 'src/background.js', type: 'module' };
   else {
     m.background = { scripts: ['src/background.js'], type: 'module' };
-    m.browser_specific_settings = { gecko: { id: 'truediscount@emirmrkaljevic.github.io', strict_min_version: '128.0',
-      data_collection_permissions: { required: ['none'] } } };
+    m.browser_specific_settings = { gecko: { id: 'truediscount@emirmrkaljevic.github.io', strict_min_version: '140.0',
+      data_collection_permissions: { required: ['none'] } }, gecko_android: { strict_min_version: '142.0' } };
   }
   return m;
 }

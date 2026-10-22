@@ -70,11 +70,13 @@ export const ADAPTERS = [
   { id: 'otto', host: /(^|\.)otto\.de$/, old: ['.pdp_price__retail-price', '[data-qa="retailPrice"]'] },
   { id: 'emag', host: /(^|\.)emag\.(ro|bg|hu)$/, old: ['.product-new-price ~ .pricing .rrp-lp30d-content s', '.product-page-pricing .pricing s'] },
   { id: 'allegro', host: /(^|\.)allegro\.(pl|cz|sk)$/, old: ['[data-testid="price-old"]', 'div[aria-label*="przed obniżką"]'] },
+  // Coolblue renders prices client-side; JSON-LD gives the current price and the labels below catch "Retail price".
+  { id: 'coolblue', host: /(^|\.)coolblue\.(nl|be|de)$/, old: ['[class*="sales-price__former"]', '[data-testid*="reference-price"]'] },
   { id: 'bol', host: /(^|\.)bol\.com$/, old: ['.buy-block__list-price', '[data-test="list-price"]'] },
 ];
 
 // Text labels shops put next to a reference price, in the main EU languages.
-const OLD_LABEL = /(?<!\p{L})(statt|vorher|bisher|uvp|was|previously|rrp|list price|prix (?:de référence|barré)|avant|prezzo (?:consigliato|precedente)|antes|pvpr|van|adviesprijs|przed obniżką|cena regularna|pret (?:vechi|întreg)|prp|eredeti ár)(?!\p{L})/iu;
+const OLD_LABEL = /(?<!\p{L})(statt|vorher|bisher|uvp|was|previously|rrp|retail price|list price|prix (?:de référence|barré)|avant|prezzo (?:consigliato|precedente)|antes|pvpr|van|adviesprijs|przed obniżką|cena regularna|pret (?:vechi|întreg)|prp|eredeti ár)(?!\p{L})/iu;
 const GENERIC_PRICE = ['[itemprop="price"]', '[data-price]', '[class*="current-price"]', '[class*="sale-price"]', '[class*="final-price"]', '[class*="product-price"]'];
 
 const GENERIC_OLD = ['[style*="line-through"]', '[data-old-price]', '[class*="regular-price"]', '[class*="list-price"]', 'del', 's', '[class*="old-price"]', '[class*="oldPrice"]', '[class*="price-old"]', '[class*="was-price"]', '[class*="strike"]', '[class*="crossed"]'];
@@ -94,7 +96,7 @@ export function extract(doc, host) {
       if (v && v > price && v < price * 20) {
         oldPrice = v;
         // A recommended retail price is not the shop's own previous price.
-        oldKind = /rrp|uvp|\bmsrp\b/i.test(s + ' ' + el.textContent) ? 'rrp' : 'previous';
+        oldKind = /rrp|uvp|retail price|\bmsrp\b/i.test(s + ' ' + el.textContent) ? 'rrp' : 'previous';
         break;
       }
     }
@@ -126,7 +128,7 @@ function labelledOldPrice(doc, price) {
     const t = el.textContent;
     if (t.length > 60 || !OLD_LABEL.test(t)) continue;
     const v = firstPrice(t.replace(OLD_LABEL, ' '));
-    if (v && v > price && v < price * 20) return [v, /uvp|rrp|consigliato|pvpr|adviesprijs|prp/i.test(t) ? 'rrp' : 'previous'];
+    if (v && v > price && v < price * 20) return [v, /uvp|rrp|retail price|consigliato|pvpr|adviesprijs|prp/i.test(t) ? 'rrp' : 'previous'];
   }
   return null;
 }

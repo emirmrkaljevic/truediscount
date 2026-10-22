@@ -19,6 +19,22 @@ test('Zalando: ProductGroup with variants', () => {
   assert.match(r.name, /DUNK RETRO/);
 });
 
+test('Coolblue: real product pages, current price from JSON-LD and no invented old price', () => {
+  const a = extract(load('coolblue-charger-live.html'), 'www.coolblue.nl');
+  assert.deepEqual([a.adapter, a.sku, a.price, a.currency, a.oldPrice], ['coolblue', '942614', 70, 'EUR', null]);
+  assert.match(a.name, /Sitecom 65W/);
+  const b = extract(load('coolblue-tablet-live.html'), 'www.coolblue.nl');
+  assert.equal(b.adapter, 'coolblue');
+  assert.ok(b.price > 0 && b.oldPrice === null);
+  assert.match(b.name, /Galaxy Tab A11/);
+});
+
+test('"Retail price" label counts as an RRP', () => {
+  const { document } = parseHTML('<html><head><script type="application/ld+json">{"@type":"Product","name":"X","sku":"1","offers":{"@type":"Offer","price":149,"priceCurrency":"EUR"}}</script></head><body><span class="sales-price__former">Retail price 199,-</span></body></html>');
+  const r = extract(document, 'www.coolblue.be');
+  assert.deepEqual([r.price, r.oldPrice, r.oldKind], [149, 199, 'rrp']);
+});
+
 test('first price token from mixed labels', () => {
   assert.equal(firstPrice('UVP 299,– €299,00€'), 299);
   assert.equal(firstPrice('Statt 1.299,99 €'), 1299.99);

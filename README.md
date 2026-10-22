@@ -48,7 +48,7 @@ Keep the folder where it is: the browser loads the extension from it. To update,
 2. Open `about:debugging#/runtime/this-firefox`.
 3. Click **Load Temporary Add-on…** and select the zip.
 
-Temporary add-ons are removed when Firefox restarts. A signed version on addons.mozilla.org is on the way. Until then, Firefox Developer Edition, Nightly and ESR can keep it installed: set `xpinstall.signatures.required` to `false` in `about:config`, then install the zip from `about:addons` → gear menu → **Install Add-on From File**.
+Temporary add-ons are removed when Firefox restarts. A signed version on addons.mozilla.org is on the way. Until then, Firefox Developer Edition, Nightly and ESR can keep it installed: set `xpinstall.signatures.required` to `false` in `about:config`, then install the zip from `about:addons` → gear menu → **Install Add-on From File**. Requires Firefox 140 or newer (Firefox for Android 142 or newer).
 
 ## Privacy
 
@@ -60,7 +60,7 @@ English and German. The extension follows your browser language. Translations ar
 
 ## Supported shops
 
-Built-in (MediaMarkt and Zalando checked against live product pages in October 2026): Amazon (DE, FR, IT, ES, NL, PL, SE, BE), Zalando, MediaMarkt / Saturn, Otto, eMAG, Allegro, bol.com.
+Built-in (MediaMarkt, Zalando and Coolblue checked against live product pages in October 2026): Amazon (DE, FR, IT, ES, NL, PL, SE, BE), Zalando, MediaMarkt / Saturn, Otto, eMAG, Allegro, bol.com, Coolblue (NL, BE, DE).
 
 Badge missing or wrong? Click **Report a problem** in the popup. It opens a prefilled GitHub issue with just the shop's domain and what was detected, so you can add a product link and submit it.
 
