@@ -4,4 +4,5 @@ export const SHOP_MATCHES = [
   'mediamarkt.de', 'mediamarkt.at', 'mediamarkt.nl', 'mediamarkt.es', 'mediamarkt.it', 'mediamarkt.be', 'saturn.de',
   'otto.de', 'emag.ro', 'emag.bg', 'emag.hu', 'allegro.pl', 'allegro.cz', 'bol.com',
   'coolblue.nl', 'coolblue.be', 'coolblue.de',
+  'alternate.de', 'alternate.nl', 'alternate.be', 'alternate.at',
 ].map(h => `https://*.${h}/*`);

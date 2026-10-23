@@ -37,7 +37,7 @@ export function fromJsonLd(doc) {
     const list = specs.find(x => /StrikethroughPrice|ListPrice|MSRP/i.test(x.priceType || ''));
     const price = parsePrice(offer?.price ?? sale?.price);
     if (price != null) return {
-      name: p.name, sku: p.sku || p.gtin13 || p.mpn || null, price,
+      name: p.name, sku: String(p.sku || p.gtin13 || p.mpn || '') || null, price,
       currency: offer.priceCurrency || sale?.priceCurrency || null,
       listPrice: parsePrice(list?.price), listKind: /MSRP/i.test(list?.priceType || '') ? 'rrp' : 'previous',
     };
@@ -73,6 +73,7 @@ export const ADAPTERS = [
   // Coolblue renders prices client-side; JSON-LD gives the current price and the labels below catch "Retail price".
   { id: 'coolblue', host: /(^|\.)coolblue\.(nl|be|de)$/, old: ['[class*="sales-price__former"]', '[data-testid*="reference-price"]'] },
   { id: 'bol', host: /(^|\.)bol\.com$/, old: ['.buy-block__list-price', '[data-test="list-price"]'] },
+  { id: 'alternate', host: /(^|\.)alternate\.(de|nl|be|at)$/, price: ['#tle-details-price-section .price'], old: ['#tle-details-price-section .strike-price', '.strike-price'] },
 ];
 
 // Text labels shops put next to a reference price, in the main EU languages.
@@ -89,14 +90,15 @@ export function extract(doc, host) {
   if (price == null) price = genericPrice(doc);
   if (price == null) return null;
   const sels = [...(adapter?.old || []), ...GENERIC_OLD];
-  let oldPrice = null, oldKind = null;
+  let oldPrice = null, oldKind = null, oldHint = '';
   for (const s of sels) {
     for (const el of doc.querySelectorAll(s)) {
       const v = firstPrice(el.textContent);
       if (v && v > price && v < price * 20) {
         oldPrice = v;
+        oldHint = el.previousElementSibling?.getAttribute('data-bs-content') || '';
         // A recommended retail price is not the shop's own previous price.
-        oldKind = /rrp|uvp|retail price|\bmsrp\b/i.test(s + ' ' + el.textContent) ? 'rrp' : 'previous';
+        oldKind = /rrp|uvp|retail price|adviesprijs|\bmsrp\b/i.test(`${s} ${el.textContent} ${oldHint}`) ? 'rrp' : 'previous';
         break;
       }
     }
@@ -108,7 +110,7 @@ export function extract(doc, host) {
   }
   if (!oldPrice && base.listPrice > price) [oldPrice, oldKind] = [base.listPrice, base.listKind];
   const name = (adapter?.name && text(doc, adapter.name)?.trim()) || base.name || null;
-  const shopLow30 = shopLowest30(doc, price);
+  const shopLow30 = shopLowest30(doc, price) ?? (oldPrice && isLow30Label(oldHint) ? oldPrice : null);
   return { adapter: adapter?.id || 'generic', name, sku: base.sku || null, price, oldPrice, oldKind, shopLow30, currency: base.currency || 'EUR' };
 }
 

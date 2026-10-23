@@ -40,3 +40,15 @@ test('first price token from mixed labels', () => {
   assert.equal(firstPrice('Statt 1.299,99 €'), 1299.99);
   assert.equal(firstPrice('was €49.90'), 49.9);
 });
+
+test("Alternate: live product pages with UVP popover and 30-day Bestpreis popover", () => {
+  const uvp = extract(load("alternate-uvp-live.html"), "www.alternate.de");
+  assert.deepEqual([uvp.adapter, uvp.sku, uvp.price, uvp.oldPrice, uvp.oldKind, uvp.shopLow30], ["alternate", "100074063", 209.9, 269.9, "rrp", null]);
+  assert.match(message(evaluate({ price: uvp.price, oldPrice: uvp.oldPrice, oldKind: uvp.oldKind, history: [] })), /RRP/);
+
+  const deal = extract(load("alternate-deal-live.html"), "www.alternate.de");
+  assert.deepEqual([deal.adapter, deal.sku, deal.price, deal.oldPrice, deal.oldKind, deal.shopLow30], ["alternate", "100075932", 309.99, 359.99, "previous", 359.99]);
+  const v = evaluate({ price: deal.price, oldPrice: deal.oldPrice, oldKind: deal.oldKind, shopLow30: deal.shopLow30, history: [] });
+  assert.equal(v.status, "real");
+  assert.equal(v.source, "shop");
+});
