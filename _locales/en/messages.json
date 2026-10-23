@@ -185,10 +185,10 @@
     "message": "truediscount: backup and restore"
   },
   "backupIntro": {
-    "message": "Save your local price history to a JSON file, or load one from another browser or computer. Imported prices are merged with the ones already here (one price per day, last 90 days)."
+    "message": "Save your local price history to a JSON file (for backup and restore) or a CSV file (for spreadsheets), or load a JSON backup from another browser. Imported prices are merged with the ones already here (one price per day, last 90 days)."
   },
   "backupExport": {
-    "message": "Export history"
+    "message": "Export JSON"
   },
   "backupImport": {
     "message": "Import history"
@@ -219,5 +219,20 @@
         "content": "$1"
       }
     }
+  },
+  "backupCsv": {
+    "message": "Export CSV"
+  },
+  "backupColProduct": {
+    "message": "Product"
+  },
+  "backupColPrice": {
+    "message": "Latest"
+  },
+  "backupColLow": {
+    "message": "30d low"
+  },
+  "backupColAlert": {
+    "message": "Alert"
   }
 }

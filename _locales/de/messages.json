@@ -185,10 +185,10 @@
     "message": "truediscount: Sichern und Wiederherstellen"
   },
   "backupIntro": {
-    "message": "Speichere deinen lokalen Preisverlauf als JSON-Datei oder lade eine aus einem anderen Browser oder Computer. Importierte Preise werden mit den vorhandenen zusammengeführt (ein Preis pro Tag, letzte 90 Tage)."
+    "message": "Speichere deinen lokalen Preisverlauf als JSON-Datei (zum Sichern und Wiederherstellen) oder als CSV-Datei (für Tabellenkalkulationen), oder lade ein JSON-Backup aus einem anderen Browser. Importierte Preise werden mit den vorhandenen zusammengeführt (ein Preis pro Tag, letzte 90 Tage)."
   },
   "backupExport": {
-    "message": "Verlauf exportieren"
+    "message": "JSON exportieren"
   },
   "backupImport": {
     "message": "Verlauf importieren"
@@ -219,5 +219,20 @@
         "content": "$1"
       }
     }
+  },
+  "backupCsv": {
+    "message": "CSV exportieren"
+  },
+  "backupColProduct": {
+    "message": "Produkt"
+  },
+  "backupColPrice": {
+    "message": "Aktuell"
+  },
+  "backupColLow": {
+    "message": "30-Tage-Tief"
+  },
+  "backupColAlert": {
+    "message": "Alarm"
   }
 }

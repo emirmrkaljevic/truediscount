@@ -1,5 +1,5 @@
-// Export and import of the local price history as a plain JSON file.
-import { DAY, RETENTION_DAYS } from './history.js';
+// Export and import of the local price history as JSON or CSV.
+import { DAY, RETENTION_DAYS, lowestInWindow } from './history.js';
 
 export const FORMAT = 'truediscount-history';
 export const VERSION = 1;
@@ -11,6 +11,30 @@ export function exportData(all = {}, now = Date.now()) {
   const items = {};
   for (const [k, v] of Object.entries(all)) if (Array.isArray(v?.history) && v.history.length) items[k] = v;
   return { format: FORMAT, version: VERSION, exported: new Date(now).toISOString(), items };
+}
+
+const csvCell = v => {
+  if (v == null || v === '') return '';
+  let s = String(v);
+  if (/^[=+\-@\t\r]/.test(s)) s = `'${s}`;
+  return /[",\r\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+};
+
+// Export tracked products as a spreadsheet-safe CSV table.
+export function exportCsv(all = {}, now = Date.now()) {
+  const rows = [['key', 'host', 'name', 'currency', 'latest_price', 'low_30d', 'min_90d', 'max_90d', 'target_price', 'days_tracked', 'first_seen', 'last_seen']];
+  const entries = Object.entries(exportData(all, now).items)
+    .sort((a, b) => (!!b[1].watch - !!a[1].watch) || b[1].history.at(-1).t - a[1].history.at(-1).t);
+  const iso = t => new Date(t).toISOString().slice(0, 10);
+  for (const [k, v] of entries) {
+    const prices = v.history.map(p => p.p);
+    rows.push([
+      k, v.host || k.split('/')[0], v.name || '', v.currency || 'EUR',
+      prices.at(-1), lowestInWindow(v.history, now, 30, false), Math.min(...prices), Math.max(...prices),
+      v.watch?.target ?? '', v.history.length, iso(v.history[0].t), iso(v.history.at(-1).t),
+    ]);
+  }
+  return rows.map(r => r.map(csvCell).join(',')).join('\r\n') + '\r\n';
 }
 
 function cleanEntry(v, now) {

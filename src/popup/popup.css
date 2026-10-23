@@ -7,3 +7,5 @@ button{margin-top:6px;padding:5px 10px;border:1px solid #cbd5e1;background:#f8fa
 .danger{color:#b91c1c}
 .row{display:flex;gap:8px;flex-wrap:wrap}
 li.hit{background:#f0fdf4}
+body.page{width:auto;max-width:760px;margin:24px auto;padding:0 16px}
+table{width:100%;border-collapse:collapse;margin-top:16px;font-size:13px}th,td{text-align:left;padding:6px 8px;border-bottom:1px solid #e2e8f0}th{color:#64748b;font-weight:600}tr.hit{background:#f0fdf4}

@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { exportData, parseImport, mergeHistory, mergeImport, FORMAT } from '../src/core/backup.js';
+import { exportData, exportCsv, parseImport, mergeHistory, mergeImport, FORMAT } from '../src/core/backup.js';
 import { DAY } from '../src/core/history.js';
 
 const NOW = 200 * DAY + 5000;
@@ -50,4 +50,17 @@ test('merge import adds new products and keeps local watch and name', () => {
   assert.equal(r.updates.a.name, 'Local');
   assert.equal(r.updates.a.watch.target, 5);
   assert.equal(r.updates.a.history.length, 2);
+});
+
+test('CSV export lists watched products first, quotes commas and neutralises formulas', () => {
+  const all = {
+    'shop.de/p/1': { name: ' Headphones, "Pro"', currency: 'EUR', host: 'www.shop.de', history: [{ t: d(10), p: 120 }, { t: d(1), p: 99 }] },
+    'shop.de/p/2': { name: '=HYPERLINK("http://x")', currency: 'EUR', history: [{ t: d(5), p: 80 }, { t: d(2), p: 75 }], watch: { target: 70, since: 1 } },
+  };
+  const lines = exportCsv(all, NOW).trim().split('\r\n');
+  assert.equal(lines.length, 3);
+  assert.match(lines[0], /^key,host,name,currency,latest_price,low_30d,min_90d,max_90d,target_price,days_tracked,first_seen,last_seen$/);
+  // Watched item comes first, leading "=" is neutralised with an apostrophe, internal quotes are doubled.
+  assert.match(lines[1], /^shop\.de\/p\/2,shop\.de,"'=HYPERLINK\(""http:\/\/x""\)",EUR,75,75,75,80,70,2,/);
+  assert.match(lines[2], /^shop\.de\/p\/1,www\.shop\.de," Headphones, ""Pro""",EUR,99,99,99,120,,2,/);
 });

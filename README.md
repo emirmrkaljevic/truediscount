@@ -12,7 +12,7 @@ Under the EU Omnibus Directive (2019/2161), a shop announcing a price reduction 
 - 🟠 **Cheaper recently**: today's price is higher than the 30-day low
 - Mini price graph for every tracked product
 - 🔔 **Price alerts**: set a target price on the badge and get a browser notification when a visit records a price at or below it
-- 💾 **Backup and restore**: export your local price history to a JSON file and import it in another browser
+- 💾 **Backup, restore and CSV export**: export your local price history to JSON (for backup/restore) or CSV (for Excel and Google Sheets)
 
 ![truediscount on a product page: flags an inflated -50% deal, shows the 30-day price graph and sets a price alert](docs/demo.gif)
 
@@ -28,7 +28,7 @@ Click **Alert me below** on the badge (10% under today's price by default, edita
 
 ### Backup and restore
 
-Open the popup and click **Backup / restore**. **Export history** saves a `truediscount-history-YYYY-MM-DD.json` file; **Import history** loads one, for example on a new computer or in a second browser. Imports are validated and merged with what is already stored: one price per product per day (the lowest wins), last 90 days only. Your local names and alerts are kept. The file never leaves your computer unless you move it.
+Open the popup and click **Backup / restore** to see a full table of your tracked products, 30-day lows and active alerts. **Export JSON** saves a `truediscount-history-YYYY-MM-DD.json` file; **Export CSV** saves a spreadsheet-ready `.csv` of every tracked product (latest price, 30-day low, 90-day min/max, alert target and dates); **Import history** loads a JSON backup, for example on a new computer or in a second browser. Imports are validated and merged with what is already stored: one price per product per day (the lowest wins), last 90 days only. Your local names and alerts are kept. Nothing leaves your computer unless you move the file.
 
 ## Install in 60 seconds
 
@@ -60,7 +60,7 @@ English and German. The extension follows your browser language. Translations ar
 
 ## Supported shops
 
-Built-in (MediaMarkt, Zalando and Coolblue checked against live product pages in October 2026): Amazon (DE, FR, IT, ES, NL, PL, SE, BE), Zalando, MediaMarkt / Saturn, Otto, eMAG, Allegro, bol.com, Coolblue (NL, BE, DE).
+Built-in (MediaMarkt, Zalando, Coolblue and Alternate checked against live product pages in October 2026): Amazon (DE, FR, IT, ES, NL, PL, SE, BE), Zalando, MediaMarkt / Saturn, Otto, eMAG, Allegro, bol.com, Coolblue (NL, BE, DE), Alternate (DE, NL, BE, AT).
 
 Badge missing or wrong? Click **Report a problem** in the popup. It opens a prefilled GitHub issue with just the shop's domain and what was detected, so you can add a product link and submit it.
 
