@@ -20,12 +20,12 @@
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
-{"@type":"SoftwareApplication","name":"truediscount","applicationCategory":"BrowserApplication","softwareVersion":"0.7.0","image":"https://emirmrkaljevic.github.io/truediscount/og.png","screenshot":"https://emirmrkaljevic.github.io/truediscount/screenshot.png","description":"Browser extension that checks if a shop discount is real by comparing the crossed-out price with the lowest price of the last 30 days (EU Omnibus rule).","operatingSystem":"Chrome, Firefox, Edge","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"url":"https://emirmrkaljevic.github.io/truediscount/","downloadUrl":"https://github.com/emirmrkaljevic/truediscount/releases/latest","license":"https://opensource.org/licenses/MIT"},
+{"@type":"SoftwareApplication","name":"truediscount","applicationCategory":"BrowserApplication","softwareVersion":"0.8.0","image":"https://emirmrkaljevic.github.io/truediscount/og.png","screenshot":"https://emirmrkaljevic.github.io/truediscount/screenshot.png","description":"Browser extension that checks if a shop discount is real by comparing the crossed-out price with the lowest price of the last 30 days (EU Omnibus rule).","operatingSystem":"Chrome, Firefox, Edge","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"url":"https://emirmrkaljevic.github.io/truediscount/","downloadUrl":"https://github.com/emirmrkaljevic/truediscount/releases/latest","license":"https://opensource.org/licenses/MIT"},
 {"@type":"FAQPage","mainEntity":[
 {"@type":"Question","name":"How do I know if a Black Friday discount is fake?","acceptedAnswer":{"@type":"Answer","text":"In the EU, the crossed-out price of a sale must be the lowest price the shop charged in the previous 30 days. If the product was cheaper in that period, the advertised discount is inflated. truediscount checks this automatically on the product page."}},
 {"@type":"Question","name":"What is the EU Omnibus 30-day rule?","acceptedAnswer":{"@type":"Answer","text":"Directive (EU) 2019/2161 amended the Price Indication Directive: any announced price reduction must state the prior price, defined as the lowest price applied during at least 30 days before the reduction."}},
 {"@type":"Question","name":"Does truediscount collect my data?","acceptedAnswer":{"@type":"Answer","text":"No. Prices are stored only in your browser. The extension makes no network requests and has no account or analytics."}},
-{"@type":"Question","name":"Which shops are supported?","acceptedAnswer":{"@type":"Answer","text":"Amazon EU stores, Zalando, MediaMarkt and Saturn, Otto, eMAG, Allegro, bol.com and Coolblue out of the box, and any other shop after one click in the popup."}}
+{"@type":"Question","name":"Which shops are supported?","acceptedAnswer":{"@type":"Answer","text":"Amazon EU stores, Zalando, MediaMarkt and Saturn, Otto, eMAG, Allegro, bol.com, Coolblue and Alternate out of the box, and any other shop after one click in the popup."}}
 ]}]}
 </script>
 <style>
@@ -40,6 +40,18 @@ h2{margin-top:44px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minm
 .card{background:#fff;border-radius:10px;padding:16px;border:1px solid #e2e8f0}.card ol{margin:6px 0;padding-left:20px}.card small{color:var(--mute)}.card b{display:block;margin-bottom:4px}
 details{background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:12px 16px;margin:8px 0}summary{font-weight:600;cursor:pointer}
 footer{color:var(--mute);font-size:14px;margin-top:48px}a{color:#1d4ed8}
+.demo{background:#fff;border:1px solid #cbd5e1;border-radius:12px;padding:18px;margin:24px 0;box-shadow:0 4px 16px rgba(15,23,42,.06)}
+.presets{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.presets button{padding:7px 12px;border:1px solid #cbd5e1;background:#f8fafc;border-radius:6px;cursor:pointer;font:600 14px system-ui,sans-serif;color:var(--ink)}
+.presets button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.demo-body{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;align-items:center}
+.inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:14px}
+.inputs label{display:flex;flex-direction:column;gap:4px;color:var(--mute)}
+.inputs input[type="number"]{padding:6px 8px;border:1px solid #cbd5e1;border-radius:6px;font:15px system-ui,sans-serif;color:var(--ink)}
+.inputs .chk{grid-column:1/-1;flex-direction:row;align-items:center;gap:8px;color:var(--ink)}
+.badge-preview{border-left:6px solid var(--c,#15803d);border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.14);padding:12px 14px;background:#fff;font:13px/1.45 system-ui,sans-serif}
+.badge-preview .bt{font-weight:700;color:var(--c,#15803d);display:flex;justify-content:space-between}
+.badge-preview .bm{margin:6px 0;color:var(--ink)}.badge-preview .bs{color:#64748b;font-size:11px;margin-top:4px}
 </style>
 </head>
 <body><main>
@@ -54,6 +66,86 @@ footer{color:var(--mute);font-size:14px;margin-top:48px}a{color:#1d4ed8}
 </header>
 <img src="demo.gif" alt="truediscount on a product page: flags an inflated -50% deal, shows the 30-day price graph and sets a price alert" width="720" height="327">
 
+<h2 id="demo">Try it right here: interactive discount check</h2>
+<p>Pick a real EU shop scenario below, or type in the numbers from a deal you are looking at, to see the exact verdict and 30-day graph the extension puts on the product page.</p>
+<div class="demo">
+<div class="presets" role="group" aria-label="Example scenarios">
+<button type="button" data-preset="0" aria-pressed="true">Inflated "-50%" deal</button>
+<button type="button" data-preset="1" aria-pressed="false">Genuine 30-day discount</button>
+<button type="button" data-preset="2" aria-pressed="false">Crossed-out RRP / UVP</button>
+<button type="button" data-preset="3" aria-pressed="false">Cheaper last week</button>
+</div>
+<div class="demo-body">
+<div class="inputs">
+<label>Sale price (€)<input id="d-price" type="number" step="0.01" min="0.01" value="99.99"></label>
+<label>Crossed-out price (€)<input id="d-old" type="number" step="0.01" min="0" value="199.99"></label>
+<label>30-day lowest price (€)<input id="d-low" type="number" step="0.01" min="0" value="99.99"></label>
+<label class="chk"><input id="d-rrp" type="checkbox">Crossed-out price is labelled RRP / UVP</label>
+</div>
+<div id="d-badge" class="badge-preview" aria-live="polite">
+<div class="bt"><span id="d-title">Inflated discount</span><span>×</span></div>
+<div id="d-msg" class="bm"></div>
+<svg id="d-svg" width="160" height="36" viewBox="0 0 160 36" aria-hidden="true"><path id="d-path" fill="none" stroke="#b91c1c" stroke-width="2" stroke-linejoin="round"/></svg>
+<div id="d-sub" class="bs">Based on the shop's own 30-day lowest price disclosure.</div>
+</div>
+</div>
+</div>
+<script>
+(() => {
+  const presets = [
+    { price: 99.99, old: 199.99, low: 99.99, rrp: false, pts: [119, 99.99, 99.99, 149.99, 199.99, 99.99] },
+    { price: 309.99, old: 359.99, low: 359.99, rrp: false, pts: [369.99, 359.99, 359.99, 359.99, 309.99] },
+    { price: 209.90, old: 269.90, low: 209.90, rrp: true, pts: [219.90, 209.90, 209.90, 209.90] },
+    { price: 109.00, old: 139.00, low: 89.00, rrp: false, pts: [119, 105, 89, 115, 109] }
+  ];
+  const elP = document.getElementById("d-price"), elO = document.getElementById("d-old"), elL = document.getElementById("d-low"), elR = document.getElementById("d-rrp");
+  const badge = document.getElementById("d-badge"), title = document.getElementById("d-title"), msg = document.getElementById("d-msg"), path = document.getElementById("d-path");
+  const btns = [...document.querySelectorAll("[data-preset]")];
+  const fmt = n => "€" + Number(n).toFixed(2);
+  let curPts = presets[0].pts;
+  function update(customPts) {
+    const p = parseFloat(elP.value) || 0, o = parseFloat(elO.value) || 0, l = parseFloat(elL.value) || 0, rrp = elR.checked;
+    const claimed = o > p && p > 0 ? Math.round((1 - p / o) * 100) : 0;
+    const realPct = l > 0 && p > 0 ? Math.round((1 - p / l) * 100) : 0;
+    let status = "nodiscount", text = "Tracking this price from today.";
+    if (!(l > 0)) {
+      if (claimed) { status = "nodata"; text = "Shop claims -" + claimed + "%. No history yet; tracking starts now."; }
+    } else if (p > l) {
+      status = "higher"; text = "It was cheaper recently: " + fmt(l) + " in the last 30 days.";
+    } else if (!claimed) {
+      status = "nodiscount"; text = "Lowest price seen in 30 days: " + fmt(l) + ".";
+    } else if (o > l * 1.01) {
+      status = "inflated"; text = "Shop claims -" + claimed + "%, but its own lowest price in the last 30 days was " + fmt(l) + ". Real saving: " + Math.max(realPct, 0) + "%.";
+    } else {
+      status = "real"; text = "Discount looks real: lowest price we saw in 30 days was " + fmt(l) + ". (The shop itself discloses this 30-day lowest price.)";
+    }
+    if (rrp && claimed) text += " Note: the crossed-out price is the manufacturer's RRP, not an earlier shop price.";
+    const colors = { real: "#15803d", inflated: "#b91c1c", higher: "#c2410c", nodata: "#475569", nodiscount: "#475569" };
+    const labels = { real: "Real discount", inflated: "Inflated discount", higher: "Cheaper recently", nodata: "No history yet", nodiscount: "Price tracked" };
+    const c = colors[status];
+    badge.style.setProperty("--c", c);
+    title.textContent = labels[status];
+    msg.textContent = text;
+    const pts = customPts || [l || p, o > p ? o : p, l || p, p];
+    const y0 = Math.min(...pts), y1 = Math.max(...pts);
+    const d = pts.map((v, i) => (i ? "L" : "M") + (2 + (i / (pts.length - 1)) * 156).toFixed(1) + "," + (y1 === y0 ? 18 : 34 - ((v - y0) / (y1 - y0)) * 32).toFixed(1)).join(" ");
+    path.setAttribute("d", d);
+    path.setAttribute("stroke", c);
+  }
+  btns.forEach((b, i) => b.onclick = () => {
+    btns.forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+    const s = presets[i];
+    elP.value = s.price.toFixed(2); elO.value = s.old.toFixed(2); elL.value = s.low.toFixed(2); elR.checked = s.rrp;
+    curPts = s.pts; update(curPts);
+  });
+  [elP, elO, elL, elR].forEach(el => el.oninput = () => {
+    btns.forEach(x => x.setAttribute("aria-pressed", "false"));
+    update(null);
+  });
+  update(curPts);
+})();
+</script>
+
 <h2>Black Friday fake discounts in the EU</h2>
 <p>Every November, "-50%" appears on products that cost the same a few weeks earlier. Since 2022, EU law says the "old price" of a sale must be the <strong>lowest price of the previous 30 days</strong> (Directive 2019/2161, Article 6a of the Price Indication Directive). Consumer authorities still find shops that inflate the reference price. truediscount lets you check it yourself, right on the product page.</p>
 
@@ -63,7 +155,7 @@ footer{color:var(--mute);font-size:14px;margin-top:48px}a{color:#1d4ed8}
 <div class="card"><b>🔴 Inflated discount</b>The product was cheaper recently, so the advertised percentage is overstated.</div>
 <div class="card"><b>📉 Price graph</b>A mini chart of every price you have seen for the product.</div>
 <div class="card"><b>🔔 Price alerts</b>Set a target price and get a notification when a visit records a price at or below it.</div>
-<div class="card"><b>💾 Backup and restore</b>Export your price history to a JSON file and import it in another browser. Merged per day, nothing uploaded.</div>
+<div class="card"><b>💾 Backup, restore &amp; CSV</b>Export your price history to JSON (for backup and restore) or CSV (for Excel and Sheets). Merged per day, nothing uploaded.</div>
 <div class="card"><b>⚡ Works on first visit</b>Reads the shop's own "lowest price in 30 days" label when it is shown.</div>
 <div class="card"><b>🏷️ RRP check</b>Tells you when the crossed-out price is only the manufacturer's recommended price.</div>
 <div class="card"><b>🔒 Private</b>Everything stays in your browser. No account, no tracking, no network requests.</div>
@@ -72,7 +164,7 @@ footer{color:var(--mute);font-size:14px;margin-top:48px}a{color:#1d4ed8}
 <img src="first-visit.png" alt="On a first visit the shop's own 30-day lowest price shows the -50% claim is inflated" width="900" height="380" loading="lazy">
 
 <h2>Supported shops</h2>
-<p>Amazon (DE, FR, IT, ES, NL, PL, SE, BE), Zalando, MediaMarkt, Saturn, Otto, eMAG, Allegro, bol.com and Coolblue out of the box. Any other web shop works after clicking <em>Enable on this site</em> in the popup. Interface in English and German.</p>
+<p>Amazon (DE, FR, IT, ES, NL, PL, SE, BE), Zalando, MediaMarkt, Saturn, Otto, eMAG, Allegro, bol.com, Coolblue and Alternate out of the box. Any other web shop works after clicking <em>Enable on this site</em> in the popup. Interface in English and German.</p>
 
 <h2 id="install">Install in 60 seconds</h2>
 <p>truediscount is not in the browser stores yet, so you load it yourself:</p>
