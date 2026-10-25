@@ -29,6 +29,15 @@ test('Coolblue: real product pages, current price from JSON-LD and no invented o
   assert.match(b.name, /Galaxy Tab A11/);
 });
 
+test('Lidl: UVP next to the struck price is an RRP, a bare struck price is the previous price', () => {
+  const a = extract(load('lidl-uvp-live.html'), 'www.lidl.de');
+  assert.deepEqual([a.adapter, a.sku, a.price, a.oldPrice, a.oldKind], ['lidl', '100407642', 349, 599, 'rrp']);
+  const b = extract(load('lidl-fr-deal-live.html'), 'www.lidl.fr');
+  assert.deepEqual([b.adapter, b.sku, b.price, b.oldPrice, b.oldKind], ['lidl', '100410190', 39.99, 49.99, 'previous']);
+  const c = extract(load('lidl-plain-live.html'), 'www.lidl.de');
+  assert.deepEqual([c.adapter, c.price, c.oldPrice], ['lidl', 139, null]);
+});
+
 test('"Retail price" label counts as an RRP', () => {
   const { document } = parseHTML('<html><head><script type="application/ld+json">{"@type":"Product","name":"X","sku":"1","offers":{"@type":"Offer","price":149,"priceCurrency":"EUR"}}</script></head><body><span class="sales-price__former">Retail price 199,-</span></body></html>');
   const r = extract(document, 'www.coolblue.be');

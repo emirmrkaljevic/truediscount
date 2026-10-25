@@ -4,5 +4,6 @@ export const SHOP_MATCHES = [
   'mediamarkt.de', 'mediamarkt.at', 'mediamarkt.nl', 'mediamarkt.es', 'mediamarkt.it', 'mediamarkt.be', 'saturn.de',
   'otto.de', 'emag.ro', 'emag.bg', 'emag.hu', 'allegro.pl', 'allegro.cz', 'bol.com',
   'coolblue.nl', 'coolblue.be', 'coolblue.de',
+  'lidl.de', 'lidl.at', 'lidl.fr', 'lidl.nl', 'lidl.be', 'lidl.it', 'lidl.es', 'lidl.pl', 'lidl.cz', 'lidl.sk', 'lidl.hu', 'lidl.ro', 'lidl.bg', 'lidl.hr', 'lidl.si', 'lidl.pt', 'lidl.ie', 'lidl.dk', 'lidl.se', 'lidl.fi',
   'alternate.de', 'alternate.nl', 'alternate.be', 'alternate.at',
 ].map(h => `https://*.${h}/*`);

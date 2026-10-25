@@ -73,6 +73,8 @@ export const ADAPTERS = [
   // Coolblue renders prices client-side; JSON-LD gives the current price and the labels below catch "Retail price".
   { id: 'coolblue', host: /(^|\.)coolblue\.(nl|be|de)$/, old: ['[class*="sales-price__former"]', '[data-testid*="reference-price"]'] },
   { id: 'bol', host: /(^|\.)bol\.com$/, old: ['.buy-block__list-price', '[data-test="list-price"]'] },
+  // Lidl prints the label next to the struck price: "UVP: <s>599.00</s>" means RRP, a bare <s> is Lidl's own earlier price.
+  { id: 'lidl', host: /(^|\.)lidl\.(de|at|fr|nl|be|it|es|pl|cz|sk|hu|ro|bg|hr|si|pt|ie|dk|se|fi)$/, price: ['.ods-price__value'], old: ['.ods-price__stroke-price s'] },
   { id: 'alternate', host: /(^|\.)alternate\.(de|nl|be|at)$/, price: ['#tle-details-price-section .price'], old: ['#tle-details-price-section .strike-price', '.strike-price'] },
 ];
 
@@ -97,8 +99,9 @@ export function extract(doc, host) {
       if (v && v > price && v < price * 20) {
         oldPrice = v;
         oldHint = el.previousElementSibling?.getAttribute('data-bs-content') || '';
+        const label = (el.parentElement?.textContent || '').length < 60 ? el.parentElement.textContent : '';
         // A recommended retail price is not the shop's own previous price.
-        oldKind = /rrp|uvp|retail price|adviesprijs|\bmsrp\b/i.test(`${s} ${el.textContent} ${oldHint}`) ? 'rrp' : 'previous';
+        oldKind = /rrp|uvp|retail price|adviesprijs|\bmsrp\b/i.test(`${s} ${el.textContent} ${label} ${oldHint}`) ? 'rrp' : 'previous';
         break;
       }
     }
