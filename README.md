@@ -13,6 +13,7 @@ Under the EU Omnibus Directive (2019/2161), a shop announcing a price reduction 
 - Mini price graph for every tracked product
 - 🔔 **Price alerts**: set a target price on the badge and get a browser notification when a visit records a price at or below it
 - 💾 **Backup, restore and CSV export**: export your local price history to JSON (for backup/restore) or CSV (for Excel and Google Sheets)
+- 🙈 **Hide on any site**: turn the badge off for a domain (and its subdomains) from the popup, and manage the list on the settings page. Nothing is recorded on hidden sites
 
 ![truediscount on a product page: flags an inflated -50% deal, shows the 30-day price graph and sets a price alert](docs/demo.gif)
 
