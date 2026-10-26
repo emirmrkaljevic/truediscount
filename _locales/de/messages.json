@@ -234,5 +234,47 @@
   },
   "backupColAlert": {
     "message": "Alarm"
+  },
+  "popupHideSite": {
+    "message": "Badge auf $SITE$ ausblenden",
+    "placeholders": {
+      "site": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupShowSite": {
+    "message": "Badge auf $SITE$ anzeigen",
+    "placeholders": {
+      "site": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupSites": {
+    "message": "Ausgeblendete Seiten"
+  },
+  "optionsTitle": {
+    "message": "truediscount: Einstellungen"
+  },
+  "optionsHiddenIntro": {
+    "message": "Auf diesen Seiten und ihren Subdomains wird kein Badge angezeigt und es werden keine Preise gespeichert. Die Liste bleibt nur in deinem Browser."
+  },
+  "optionsAdd": {
+    "message": "Ausblenden"
+  },
+  "optionsRemove": {
+    "message": "Wieder anzeigen"
+  },
+  "optionsEmpty": {
+    "message": "Keine ausgeblendeten Seiten."
+  },
+  "optionsInvalid": {
+    "message": "Keine gültige Domain: $SITE$",
+    "placeholders": {
+      "site": {
+        "content": "$1"
+      }
+    }
   }
 }

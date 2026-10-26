@@ -234,5 +234,47 @@
   },
   "backupColAlert": {
     "message": "Alert"
+  },
+  "popupHideSite": {
+    "message": "Hide badge on $SITE$",
+    "placeholders": {
+      "site": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupShowSite": {
+    "message": "Show badge on $SITE$",
+    "placeholders": {
+      "site": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupSites": {
+    "message": "Hidden sites"
+  },
+  "optionsTitle": {
+    "message": "truediscount: settings"
+  },
+  "optionsHiddenIntro": {
+    "message": "The badge is not shown on these sites or their subdomains. Prices are not recorded there either. This list is stored only in your browser."
+  },
+  "optionsAdd": {
+    "message": "Hide on site"
+  },
+  "optionsRemove": {
+    "message": "Show again"
+  },
+  "optionsEmpty": {
+    "message": "No hidden sites."
+  },
+  "optionsInvalid": {
+    "message": "Not a valid domain: $SITE$",
+    "placeholders": {
+      "site": {
+        "content": "$1"
+      }
+    }
   }
 }

@@ -5,6 +5,7 @@ import { formatPrice } from './core/price.js';
 import { addPoint } from './core/history.js';
 import { makeT } from './core/strings.js';
 import { defaultTarget } from './core/watch.js';
+import { HIDDEN_KEY, isHidden } from './core/sites.js';
 
 const api = globalThis.browser ?? globalThis.chrome;
 const COLORS = { real: '#15803d', inflated: '#b91c1c', higher: '#c2410c', nodata: '#475569', nodiscount: '#475569' };
@@ -74,6 +75,8 @@ function renderWatch(el, info, key, watch, fmt) {
 
 let lastSig = '';
 async function run() {
+  const { [HIDDEN_KEY]: hidden } = await api.storage.local.get(HIDDEN_KEY);
+  if (isHidden(hidden, location.hostname)) { document.getElementById('truediscount-host')?.remove(); lastSig = ''; return; }
   const info = extract(document, location.hostname);
   if (!info) return;
   const key = productKey(location.href);
@@ -92,6 +95,8 @@ api.runtime.onMessage.addListener((msg, _sender, send) => {
   const info = extract(document, location.hostname);
   send(info && { adapter: info.adapter, price: info.price, oldPrice: info.oldPrice, shopLow30: info.shopLow30 });
 });
+// Hide or show the badge right away when the site is toggled in the popup or options page.
+api.storage.onChanged?.addListener(changes => { if (HIDDEN_KEY in changes) { lastSig = ''; run(); } });
 // Single-page shops change the product without reloading.
 let timer; new MutationObserver(() => { clearTimeout(timer); timer = setTimeout(run, 1200); })
   .observe(document.body, { childList: true, subtree: true });

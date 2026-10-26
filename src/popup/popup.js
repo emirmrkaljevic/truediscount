@@ -2,6 +2,7 @@ import { formatPrice } from '../core/price.js';
 import { lowestInWindow } from '../core/history.js';
 import { makeT } from '../core/strings.js';
 import { reportUrl, summarizeDetection } from '../core/report.js';
+import { HIDDEN_KEY, isHidden, addHidden, removeHidden, normalizeHost, isValidHost } from '../core/sites.js';
 
 const api = globalThis.browser ?? globalThis.chrome;
 const list = document.getElementById('list');
@@ -30,7 +31,12 @@ async function show() {
 }
 
 document.getElementById('clear').onclick = async () => {
-  if (confirm(t('popupConfirmClear'))) { await api.storage.local.clear(); show(); }
+  if (!confirm(t('popupConfirmClear'))) return;
+  // Clearing history keeps the list of hidden sites.
+  const { [HIDDEN_KEY]: hidden } = await api.storage.local.get(HIDDEN_KEY);
+  await api.storage.local.clear();
+  if (hidden) await api.storage.local.set({ [HIDDEN_KEY]: hidden });
+  show();
 };
 
 document.getElementById('enable').onclick = async () => {
@@ -61,3 +67,24 @@ document.getElementById('backup').onclick = async () => {
   await api.tabs.create({ url: api.runtime.getURL('src/popup/backup.html') });
   window.close();
 };
+
+document.getElementById('settings').onclick = () => { api.runtime.openOptionsPage(); window.close(); };
+
+// Per-site toggle for the current tab.
+async function showToggle() {
+  const [tab] = await api.tabs.query({ active: true, currentWindow: true });
+  if (!/^https?:/.test(tab?.url || '')) return;
+  const host = normalizeHost(new URL(tab.url).hostname);
+  if (!isValidHost(host)) return;
+  const btn = document.getElementById('toggle-site');
+  const load = async () => (await api.storage.local.get(HIDDEN_KEY))[HIDDEN_KEY] || [];
+  const paint = list => { btn.textContent = t(isHidden(list, host) ? 'popupShowSite' : 'popupHideSite', [host]); btn.hidden = false; };
+  paint(await load());
+  btn.onclick = async () => {
+    const list = await load();
+    const next = isHidden(list, host) ? removeHidden(list, host) : addHidden(list, host);
+    await api.storage.local.set({ [HIDDEN_KEY]: next });
+    paint(next);
+  };
+}
+showToggle();

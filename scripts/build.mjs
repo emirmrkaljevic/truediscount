@@ -19,6 +19,7 @@ export function manifest(browser) {
     permissions: ['storage', 'scripting', 'activeTab', 'notifications'],
     host_permissions: SHOP_MATCHES,
     optional_host_permissions: ['https://*/*'],
+    options_ui: { page: 'src/popup/options.html', open_in_tab: true },
     content_scripts: [{ matches: SHOP_MATCHES, js: ['content.js'], run_at: 'document_idle' }],
   };
   if (browser === 'chrome') m.background = { service_worker: 'src/background.js', type: 'module' };
@@ -32,7 +33,7 @@ export function manifest(browser) {
 
 // Content scripts cannot be ES modules, so inline the core modules into one classic script.
 export function bundleContent() {
-  const order = ['price', 'history', 'strings', 'watch', 'verdict', 'sparkline', 'extract'].map(n => `src/core/${n}.js`).concat('src/content-main.js');
+  const order = ['price', 'history', 'strings', 'watch', 'verdict', 'sparkline', 'extract', 'sites'].map(n => `src/core/${n}.js`).concat('src/content-main.js');
   const body = order.map(f => `// ${f}\n` + readFileSync(f, 'utf8').replace(/^import .*$/gm, '').replace(/^export /gm, '')).join('\n');
   return `(() => {\n${body}\n})();\n`;
 }

@@ -1,5 +1,14 @@
 // English strings, used when the browser i18n API is not available (tests).
 export const EN = {
+  "popupHideSite": "Hide badge on $1",
+  "popupShowSite": "Show badge on $1",
+  "popupSites": "Hidden sites",
+  "optionsTitle": "truediscount: settings",
+  "optionsHiddenIntro": "The badge is not shown on these sites or their subdomains. Prices are not recorded there either. This list is stored only in your browser.",
+  "optionsAdd": "Hide on site",
+  "optionsRemove": "Show again",
+  "optionsEmpty": "No hidden sites.",
+  "optionsInvalid": "Not a valid domain: $1",
   "popupBackup": "Backup / restore",
   "backupTitle": "truediscount: backup and restore",
   "backupIntro": "Save your local price history to a JSON file (for backup and restore) or a CSV file (for spreadsheets), or load a JSON backup from another browser. Imported prices are merged with the ones already here (one price per day, last 90 days).",
