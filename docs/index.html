@@ -20,7 +20,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[
-{"@type":"SoftwareApplication","name":"truediscount","applicationCategory":"BrowserApplication","softwareVersion":"0.11.0","image":"https://emirmrkaljevic.github.io/truediscount/og.png","screenshot":"https://emirmrkaljevic.github.io/truediscount/screenshot.png","description":"Browser extension that checks if a shop discount is real by comparing the crossed-out price with the lowest price of the last 30 days (EU Omnibus rule).","operatingSystem":"Chrome, Firefox, Edge","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"url":"https://emirmrkaljevic.github.io/truediscount/","downloadUrl":"https://github.com/emirmrkaljevic/truediscount/releases/latest","license":"https://opensource.org/licenses/MIT"},
+{"@type":"SoftwareApplication","name":"truediscount","applicationCategory":"BrowserApplication","softwareVersion":"0.12.0","image":"https://emirmrkaljevic.github.io/truediscount/og.png","screenshot":"https://emirmrkaljevic.github.io/truediscount/screenshot.png","description":"Browser extension that checks if a shop discount is real by comparing the crossed-out price with the lowest price of the last 30 days (EU Omnibus rule).","operatingSystem":"Chrome, Firefox, Edge","offers":{"@type":"Offer","price":"0","priceCurrency":"EUR"},"url":"https://emirmrkaljevic.github.io/truediscount/","downloadUrl":"https://github.com/emirmrkaljevic/truediscount/releases/latest","license":"https://opensource.org/licenses/MIT"},
 {"@type":"FAQPage","mainEntity":[
 {"@type":"Question","name":"How do I know if a Black Friday discount is fake?","acceptedAnswer":{"@type":"Answer","text":"In the EU, the crossed-out price of a sale must be the lowest price the shop charged in the previous 30 days. If the product was cheaper in that period, the advertised discount is inflated. truediscount checks this automatically on the product page."}},
 {"@type":"Question","name":"What is the EU Omnibus 30-day rule?","acceptedAnswer":{"@type":"Answer","text":"Directive (EU) 2019/2161 amended the Price Indication Directive: any announced price reduction must state the prior price, defined as the lowest price applied during at least 30 days before the reduction."}},
@@ -62,6 +62,7 @@ footer{color:var(--mute);font-size:14px;margin-top:48px}a{color:#1d4ed8}
 <p class="tag">A free browser extension that puts a badge on the product page: real discount, or a "-50%" that was cheaper last week. No account, nothing leaves your browser.</p>
 <div class="btns">
 <a class="p big" href="https://github.com/emirmrkaljevic/truediscount/releases/latest">Download free for Chrome, Edge &amp; Firefox</a>
+<a class="s" href="https://github.com/emirmrkaljevic/truediscount/releases/latest/download/truediscount.user.js">Install as userscript</a>
 <a class="s" href="#install">Install in 60 seconds</a>
 <a class="s" href="#demo">Try the demo</a>
 </div>
@@ -80,6 +81,10 @@ footer{color:var(--mute);font-size:14px;margin-top:48px}a{color:#1d4ed8}
 <li>Open <code>about:debugging#/runtime/this-firefox</code>.</li>
 <li>Click <em>Load Temporary Add-on</em> and pick the zip.</li></ol>
 <small>Temporary add-ons are removed on restart. A signed version on addons.mozilla.org is on the way.</small></div>
+<div class="card"><b>Userscript (any browser, one click)</b><ol>
+<li>Install <a href="https://www.tampermonkey.net/">Tampermonkey</a> or <a href="https://violentmonkey.github.io/">Violentmonkey</a>.</li>
+<li>Open <a href="https://github.com/emirmrkaljevic/truediscount/releases/latest/download/truediscount.user.js">truediscount.user.js</a> and click <em>Install</em>.</li></ol>
+<small>Stays installed after restarts and updates itself. Price history is kept in the userscript manager on your device.</small></div>
 </div>
 <p>Full steps, including how to update and how to keep it installed in Firefox Developer Edition, are in the <a href="https://github.com/emirmrkaljevic/truediscount#install-in-60-seconds">README</a>.</p>
 
