@@ -1,5 +1,10 @@
 // English strings, used when the browser i18n API is not available (tests).
 export const EN = {
+  "popupWatchlist": "Watchlist",
+  "popupSortRecent": "Recent first",
+  "popupSortDrop": "Biggest drop",
+  "popupDropHint": "Below the 30-day high of $1",
+  "popupAtLow": "30d low",
   "popupHideSite": "Hide badge on $1",
   "popupShowSite": "Show badge on $1",
   "popupSites": "Hidden sites",

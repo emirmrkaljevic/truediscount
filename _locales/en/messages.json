@@ -276,5 +276,25 @@
         "content": "$1"
       }
     }
+  },
+  "popupWatchlist": {
+    "message": "Watchlist"
+  },
+  "popupSortRecent": {
+    "message": "Recent first"
+  },
+  "popupSortDrop": {
+    "message": "Biggest drop"
+  },
+  "popupDropHint": {
+    "message": "Below the 30-day high of $p1$",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupAtLow": {
+    "message": "30d low"
   }
 }

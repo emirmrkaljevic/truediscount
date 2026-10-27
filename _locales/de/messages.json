@@ -276,5 +276,25 @@
         "content": "$1"
       }
     }
+  },
+  "popupWatchlist": {
+    "message": "Merkliste"
+  },
+  "popupSortRecent": {
+    "message": "Neueste zuerst"
+  },
+  "popupSortDrop": {
+    "message": "Größte Senkung"
+  },
+  "popupDropHint": {
+    "message": "Unter dem 30-Tage-Hoch von $p1$",
+    "placeholders": {
+      "p1": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupAtLow": {
+    "message": "30-Tage-Tief"
   }
 }
