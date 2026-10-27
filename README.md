@@ -3,9 +3,9 @@
 <p align="center"><a href="https://skintoscan.com/#packages"><img src=".github/assets/skintoscan-support.svg" width="684" alt="Support my open-source work: get a SkinToScan pack"></a><br><sub>If you find this useful, you can support me by getting a SkinToScan pack, my other project. It's a one-time purchase that directly funds my open-source work.</sub></p>
 <p align="center"><a href="https://skintoscan.com/checkout/?add-to-cart=138"><img src=".github/assets/skintoscan-pack-1.svg" width="220" alt="Buy Single Picture Check, €4.49"></a> <a href="https://skintoscan.com/checkout/?add-to-cart=139"><img src=".github/assets/skintoscan-pack-5.svg" width="220" alt="Buy 5 Picture Pack, €19.99 (popular)"></a> <a href="https://skintoscan.com/checkout/?add-to-cart=140"><img src=".github/assets/skintoscan-pack-15.svg" width="220" alt="Buy 15 Picture Pack, €54.99"></a></p>
 
-**Is that discount real?** A small browser extension for Chrome and Firefox that checks shop discounts against the lowest price of the last 30 days.
+**Is this Black Friday deal real?** See the 30-day lowest price on any EU shop. truediscount is a free browser extension for Chrome, Edge and Firefox that puts a badge on the product page: real discount, or a "-50%" that was cheaper last week.
 
-**[Download the latest release](https://github.com/emirmrkaljevic/truediscount/releases/latest)** · [Install in 60 seconds](#install-in-60-seconds) · [Try the live demo first](https://emirmrkaljevic.github.io/truediscount/#demo). Free, open source, no account, no data leaves your browser. Firefox and Edge store listings are pending review setup.
+**[Download the latest release](https://github.com/emirmrkaljevic/truediscount/releases/latest)** · [Install in 60 seconds](#install-in-60-seconds) · [Try the live demo first](https://emirmrkaljevic.github.io/truediscount/#demo). Free, open source, no account, no data leaves your browser. Not in the browser stores yet: Firefox and Edge listings are pending, so installing takes three clicks (steps below).
 
 Under the EU Omnibus Directive (2019/2161), a shop announcing a price reduction must use the lowest price of the previous 30 days as the reference "old price". Many Black Friday deals don't. truediscount remembers the prices you see while browsing and tells you, right on the product page, whether the claimed discount holds up.
 
