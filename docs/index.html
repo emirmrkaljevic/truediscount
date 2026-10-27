@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>truediscount: fake discount checker for EU shops (Black Friday)</title>
+<title>Is this Black Friday deal real? 30-day lowest price checker for EU shops | truediscount</title>
 <meta name="description" content="Free, open-source browser extension that checks if a discount is real. Compares the crossed-out price with the lowest price of the last 30 days, as the EU Omnibus rule requires. Chrome and Firefox, no tracking.">
 <link rel="canonical" href="https://emirmrkaljevic.github.io/truediscount/">
 <meta property="og:type" content="website">
@@ -34,6 +34,7 @@
 main{max-width:860px;margin:0 auto;padding:32px 20px 64px}
 header h1{font-size:2.3rem;line-height:1.15;margin:.2em 0}.tag{color:var(--mute);font-size:1.15rem;margin:0 0 20px}
 .btns a{display:inline-block;margin:4px 8px 4px 0;padding:10px 18px;border-radius:8px;text-decoration:none;font-weight:600}
+.big{font-size:1.15rem;padding:14px 24px!important}.note{color:var(--mute);font-size:14px}
 .p{background:var(--g);color:#fff}.s{background:#e2e8f0;color:var(--ink)}
 img{max-width:100%;border-radius:10px;box-shadow:0 6px 24px rgba(15,23,42,.12);margin:20px 0}
 h2{margin-top:44px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
@@ -57,13 +58,32 @@ footer{color:var(--mute);font-size:14px;margin-top:48px}a{color:#1d4ed8}
 <body><main>
 <header>
 <p><strong>truediscount</strong></p>
-<h1>Is that discount real? A fake discount checker for EU shops</h1>
-<p class="tag">Free browser extension that compares the crossed-out price with the lowest price of the last 30 days, the reference the EU Omnibus rule requires. Just in time for Black Friday.</p>
+<h1>Is this Black Friday deal real? See the 30-day lowest price on any EU shop</h1>
+<p class="tag">A free browser extension that puts a badge on the product page: real discount, or a "-50%" that was cheaper last week. No account, nothing leaves your browser.</p>
 <div class="btns">
-<a class="p" href="https://github.com/emirmrkaljevic/truediscount/releases/latest">Download (Chrome &amp; Firefox)</a>
-<a class="s" href="https://github.com/emirmrkaljevic/truediscount">Source on GitHub</a>
+<a class="p big" href="https://github.com/emirmrkaljevic/truediscount/releases/latest">Download free for Chrome, Edge &amp; Firefox</a>
+<a class="s" href="#install">Install in 60 seconds</a>
+<a class="s" href="#demo">Try the demo</a>
 </div>
+<p class="note">Works on Amazon EU, Zalando, MediaMarkt, Saturn, Otto, bol.com, Coolblue, Lidl and more. Not in the Chrome, Firefox or Edge stores yet, so installing takes three clicks instead of one.</p>
 </header>
+<h2 id="install">Install in 60 seconds</h2>
+<p>truediscount is not in the browser stores yet (Firefox and Edge listings are pending), so you load it yourself:</p>
+<div class="grid">
+<div class="card"><b>Chrome, Edge, Brave</b><ol>
+<li>Download the Chrome zip from the <a href="https://github.com/emirmrkaljevic/truediscount/releases/latest">latest release</a> and unzip it.</li>
+<li>Open <code>chrome://extensions</code> (or <code>edge://extensions</code>, <code>brave://extensions</code>).</li>
+<li>Turn on <em>Developer mode</em>.</li>
+<li>Click <em>Load unpacked</em> and pick the folder.</li></ol></div>
+<div class="card"><b>Firefox</b><ol>
+<li>Download the Firefox zip from the <a href="https://github.com/emirmrkaljevic/truediscount/releases/latest">latest release</a>.</li>
+<li>Open <code>about:debugging#/runtime/this-firefox</code>.</li>
+<li>Click <em>Load Temporary Add-on</em> and pick the zip.</li></ol>
+<small>Temporary add-ons are removed on restart. A signed version on addons.mozilla.org is on the way.</small></div>
+</div>
+<p>Full steps, including how to update and how to keep it installed in Firefox Developer Edition, are in the <a href="https://github.com/emirmrkaljevic/truediscount#install-in-60-seconds">README</a>.</p>
+
+
 <img src="demo.gif" alt="truediscount on a product page: flags an inflated -50% deal, shows the 30-day price graph and sets a price alert" width="720" height="327">
 
 <h2 id="demo">Try it right here: interactive discount check</h2>
@@ -146,8 +166,11 @@ footer{color:var(--mute);font-size:14px;margin-top:48px}a{color:#1d4ed8}
 })();
 </script>
 
-<h2>Black Friday fake discounts in the EU</h2>
-<p>Every November, "-50%" appears on products that cost the same a few weeks earlier. Since 2022, EU law says the "old price" of a sale must be the <strong>lowest price of the previous 30 days</strong> (Directive 2019/2161, Article 6a of the Price Indication Directive). Consumer authorities still find shops that inflate the reference price. truediscount lets you check it yourself, right on the product page.</p>
+<h2 id="example">Spot a fake discount: an example</h2>
+<p><em>Example data for illustration only. This is not a real shop or product.</em></p>
+<div class="card"><b>"Example Headphones X" on an example shop</b>
+<ol><li>Price on 1 November: €129</li><li>Price on 15 November: €99</li><li>Black Friday banner: <s>€199</s> now €99, "-50%"</li></ol>
+<p>The lowest price in the 30 days before the sale was €99, the same as the "deal" price. The real saving is 0%, not 50%. truediscount shows a red <strong>Inflated discount</strong> badge here, because the crossed-out €199 is not the 30-day lowest price.</p></div>
 
 <h2>What it does</h2>
 <div class="grid">
@@ -171,21 +194,8 @@ footer{color:var(--mute);font-size:14px;margin-top:48px}a{color:#1d4ed8}
 <h2>Supported shops</h2>
 <p>Amazon (DE, FR, IT, ES, NL, PL, SE, BE), Zalando, MediaMarkt, Saturn, Otto, eMAG, Allegro, bol.com, Coolblue, Alternate and Lidl out of the box. Any other web shop works after clicking <em>Enable on this site</em> in the popup. Interface in English and German.</p>
 
-<h2 id="install">Install in 60 seconds</h2>
-<p>truediscount is not in the browser stores yet, so you load it yourself:</p>
-<div class="grid">
-<div class="card"><b>Chrome, Edge, Brave</b><ol>
-<li>Download the Chrome zip from the <a href="https://github.com/emirmrkaljevic/truediscount/releases/latest">latest release</a> and unzip it.</li>
-<li>Open <code>chrome://extensions</code> (or <code>edge://extensions</code>, <code>brave://extensions</code>).</li>
-<li>Turn on <em>Developer mode</em>.</li>
-<li>Click <em>Load unpacked</em> and pick the folder.</li></ol></div>
-<div class="card"><b>Firefox</b><ol>
-<li>Download the Firefox zip from the <a href="https://github.com/emirmrkaljevic/truediscount/releases/latest">latest release</a>.</li>
-<li>Open <code>about:debugging#/runtime/this-firefox</code>.</li>
-<li>Click <em>Load Temporary Add-on</em> and pick the zip.</li></ol>
-<small>Temporary add-ons are removed on restart. A signed version on addons.mozilla.org is on the way.</small></div>
-</div>
-<p>Full steps, including how to update and how to keep it installed in Firefox Developer Edition, are in the <a href="https://github.com/emirmrkaljevic/truediscount#install-in-60-seconds">README</a>.</p>
+<h2 id="law">Why this works: the EU 30-day rule</h2>
+<p>Every November, "-50%" appears on products that cost the same a few weeks earlier. Since 2022, EU law says the "old price" of a sale must be the <strong>lowest price of the previous 30 days</strong> (Directive 2019/2161, Article 6a of the Price Indication Directive). Consumer authorities still find shops that inflate the reference price. truediscount lets you check it yourself, right on the product page.</p>
 
 <h2>FAQ</h2>
 <details><summary>How do I know if a Black Friday discount is fake?</summary><p>Compare the crossed-out price with the lowest price of the last 30 days. If the product was cheaper in that period, the discount is inflated. truediscount does this comparison automatically.</p></details>
