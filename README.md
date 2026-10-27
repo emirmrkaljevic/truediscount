@@ -12,6 +12,7 @@ Under the EU Omnibus Directive (2019/2161), a shop announcing a price reduction 
 - 🟠 **Cheaper recently**: today's price is higher than the 30-day low
 - Mini price graph for every tracked product
 - 🔔 **Price alerts**: set a target price on the badge and get a browser notification when a visit records a price at or below it
+- 📋 **Watchlist**: the popup lists every tracked product with its latest price, 30-day low and drop from the 30-day high. Sort by biggest drop and click a name to open the product
 - 💾 **Backup, restore and CSV export**: export your local price history to JSON (for backup/restore) or CSV (for Excel and Google Sheets)
 - 🙈 **Hide on any site**: turn the badge off for a domain (and its subdomains) from the popup, and manage the list on the settings page. Nothing is recorded on hidden sites
 
@@ -26,6 +27,12 @@ Many EU shops already print their own "lowest price in the last 30 days" next to
 ### Price alerts
 
 Click **Alert me below** on the badge (10% under today's price by default, editable). Watched products are listed first in the popup, and the toolbar icon shows how many are at or below their target. Prices are checked whenever you open the product page; the extension never loads shop pages in the background.
+
+### Watchlist
+
+The popup shows every product you have visited, with the latest price you saw, the 30-day low and how far the price is below its 30-day high. Switch the list to **Biggest drop** to see which items on your Black Friday wishlist really got cheaper, and click a product to open its page. Prices on this list only update when you visit the product page.
+
+![Popup watchlist sorted by biggest drop (example data)](docs/watchlist.png)
 
 ### Backup and restore
 
