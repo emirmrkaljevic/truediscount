@@ -5,6 +5,8 @@
 
 **Is that discount real?** A small browser extension for Chrome and Firefox that checks shop discounts against the lowest price of the last 30 days.
 
+**[Download the latest release](https://github.com/emirmrkaljevic/truediscount/releases/latest)** · [Install in 60 seconds](#install-in-60-seconds) · [Try the live demo first](https://emirmrkaljevic.github.io/truediscount/#demo). Free, open source, no account, no data leaves your browser. Firefox and Edge store listings are pending review setup.
+
 Under the EU Omnibus Directive (2019/2161), a shop announcing a price reduction must use the lowest price of the previous 30 days as the reference "old price". Many Black Friday deals don't. truediscount remembers the prices you see while browsing and tells you, right on the product page, whether the claimed discount holds up.
 
 - 🟢 **Real discount**: the old price matches what we saw in the last 30 days
