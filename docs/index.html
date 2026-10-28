@@ -54,9 +54,9 @@ footer{color:var(--mute);font-size:14px;margin-top:48px}a{color:#1d4ed8}
 .presets button{padding:7px 12px;border:1px solid #cbd5e1;background:#f8fafc;border-radius:6px;cursor:pointer;font:600 14px system-ui,sans-serif;color:var(--ink)}
 .presets button[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
 .demo-body{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px;align-items:center}
-.inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:14px}
+.inputs{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;font-size:14px}
 .inputs label{display:flex;flex-direction:column;gap:4px;color:var(--mute)}
-.inputs input[type="number"]{padding:6px 8px;border:1px solid #cbd5e1;border-radius:6px;font:15px system-ui,sans-serif;color:var(--ink)}
+.inputs input[type="number"]{min-width:0;width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid #cbd5e1;border-radius:6px;font:15px system-ui,sans-serif;color:var(--ink)}
 .inputs .chk{grid-column:1/-1;flex-direction:row;align-items:center;gap:8px;color:var(--ink)}
 .badge-preview{border-left:6px solid var(--c,#15803d);border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,.14);padding:12px 14px;background:#fff;font:13px/1.45 system-ui,sans-serif}
 .badge-preview .bt{font-weight:700;color:var(--c,#15803d);display:flex;justify-content:space-between}
