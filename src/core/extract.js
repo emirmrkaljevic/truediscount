@@ -57,7 +57,7 @@ export function fromMicrodata(doc) {
 
 // Per-shop selectors for the advertised "old" price (and price when needed).
 export const ADAPTERS = [
-  { id: 'amazon', host: /(^|\.)amazon\.(de|fr|it|es|nl|pl|se|com\.be)$/,
+  { id: 'amazon', host: /(^|\.)amazon\.(de|fr|it|es|nl|pl|se|ie|com\.be)$/,
     price: ['#corePriceDisplay_desktop_feature_div .priceToPay .a-offscreen', '#apex_desktop .apex-pricetopay-value .a-offscreen',
       '#corePrice_feature_div .a-price .a-offscreen', '#corePriceDisplay_desktop_feature_div .a-price .a-offscreen', '#priceblock_ourprice'],
     old: ['#corePriceDisplay_desktop_feature_div .basisPrice .a-offscreen', '#apex_desktop .apex-basisprice-value .a-offscreen',

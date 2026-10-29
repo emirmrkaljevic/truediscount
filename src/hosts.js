@@ -1,8 +1,8 @@
 export const SHOP_MATCHES = [
-  'amazon.de', 'amazon.fr', 'amazon.it', 'amazon.es', 'amazon.nl', 'amazon.pl', 'amazon.se', 'amazon.com.be',
-  'zalando.de', 'zalando.fr', 'zalando.it', 'zalando.es', 'zalando.nl', 'zalando.pl', 'zalando.at', 'zalando.be',
-  'mediamarkt.de', 'mediamarkt.at', 'mediamarkt.nl', 'mediamarkt.es', 'mediamarkt.it', 'mediamarkt.be', 'saturn.de',
-  'otto.de', 'emag.ro', 'emag.bg', 'emag.hu', 'allegro.pl', 'allegro.cz', 'bol.com',
+  'amazon.de', 'amazon.fr', 'amazon.it', 'amazon.es', 'amazon.nl', 'amazon.pl', 'amazon.se', 'amazon.com.be', 'amazon.ie',
+  'zalando.de', 'zalando.fr', 'zalando.it', 'zalando.es', 'zalando.nl', 'zalando.pl', 'zalando.at', 'zalando.be', 'zalando.cz', 'zalando.se', 'zalando.dk', 'zalando.fi', 'zalando.ie',
+  'mediamarkt.de', 'mediamarkt.at', 'mediamarkt.nl', 'mediamarkt.es', 'mediamarkt.it', 'mediamarkt.be', 'saturn.de', 'saturn.at', 'mediamarkt.pl', 'mediamarkt.hu', 'mediamarkt.se',
+  'otto.de', 'emag.ro', 'emag.bg', 'emag.hu', 'allegro.pl', 'allegro.cz', 'allegro.sk', 'bol.com',
   'coolblue.nl', 'coolblue.be', 'coolblue.de',
   'lidl.de', 'lidl.at', 'lidl.fr', 'lidl.nl', 'lidl.be', 'lidl.it', 'lidl.es', 'lidl.pl', 'lidl.cz', 'lidl.sk', 'lidl.hu', 'lidl.ro', 'lidl.bg', 'lidl.hr', 'lidl.si', 'lidl.pt', 'lidl.ie', 'lidl.dk', 'lidl.se', 'lidl.fi',
   'alternate.de', 'alternate.nl', 'alternate.be', 'alternate.at',
