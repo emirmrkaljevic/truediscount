@@ -296,5 +296,11 @@
   },
   "popupAtLow": {
     "message": "30d low"
+  },
+  "popupSearch": {
+    "message": "Search watchlist"
+  },
+  "popupNoMatch": {
+    "message": "No saved product matches."
   }
 }

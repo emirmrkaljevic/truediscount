@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { watchlistRows, sortRows, productUrl } from '../src/core/watchlist.js';
+import { watchlistRows, sortRows, productUrl, filterRows } from '../src/core/watchlist.js';
 
 const DAY = 86400000, now = 100 * DAY;
 const h = (...ps) => ps.map(([d, p]) => ({ t: now - d * DAY, p }));
@@ -32,4 +32,12 @@ test('productUrl only builds https links for host-like keys', () => {
   assert.equal(productUrl('amazon.de/dp/B000000000'), 'https://amazon.de/dp/B000000000');
   assert.equal(productUrl('javascript:alert(1)'), null);
   assert.equal(productUrl('td-hidden-sites'), null);
+});
+
+test('filterRows matches name or key, ignoring case and accents', () => {
+  const rows = [{ name: 'Café Crème Maschine', key: 'shop.de/a' }, { name: 'Kopfhörer', key: 'amazon.fr/b' }];
+  assert.equal(filterRows(rows, '').length, 2);
+  assert.deepEqual(filterRows(rows, 'cafe creme').map(r => r.key), ['shop.de/a']);
+  assert.deepEqual(filterRows(rows, 'AMAZON').map(r => r.key), ['amazon.fr/b']);
+  assert.equal(filterRows(rows, 'cafe amazon').length, 0);
 });

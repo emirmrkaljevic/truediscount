@@ -296,5 +296,11 @@
   },
   "popupAtLow": {
     "message": "30-Tage-Tief"
+  },
+  "popupSearch": {
+    "message": "Merkliste durchsuchen"
+  },
+  "popupNoMatch": {
+    "message": "Kein gespeichertes Produkt passt."
   }
 }

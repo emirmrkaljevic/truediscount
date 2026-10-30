@@ -3,6 +3,8 @@ export const EN = {
   "popupWatchlist": "Watchlist",
   "popupSortRecent": "Recent first",
   "popupSortDrop": "Biggest drop",
+  "popupSearch": "Search watchlist",
+  "popupNoMatch": "No saved product matches.",
   "popupDropHint": "Below the 30-day high of $1",
   "popupAtLow": "30d low",
   "popupHideSite": "Hide badge on $1",

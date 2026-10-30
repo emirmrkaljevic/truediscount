@@ -13,3 +13,4 @@ table{width:100%;border-collapse:collapse;margin-top:16px;font-size:13px}th,td{t
 a.name{color:#0f172a;text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}a.name:hover{text-decoration:underline}
 .drop{color:#15803d}.low{color:#15803d;font-weight:600;font-size:10px}
 li span:last-child{white-space:nowrap;flex-shrink:0}
+#search{width:100%;box-sizing:border-box;margin:4px 0 6px;padding:4px 8px;border:1px solid #cbd5e1;border-radius:6px;font:inherit}

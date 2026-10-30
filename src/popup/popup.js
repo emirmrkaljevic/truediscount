@@ -1,5 +1,5 @@
 import { formatPrice } from '../core/price.js';
-import { watchlistRows, sortRows } from '../core/watchlist.js';
+import { watchlistRows, sortRows, filterRows } from '../core/watchlist.js';
 import { makeT } from '../core/strings.js';
 import { reportUrl, summarizeDetection } from '../core/report.js';
 import { HIDDEN_KEY, isHidden, addHidden, removeHidden, normalizeHost, isValidHost } from '../core/sites.js';
@@ -10,13 +10,16 @@ const t = makeT(api.i18n?.getMessage?.bind(api.i18n));
 for (const el of document.querySelectorAll('[data-i18n]')) el.textContent = t(el.dataset.i18n);
 
 const sortSel = document.getElementById('sort');
+const search = document.getElementById('search');
+search.placeholder = t('popupSearch');
+search.oninput = () => show();
 const pct = d => Math.round(d * 100);
 
 async function show() {
   const all = await api.storage.local.get(null);
   const mode = all['td-sort'] === 'drop' ? 'drop' : 'recent';
   sortSel.value = mode;
-  const items = sortRows(watchlistRows(all), mode).slice(0, 50);
+  const items = filterRows(sortRows(watchlistRows(all), mode), search.value).slice(0, 50);
   list.replaceChildren(...items.map(r => {
     const li = document.createElement('li');
     const name = document.createElement(r.url ? 'a' : 'span');
@@ -38,7 +41,7 @@ async function show() {
     if (newLow) { const l = document.createElement('b'); l.className = 'low'; l.textContent = ' ' + t('popupAtLow'); p.append(l); }
     li.append(name, p); return li;
   }));
-  if (!items.length) { const li = document.createElement('li'); li.textContent = t('popupEmpty'); list.append(li); }
+  if (!items.length) { const li = document.createElement('li'); li.textContent = t(search.value.trim() ? 'popupNoMatch' : 'popupEmpty'); list.append(li); }
 }
 
 sortSel.onchange = async () => { await api.storage.local.set({ 'td-sort': sortSel.value }); show(); };

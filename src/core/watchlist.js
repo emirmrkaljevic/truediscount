@@ -31,3 +31,11 @@ export function sortRows(rows, mode = 'recent') {
   else r.sort((a, b) => (!!b.watch - !!a.watch) || b.seen - a.seen);
   return r;
 }
+
+// Case- and accent-insensitive match on product name or shop key; every word must match.
+const fold = s => String(s || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+export function filterRows(rows, query = '') {
+  const words = fold(query).split(/\s+/).filter(Boolean);
+  if (!words.length) return rows;
+  return rows.filter(r => { const hay = fold(r.name + ' ' + r.key); return words.every(w => hay.includes(w)); });
+}
