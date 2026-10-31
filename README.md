@@ -5,7 +5,7 @@
 
 **Is this Black Friday deal real?** See the 30-day lowest price on any EU shop. truediscount is a free browser extension for Chrome, Edge and Firefox that puts a badge on the product page: real discount, or a "-50%" that was cheaper last week.
 
-**[Download the latest release](https://github.com/emirmrkaljevic/truediscount/releases/latest)** · [Install in 60 seconds](#install-in-60-seconds) · [Try the live demo first](https://emirmrkaljevic.github.io/truediscount/#demo). Free, open source, no account, no data leaves your browser. Not in the browser stores yet: Firefox and Edge listings are pending, so installing takes three clicks (steps below).
+**[Download the latest release](https://github.com/emirmrkaljevic/truediscount/releases/latest)** · [Install in 60 seconds](#install-in-60-seconds) · [Try the live demo first](https://emirmrkaljevic.github.io/truediscount/#demo). Free, open source, no account, no data leaves your browser. **[Install for Firefox](https://addons.mozilla.org/en-US/firefox/addon/truediscount/)** from addons.mozilla.org. On Chrome, Edge and other Chromium browsers installing takes three clicks (steps below).
 
 Under the EU Omnibus Directive (2019/2161), a shop announcing a price reduction must use the lowest price of the previous 30 days as the reference "old price". Many Black Friday deals don't. truediscount remembers the prices you see while browsing and tells you, right on the product page, whether the claimed discount holds up.
 
@@ -42,7 +42,9 @@ Open the popup and click **Backup / restore** to see a full table of your tracke
 
 ## Install in 60 seconds
 
-truediscount is not in the browser stores yet, so you load it yourself. It takes about a minute.
+**Firefox:** [Install for Firefox](https://addons.mozilla.org/en-US/firefox/addon/truediscount/) from addons.mozilla.org, one click, updates automatically.
+
+Chrome-based browsers are not in a store yet, so you load it yourself. It takes about a minute.
 
 **Chrome, Edge, Brave, Opera, Vivaldi**
 1. Download `truediscount-chrome-<version>.zip` from the [latest release](https://github.com/emirmrkaljevic/truediscount/releases/latest) and unzip it.
@@ -53,12 +55,12 @@ truediscount is not in the browser stores yet, so you load it yourself. It takes
 
 Keep the folder where it is: the browser loads the extension from it. To update, unzip the new version over it and click the reload icon on the extension card.
 
-**Firefox**
+**Firefox (manual install)**
 1. Download `truediscount-firefox-<version>.zip` from the [latest release](https://github.com/emirmrkaljevic/truediscount/releases/latest) (no need to unzip).
 2. Open `about:debugging#/runtime/this-firefox`.
 3. Click **Load Temporary Add-on…** and select the zip.
 
-Temporary add-ons are removed when Firefox restarts. A signed version on addons.mozilla.org is on the way. Until then, Firefox Developer Edition, Nightly and ESR can keep it installed: set `xpinstall.signatures.required` to `false` in `about:config`, then install the zip from `about:addons` → gear menu → **Install Add-on From File**. Requires Firefox 140 or newer (Firefox for Android 142 or newer).
+Temporary add-ons are removed when Firefox restarts, so the [addons.mozilla.org version](https://addons.mozilla.org/en-US/firefox/addon/truediscount/) is the easier choice. If you want the manual zip anyway, Firefox Developer Edition, Nightly and ESR can keep it installed: set `xpinstall.signatures.required` to `false` in `about:config`, then install the zip from `about:addons` → gear menu → **Install Add-on From File**. Requires Firefox 140 or newer (Firefox for Android 142 or newer).
 
 ## Privacy
 
