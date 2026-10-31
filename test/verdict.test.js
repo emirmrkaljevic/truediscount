@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { addPoint, lowestInWindow, DAY } from '../src/core/history.js';
-import { evaluate } from '../src/core/verdict.js';
+import { evaluate, message } from '../src/core/verdict.js';
 
 const now = Date.UTC(2026, 10, 27, 12);
 const hist = (pairs) => pairs.reduce((h, [d, p]) => addPoint(h, p, now - d * DAY), []);
@@ -26,4 +26,14 @@ test('flags inflated old price', () => {
 test('accepts genuine discount and no-data', () => {
   assert.equal(evaluate({ price: 80, oldPrice: 100, history: hist([[5, 100]]), now }).status, 'real');
   assert.equal(evaluate({ price: 80, oldPrice: 100, history: [], now }).status, 'nodata');
+});
+
+test('notes a price hike that happened before the 30-day window', () => {
+  const h = hist([[60, 70], [20, 100], [5, 100]]);
+  const v = evaluate({ price: 85, oldPrice: 100, history: h, now });
+  assert.equal(v.status, 'real'); assert.equal(v.low90, 70);
+  assert.match(message(v), /cost 70\.00 in the last 90 days/);
+  const quiet = evaluate({ price: 85, oldPrice: 100, history: hist([[60, 99], [20, 100]]), now });
+  assert.equal(quiet.low90, undefined);
+  assert.doesNotMatch(message(quiet), /90 days/);
 });

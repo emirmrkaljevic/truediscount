@@ -42,6 +42,7 @@ export const EN = {
   "msgNodata": "Shop claims -$1%. No history yet; tracking starts now.",
   "msgLowest": "Lowest price seen in 30 days: $1.",
   "msgTracking": "Tracking this price from today.",
+  "msgHike": "Heads up: it cost $1 in the last 90 days, so the price may have been raised before this sale.",
   "msgRrp": "Note: the crossed-out price is the manufacturer's RRP, not an earlier shop price.",
   "basedOnDays": "Based on prices seen in this browser over $1 day(s).",
   "basedOn": "Based on prices seen in this browser.",

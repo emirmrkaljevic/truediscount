@@ -13,6 +13,9 @@ export function evaluate({ price, oldPrice, oldKind = 'previous', shopLow30 = nu
   const res = { price, oldPrice, oldKind, low30, source, days, claimedPct: claimed, realPct: null };
   if (low30 == null) return { ...res, status: claimed ? 'nodata' : 'nodiscount' };
   res.realPct = Math.round((1 - price / low30) * 100);
+  // Pre-sale hike: the price was clearly lower 31 to 90 days ago, outside the legal 30-day window.
+  const low90 = lowestInWindow(history, now, 90);
+  if (low90 != null && low90 < low30 * 0.97 && low90 < price) res.low90 = low90;
   if (price > low30) return { ...res, status: 'higher' };
   if (!claimed) return { ...res, status: 'nodiscount' };
   if (oldPrice > low30 * 1.01) return { ...res, status: 'inflated' };
@@ -22,6 +25,7 @@ export function evaluate({ price, oldPrice, oldKind = 'previous', shopLow30 = nu
 export function message(v, fmt = x => x.toFixed(2), t = makeT()) {
   let base = baseMessage(v, fmt, t);
   if (v.source === 'shop' && !['nodata', 'inflated'].includes(v.status)) base = `${base} ${t('msgSourceShop')}`;
+  if (v.low90 != null && ['real', 'nodiscount'].includes(v.status)) base = `${base} ${t('msgHike', [fmt(v.low90)])}`;
   return v.oldKind === 'rrp' && v.claimedPct ? `${base} ${t('msgRrp')}` : base;
 }
 

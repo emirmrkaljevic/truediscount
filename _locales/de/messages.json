@@ -302,5 +302,13 @@
   },
   "popupNoMatch": {
     "message": "Kein gespeichertes Produkt passt."
+  },
+  "msgHike": {
+    "message": "Achtung: In den letzten 90 Tagen kostete es $PRICE$, der Preis wurde vor dieser Aktion womöglich erhöht.",
+    "placeholders": {
+      "price": {
+        "content": "$1"
+      }
+    }
   }
 }

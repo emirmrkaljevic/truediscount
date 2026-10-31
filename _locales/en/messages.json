@@ -302,5 +302,13 @@
   },
   "popupNoMatch": {
     "message": "No saved product matches."
+  },
+  "msgHike": {
+    "message": "Heads up: it cost $PRICE$ in the last 90 days, so the price may have been raised before this sale.",
+    "placeholders": {
+      "price": {
+        "content": "$1"
+      }
+    }
   }
 }
