@@ -300,6 +300,9 @@
   "popupSearch": {
     "message": "Search watchlist"
   },
+  "popupRemove": {
+    "message": "Remove from watchlist"
+  },
   "popupNoMatch": {
     "message": "No saved product matches."
   },

@@ -1,5 +1,5 @@
 import { formatPrice } from '../core/price.js';
-import { watchlistRows, sortRows, filterRows } from '../core/watchlist.js';
+import { watchlistRows, sortRows, filterRows, removeKeys } from '../core/watchlist.js';
 import { makeT } from '../core/strings.js';
 import { reportUrl, summarizeDetection } from '../core/report.js';
 import { HIDDEN_KEY, isHidden, addHidden, removeHidden, normalizeHost, isValidHost } from '../core/sites.js';
@@ -39,6 +39,10 @@ async function show() {
       p.append(d);
     }
     if (newLow) { const l = document.createElement('b'); l.className = 'low'; l.textContent = ' ' + t('popupAtLow'); p.append(l); }
+    const x = document.createElement('button');
+    x.className = 'rm'; x.textContent = '×'; x.title = t('popupRemove'); x.setAttribute('aria-label', t('popupRemove') + ': ' + r.name);
+    x.onclick = async () => { const keys = removeKeys(await api.storage.local.get(r.key), r.key); if (keys.length) await api.storage.local.remove(keys); show(); };
+    p.append(x);
     li.append(name, p); return li;
   }));
   if (!items.length) { const li = document.createElement('li'); li.textContent = t(search.value.trim() ? 'popupNoMatch' : 'popupEmpty'); list.append(li); }

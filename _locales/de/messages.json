@@ -300,6 +300,9 @@
   "popupSearch": {
     "message": "Merkliste durchsuchen"
   },
+  "popupRemove": {
+    "message": "Von der Merkliste entfernen"
+  },
   "popupNoMatch": {
     "message": "Kein gespeichertes Produkt passt."
   },

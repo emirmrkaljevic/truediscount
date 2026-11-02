@@ -39,3 +39,9 @@ export function filterRows(rows, query = '') {
   if (!words.length) return rows;
   return rows.filter(r => { const hay = fold(r.name + ' ' + r.key); return words.every(w => hay.includes(w)); });
 }
+
+// Removing one product drops its price history and any alert, nothing else.
+export function removeKeys(all, key) {
+  const v = all?.[key];
+  return v && Array.isArray(v.history) ? [key] : [];
+}

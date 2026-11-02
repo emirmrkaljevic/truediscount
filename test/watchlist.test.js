@@ -41,3 +41,11 @@ test('filterRows matches name or key, ignoring case and accents', () => {
   assert.deepEqual(filterRows(rows, 'AMAZON').map(r => r.key), ['amazon.fr/b']);
   assert.equal(filterRows(rows, 'cafe amazon').length, 0);
 });
+
+test('removeKeys only removes a stored product, never settings', async () => {
+  const { removeKeys } = await import('../src/core/watchlist.js');
+  const all = { 'shop.de/a': { history: [{ t: 1, p: 5 }] }, 'td-sort': 'drop' };
+  assert.deepEqual(removeKeys(all, 'shop.de/a'), ['shop.de/a']);
+  assert.deepEqual(removeKeys(all, 'td-sort'), []);
+  assert.deepEqual(removeKeys(all, 'missing'), []);
+});
