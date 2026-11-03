@@ -45,3 +45,8 @@ export function removeKeys(all, key) {
   const v = all?.[key];
   return v && Array.isArray(v.history) ? [key] : [];
 }
+
+// The popup shows at most `limit` rows; total tells how many matched so nothing is hidden silently.
+export function pageRows(rows, limit = 50) {
+  return { items: rows.slice(0, limit), total: rows.length, more: Math.max(0, rows.length - limit) };
+}

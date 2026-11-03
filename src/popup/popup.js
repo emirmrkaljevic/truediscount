@@ -1,5 +1,5 @@
 import { formatPrice } from '../core/price.js';
-import { watchlistRows, sortRows, filterRows, removeKeys } from '../core/watchlist.js';
+import { watchlistRows, sortRows, filterRows, removeKeys, pageRows } from '../core/watchlist.js';
 import { makeT } from '../core/strings.js';
 import { reportUrl, summarizeDetection } from '../core/report.js';
 import { HIDDEN_KEY, isHidden, addHidden, removeHidden, normalizeHost, isValidHost } from '../core/sites.js';
@@ -19,7 +19,7 @@ async function show() {
   const all = await api.storage.local.get(null);
   const mode = all['td-sort'] === 'drop' ? 'drop' : 'recent';
   sortSel.value = mode;
-  const items = filterRows(sortRows(watchlistRows(all), mode), search.value).slice(0, 50);
+  const { items, total, more } = pageRows(filterRows(sortRows(watchlistRows(all), mode), search.value));
   list.replaceChildren(...items.map(r => {
     const li = document.createElement('li');
     const name = document.createElement(r.url ? 'a' : 'span');
@@ -45,6 +45,7 @@ async function show() {
     p.append(x);
     li.append(name, p); return li;
   }));
+  if (more) { const li = document.createElement('li'); li.className = 'more'; li.textContent = `${items.length} / ${total}`; list.append(li); }
   if (!items.length) { const li = document.createElement('li'); li.textContent = t(search.value.trim() ? 'popupNoMatch' : 'popupEmpty'); list.append(li); }
 }
 

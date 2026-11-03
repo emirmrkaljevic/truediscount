@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { watchlistRows, sortRows, productUrl, filterRows } from '../src/core/watchlist.js';
+import { watchlistRows, sortRows, productUrl, filterRows, pageRows } from '../src/core/watchlist.js';
 
 const DAY = 86400000, now = 100 * DAY;
 const h = (...ps) => ps.map(([d, p]) => ({ t: now - d * DAY, p }));
@@ -43,9 +43,16 @@ test('filterRows matches name or key, ignoring case and accents', () => {
 });
 
 test('removeKeys only removes a stored product, never settings', async () => {
-  const { removeKeys } = await import('../src/core/watchlist.js');
+  const { removeKeys, pageRows } = await import('../src/core/watchlist.js');
   const all = { 'shop.de/a': { history: [{ t: 1, p: 5 }] }, 'td-sort': 'drop' };
   assert.deepEqual(removeKeys(all, 'shop.de/a'), ['shop.de/a']);
   assert.deepEqual(removeKeys(all, 'td-sort'), []);
   assert.deepEqual(removeKeys(all, 'missing'), []);
+});
+
+test('pageRows caps the list and reports how many are hidden', () => {
+  const rows = Array.from({ length: 60 }, (_, i) => ({ key: 'k' + i }));
+  const r = pageRows(rows);
+  assert.equal(r.items.length, 50); assert.equal(r.total, 60); assert.equal(r.more, 10);
+  assert.equal(pageRows(rows.slice(0, 3)).more, 0);
 });
