@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.13.1 (2026-11-03)
+
+- Watchlist: remove a single product with the new × button instead of clearing everything.
+- Watchlist: when more than 50 products match, the popup now shows how many are listed out of the total.
+
 ## 0.13.0 (2026-11-01)
 
 - Watchlist: new search box filters saved products by name or shop, ignoring case and accents.
