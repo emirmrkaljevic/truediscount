@@ -1,6 +1,7 @@
 export const SHOP_MATCHES = [
   'amazon.de', 'amazon.fr', 'amazon.it', 'amazon.es', 'amazon.nl', 'amazon.pl', 'amazon.se', 'amazon.com.be', 'amazon.ie',
   'zalando.de', 'zalando.fr', 'zalando.it', 'zalando.es', 'zalando.nl', 'zalando.pl', 'zalando.at', 'zalando.be', 'zalando.cz', 'zalando.se', 'zalando.dk', 'zalando.fi', 'zalando.ie',
+  'zalando.sk', 'zalando.hu', 'zalando.ro', 'zalando.si', 'zalando.hr', 'zalando.lt', 'zalando.lv', 'zalando.ee',
   'mediamarkt.de', 'mediamarkt.at', 'mediamarkt.nl', 'mediamarkt.es', 'mediamarkt.it', 'mediamarkt.be', 'saturn.de', 'saturn.at', 'mediamarkt.pl', 'mediamarkt.hu', 'mediamarkt.se',
   'otto.de', 'emag.ro', 'emag.bg', 'emag.hu', 'allegro.pl', 'allegro.cz', 'allegro.sk', 'bol.com',
   'coolblue.nl', 'coolblue.be', 'coolblue.de',
