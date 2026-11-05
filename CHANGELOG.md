@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.13.2 (2026-11-05)
+
+- Runs on MediaWorld Italy (mediaworld.it) and MediaMarkt Switzerland, same reader as MediaMarkt.
+- Italian "30gg" 30-day labels are recognised; MediaMarkt "lowest in 30 days" marks are no longer treated as a claimed old price.
+
 ## 0.13.1 (2026-11-03)
 
 - Watchlist: remove a single product with the new × button instead of clearing everything.

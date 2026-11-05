@@ -65,8 +65,9 @@ export const ADAPTERS = [
     name: ['#productTitle'] },
   { id: 'zalando', host: /(^|\.)zalando\.[a-z.]+$/,
     old: ['[data-testid="pdp-price-container"] s', 'span[class*="strike"]', 'p s'] },
-  { id: 'mediamarkt', host: /(^|\.)(mediamarkt|saturn)\.[a-z.]+$/,
-    old: ['[data-test="mms-strike-price-type-lop"]', '[data-test="mms-strike-price-type-lowest"]', '[data-test="mms-strike-price-type-rrp"]', '[data-test*="strike-price"]'] },
+  { id: 'mediamarkt', host: /(^|\.)(mediamarkt|saturn|mediaworld)\.[a-z.]+$/,
+    // lop/lowest are the shop's 30-day disclosure, not a claimed "was" price; shopLowest30 reads them.
+    old: ['[data-test="mms-strike-price-type-rrp"]', '[data-test="mms-strike-price-type-previous"]', '[data-test*="strike-price"]'] },
   { id: 'otto', host: /(^|\.)otto\.de$/, old: ['.pdp_price__retail-price', '[data-qa="retailPrice"]'] },
   { id: 'emag', host: /(^|\.)emag\.(ro|bg|hu)$/, old: ['.product-new-price ~ .pricing .rrp-lp30d-content s', '.product-page-pricing .pricing s'] },
   { id: 'allegro', host: /(^|\.)allegro\.(pl|cz|sk)$/, old: ['[data-testid="price-old"]', 'div[aria-label*="przed obniżką"]'] },
@@ -97,8 +98,12 @@ export function extract(doc, host) {
     for (const el of doc.querySelectorAll(s)) {
       const v = firstPrice(el.textContent);
       if (v && v > price && v < price * 20) {
-        oldPrice = v;
         oldHint = el.previousElementSibling?.getAttribute('data-bs-content') || '';
+        const own = el.textContent.replace(/\s+/g, ' ').trim();
+        const dataTest = el.getAttribute('data-test') || '';
+        // MediaMarkt lop/lowest marks are the 30-day disclosure only, not a claimed "was" price.
+        if (isLow30Label(own) || /strike-price-type-(lop|lowest)/i.test(s) || /strike-price-type-(lop|lowest)/i.test(dataTest)) continue;
+        oldPrice = v;
         const label = (el.parentElement?.textContent || '').length < 60 ? el.parentElement.textContent : '';
         // A recommended retail price is not the shop's own previous price.
         oldKind = /rrp|uvp|retail price|adviesprijs|\bmsrp\b/i.test(`${s} ${el.textContent} ${label} ${oldHint}`) ? 'rrp' : 'previous';
@@ -140,7 +145,7 @@ function labelledOldPrice(doc, price) {
 
 // Omnibus disclosures: "Niedrigster Preis der letzten 30 Tage: 49,99 €" and the like.
 const LOW_WORD = /(lowest|30-day low|niedrigste|tiefstpreis|günstigste|bestpreis|le plus bas|più basso|más bajo|mais baixo|laagste|najniższa|cel mai mic|nejnižší|najniža|najnižja|legalacsonyabb|lägsta|laveste|alhaisin|nižšia|nejnižší)/iu;
-const DAYS_30 = /30[\s\u00a0-]*(?:tage?n?|days?|derniers jours|jours|giorni|días|dias|dagen|dagarna|dage|päivän|dni|dní|dnů|de zile|zile|dana|dni|nap)/giu;
+const DAYS_30 = /30[\s\u00a0-]*(?:tage?n?|days?|derniers jours|jours|giorni|gg|días|dias|dagen|dagarna|dage|päivän|dni|dní|dnů|de zile|zile|dana|dni|nap)/giu;
 const SKIP = new Set(['SCRIPT', 'STYLE', 'NOSCRIPT', 'TEMPLATE']);
 
 const isLow30Label = t => t.length <= 160 && LOW_WORD.test(t) && /30/.test(t);

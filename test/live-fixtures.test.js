@@ -13,6 +13,15 @@ test('MediaMarkt: product nested in BuyAction, RRP strike price', () => {
   assert.match(message(evaluate({ price: r.price, oldPrice: r.oldPrice, oldKind: r.oldKind, history: [] })), /RRP/);
 });
 
+test('MediaWorld Italy: same MediaMarkt layout, Italian 30gg lowest-price label', () => {
+  const r = extract(load('mediaworld-live.html'), 'www.mediaworld.it');
+  assert.deepEqual([r.adapter, r.sku, r.price, r.oldPrice, r.shopLow30, r.currency], ['mediamarkt', '424284', 459, null, 469, 'EUR']);
+  assert.match(r.name, /iPad/i);
+  const v = evaluate({ price: r.price, oldPrice: r.oldPrice, oldKind: r.oldKind, shopLow30: r.shopLow30, history: [] });
+  assert.equal(v.status, 'nodiscount');
+  assert.equal(v.source, 'shop');
+});
+
 test('Zalando: ProductGroup with variants', () => {
   const r = extract(load('zalando-live.html'), 'en.zalando.de');
   assert.deepEqual([r.adapter, r.price, r.currency, r.oldPrice], ['zalando', 83.95, 'EUR', null]);
