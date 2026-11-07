@@ -57,6 +57,46 @@ test('first price token from mixed labels', () => {
   assert.equal(firstPrice('UVP 299,– €299,00€'), 299);
   assert.equal(firstPrice('Statt 1.299,99 €'), 1299.99);
   assert.equal(firstPrice('was €49.90'), 49.9);
+  // A 1-3 digit prefix must not win. These used to become 129, 159, 1.59 and 1.
+  assert.equal(firstPrice('1299,99'), 1299.99);
+  assert.equal(firstPrice('1599.00'), 1599);
+  assert.equal(firstPrice('1000'), 1000);
+  assert.equal(firstPrice('2149.00 €'), 2149);
+  assert.equal(firstPrice('€1,599.00'), 1599);
+  assert.equal(firstPrice('1099.–'), 1099);
+  assert.equal(firstPrice('1.099,-'), 1099);
+  assert.equal(firstPrice("CHF 1'299.00"), 1299);
+  assert.equal(firstPrice('1’099.00'), 1099);
+  assert.equal(firstPrice('1’299.–'), 1299);
+});
+
+test('prices of 1000 or more stay whole, so a fake discount is still compared', () => {
+  const { document } = parseHTML(`<html><head><script type="application/ld+json">${JSON.stringify(
+    { '@type': 'Product', name: 'Washer', offers: { price: '899.00', priceCurrency: 'EUR' } })}</script></head><body>
+    <s>1599,99 €</s><p>Lowest price in the last 30 days: 1299,00 €</p></body></html>`);
+  const r = extract(document, 'shop.example');
+  assert.deepEqual([r.price, r.oldPrice, r.shopLow30], [899, 1599.99, 1299]);
+  const v = evaluate({ price: r.price, oldPrice: r.oldPrice, oldKind: r.oldKind, shopLow30: r.shopLow30, history: [] });
+  assert.equal(v.status, 'inflated');
+  assert.equal(v.low30, 1299);
+  assert.equal(v.source, 'shop');
+});
+
+test('comma thousands on an Irish price block are not cut after the first digits', () => {
+  const { document } = parseHTML(`<html><body><span id="productTitle">Kettle</span>
+    <div id="corePriceDisplay_desktop_feature_div"><span class="priceToPay"><span class="a-offscreen">€1,099.00</span></span>
+    <div class="basisPrice"><span class="a-offscreen">€1,599.00</span></div></div></body></html>`);
+  const r = extract(document, 'www.amazon.ie');
+  assert.deepEqual([r.adapter, r.price, r.oldPrice, r.name], ['amazon', 1099, 1599, 'Kettle']);
+});
+
+test('MediaMarkt Switzerland apostrophe prices are not read as 1', () => {
+  const { document } = parseHTML(`<html><head><script type="application/ld+json">${JSON.stringify(
+    { '@type': 'Product', name: 'Speaker', sku: '1', offers: { price: '899.00', priceCurrency: 'CHF' } })}</script></head><body>
+    <span data-test="mms-strike-price-type-rrp">CHF 1’299.00</span></body></html>`);
+  const r = extract(document, 'www.mediamarkt.ch');
+  assert.equal(r.adapter, 'mediamarkt');
+  assert.deepEqual([r.price, r.oldPrice, r.oldKind, r.currency], [899, 1299, 'rrp', 'CHF']);
 });
 
 test("Alternate: live product pages with UVP popover and 30-day Bestpreis popover", () => {
