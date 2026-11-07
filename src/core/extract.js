@@ -1,7 +1,10 @@
 import { parsePrice } from './price.js';
 
 // Old-price elements often hold a label and several renderings, e.g. "UVP 299,– €299,00€".
-const PRICE_TOKEN = /\d{1,3}(?:[.\s\u00a0]\d{3})*(?:[.,]\d{1,2}|,[-\u2013])?|\d+(?:[.,]\d{1,2})?/;
+// Thousands can be grouped (1.299,99 / 1,299.99 / 1'299.00) or written in full (1299,99).
+// The grouped form has to be tried before a short digit run, otherwise 1299,99 is read as 129
+// and a Swiss 1'299.00 is read as 1, so the comparison never sees the real reference price.
+const PRICE_TOKEN = /(?:\d{1,3}(?:[.,\u2019'\s]\d{3})+|\d+)(?:[.,]\d{1,2}|,[-\u2013])?/;
 export function firstPrice(str) {
   const m = String(str ?? '').match(PRICE_TOKEN);
   return m ? parsePrice(m[0].replace(/,[-\u2013]$/, '')) : null;
