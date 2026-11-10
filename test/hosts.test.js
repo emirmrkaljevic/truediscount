@@ -10,6 +10,6 @@ test('every shop the extension runs on has an adapter', () => {
 });
 
 test('newly covered EU shop domains are matched', () => {
-  for (const h of ['amazon.ie', 'zalando.cz', 'zalando.se', 'allegro.sk', 'saturn.at', 'mediamarkt.pl', 'zalando.ro', 'zalando.hr', 'zalando.ee', 'mediaworld.it', 'mediamarkt.ch'])
+  for (const h of ['amazon.ie', 'zalando.cz', 'zalando.se', 'allegro.sk', 'saturn.at', 'mediamarkt.pl', 'zalando.ro', 'zalando.hr', 'zalando.ee', 'mediaworld.it', 'mediamarkt.ch', 'notino.de', 'notino.fr', 'notino.cz', 'notino.pl'])
     assert.ok(hosts.includes(h), h);
 });

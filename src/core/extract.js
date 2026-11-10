@@ -80,6 +80,11 @@ export const ADAPTERS = [
   // Lidl prints the label next to the struck price: "UVP: <s>599.00</s>" means RRP, a bare <s> is Lidl's own earlier price.
   { id: 'lidl', host: /(^|\.)lidl\.(de|at|fr|nl|be|it|es|pl|cz|sk|hu|ro|bg|hr|si|pt|ie|dk|se|fi)$/, price: ['.ods-price__value'], old: ['.ods-price__stroke-price s'] },
   { id: 'alternate', host: /(^|\.)alternate\.(de|nl|be|at)$/, price: ['#tle-details-price-section .price'], old: ['#tle-details-price-section .strike-price', '.strike-price'] },
+  // Shelf price is [data-testid="pd-price"]. A later wrapper is the optional code price, and the
+  // variant list repeats every size, so those are not the product price. The 30-day low is
+  // recentMinPrice on the selected variant (printed as "Mindestpreis" or "Letzter niedrigster Preis").
+  // The recommended price in that state is not crossed out, and JSON-LD lists every size.
+  { id: 'notino', host: /(^|\.)notino\.(at|be|bg|ch|cz|de|dk|ee|es|fi|fr|gr|hr|hu|ie|it|lt|lv|nl|pl|pt|ro|se|si|sk)$/, name: ['h1'] },
 ];
 
 // Text labels shops put next to a reference price, in the main EU languages.
@@ -88,11 +93,78 @@ const GENERIC_PRICE = ['[itemprop="price"]', '[data-price]', '[class*="current-p
 
 const GENERIC_OLD = ['[style*="line-through"]', '[data-old-price]', '[class*="regular-price"]', '[class*="list-price"]', 'del', 's', '[class*="old-price"]', '[class*="oldPrice"]', '[class*="price-old"]', '[class*="was-price"]', '[class*="strike"]', '[class*="crossed"]'];
 
+const NOTINO_VARIANT = '#pdVariantsTile, [data-testid="pd-variants-tile"]';
+const NOTINO_LOW_LABEL = /Mindestpreis|Letzter niedrigster Preis/i;
+
+function notinoSelectedId(doc) {
+  const sel = doc.querySelector('a.pd-variant-selected, .pd-variant-selected');
+  return sel?.id?.match(/(\d+)/)?.[1] || sel?.getAttribute('href')?.match(/\/p-(\d+)/)?.[1] || null;
+}
+
+function notinoShownPrice(doc) {
+  const shelf = doc.querySelector('[data-testid="pd-price"]');
+  const fromShelf = shelf && firstPrice(shelf.getAttribute('content') || shelf.textContent);
+  if (fromShelf) return fromShelf;
+  for (const el of doc.querySelectorAll('[data-testid="pd-price-wrapper"]')) {
+    if (el.closest(`${NOTINO_VARIANT}, [data-testid="product-specifications"]`)) continue;
+    const v = firstPrice(el.getAttribute('content') || el.textContent);
+    if (v) return v;
+  }
+  return null;
+}
+
+function notinoVariant(doc) {
+  const el = doc.getElementById('__APOLLO_STATE__');
+  if (!el) return null;
+  let data;
+  try { data = JSON.parse(el.textContent.trim().replace(/;+$/, '')); } catch { return null; }
+  const variants = Object.entries(data).filter(([k, v]) => /^CatalogVariant:\d+$/.test(k) && typeof v?.price?.value === 'number');
+  if (!variants.length) return null;
+  const id = notinoSelectedId(doc);
+  if (id && typeof data[`CatalogVariant:${id}`]?.price?.value === 'number') return data[`CatalogVariant:${id}`];
+  if (variants.length === 1) return variants[0][1];
+  const shown = notinoShownPrice(doc);
+  return (variants.find(([, v]) => v.price.value === shown) || variants[0])[1];
+}
+
+// Price that follows the label, so an earlier "Aktueller Preis" in the same line is not used.
+function priceAfterLabel(label, raw) {
+  const m = String(raw).match(label);
+  return m ? firstPrice(String(raw).slice(m.index + m[0].length)) : null;
+}
+
+function notinoRead(doc) {
+  const variant = notinoVariant(doc);
+  const price = notinoShownPrice(doc) ?? (typeof variant?.price?.value === 'number' ? variant.price.value : null);
+  if (price == null) return null;
+  let shopLow30 = null;
+  const recent = variant?.recentMinPrice?.value;
+  if (typeof recent === 'number' && recent >= price * 0.2 && recent <= price * 20) shopLow30 = recent;
+  if (shopLow30 == null && doc.body) {
+    const walker = doc.createTreeWalker(doc.body, 4);
+    for (let node = walker.nextNode(); node; node = walker.nextNode()) {
+      const tag = node.parentElement?.tagName;
+      if (!node.nodeValue || node.nodeValue.length > 160) continue;
+      if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'NOSCRIPT' || tag === 'TEMPLATE') continue;
+      if (!NOTINO_LOW_LABEL.test(node.nodeValue) || node.parentElement.closest(NOTINO_VARIANT)) continue;
+      const v = priceAfterLabel(NOTINO_LOW_LABEL, node.nodeValue);
+      if (v && v >= price * 0.2 && v <= price * 20) { shopLow30 = v; break; }
+    }
+  }
+  const currency = variant?.price?.currency;
+  return {
+    price, shopLow30,
+    currency: typeof currency === 'string' && /^[A-Z]{3}$/.test(currency) ? currency : null,
+    sku: variant?.webId != null ? String(variant.webId) : null,
+  };
+}
+
 export function extract(doc, host) {
   const adapter = ADAPTERS.find(a => a.host.test(host)) || null;
   const base = fromJsonLd(doc) || fromMicrodata(doc) || {};
-  let price = base.price ?? null;
-  if (adapter?.price) price = firstPrice(text(doc, adapter.price)) ?? price;
+  const notino = adapter?.id === 'notino' ? notinoRead(doc) : null;
+  let price = notino?.price ?? base.price ?? null;
+  if (!notino && adapter?.price) price = firstPrice(text(doc, adapter.price)) ?? price;
   if (price == null) price = genericPrice(doc);
   if (price == null) return null;
   const sels = [...(adapter?.old || []), ...GENERIC_OLD];
@@ -120,9 +192,16 @@ export function extract(doc, host) {
     if (labelled) [oldPrice, oldKind] = labelled;
   }
   if (!oldPrice && base.listPrice > price) [oldPrice, oldKind] = [base.listPrice, base.listKind];
+  // Notino's first JSON-LD offer is often another size, or the price before a code. That strikethrough
+  // is not the selected size's earlier shop price. A recommended price kept only in page state is ignored too.
+  if (notino && oldPrice != null && oldPrice === base.listPrice) { oldPrice = null; oldKind = null; }
   const name = (adapter?.name && text(doc, adapter.name)?.trim()) || base.name || null;
-  const shopLow30 = shopLowest30(doc, price) ?? (oldPrice && isLow30Label(oldHint) ? oldPrice : null);
-  return { adapter: adapter?.id || 'generic', name, sku: base.sku || null, price, oldPrice, oldKind, shopLow30, currency: base.currency || 'EUR' };
+  const shopLow30 = notino?.shopLow30 ?? shopLowest30(doc, price) ?? (oldPrice && isLow30Label(oldHint) ? oldPrice : null);
+  return {
+    adapter: adapter?.id || 'generic', name, price, oldPrice, oldKind, shopLow30,
+    sku: notino?.sku || base.sku || null,
+    currency: notino?.currency || base.currency || 'EUR',
+  };
 }
 
 function genericPrice(doc) {
