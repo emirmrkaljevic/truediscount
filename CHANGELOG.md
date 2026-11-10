@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.13.3 (2026-11-10)
+
+- Runs on Notino in 25 countries (including DE, FR, IT, ES, PL, CZ and CH) and reads the selected size's 30-day lowest price.
+- Prices of 1,000 or more are read in full. Values such as 1299,99, 1,599.00 and 1'299.00 were previously cut to their first digits, so crossed-out prices and 30-day labels dropped out of the comparison.
+
 ## 0.13.2 (2026-11-05)
 
 - Runs on MediaWorld Italy (mediaworld.it) and MediaMarkt Switzerland, same reader as MediaMarkt.
