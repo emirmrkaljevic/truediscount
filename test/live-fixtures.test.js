@@ -149,6 +149,56 @@ test('Euronics Italy: barred previous price is the 30-day low, recommended price
   assert.match(message(w), /RRP/);
 });
 
+test('About You: 30-day price is the struck reference, original price is not', () => {
+  const sale = extract(load('aboutyou-sale-live.html'), 'www.aboutyou.de');
+  assert.deepEqual([sale.adapter, sale.sku, sale.price, sale.oldPrice, sale.oldKind, sale.shopLow30, sale.currency], ['aboutyou', '32423052', 94.9, 119, 'previous', 119, 'EUR']);
+  assert.match(sale.name, /WAVE MOTION/);
+  const v = evaluate({ price: sale.price, oldPrice: sale.oldPrice, oldKind: sale.oldKind, shopLow30: sale.shopLow30, history: [] });
+  assert.equal(v.status, 'real');
+  assert.equal(v.source, 'shop');
+  assert.equal(v.low30, 119);
+
+  const original = extract(load('aboutyou-original-live.html'), 'www.aboutyou.fr');
+  assert.deepEqual([original.adapter, original.sku, original.price, original.oldPrice, original.oldKind, original.shopLow30, original.currency], ['aboutyou', '32443407', 15.9, 19.9, 'rrp', 13.93, 'EUR']);
+  assert.match(original.name, /VMPAULINA THEA/);
+  const w = evaluate({ price: original.price, oldPrice: original.oldPrice, oldKind: original.oldKind, shopLow30: original.shopLow30, history: [] });
+  assert.equal(w.status, 'higher');
+  assert.equal(w.source, 'shop');
+  assert.match(message(w), /RRP/);
+
+  const { document: fromPrice } = parseHTML(`<html><body>
+    <link rel="canonical" href="https://www.aboutyou.at/p/only/strickjacke-onlcarol-27951470">
+    <h1>ONLY Strickjacke</h1>
+    <div data-testid="priceBox">
+      <span data-testid="finalPrice">Ab 23,90€</span>
+      <div data-testid="originalPrice">Ursprünglich: 29,90€</div>
+      <div data-testid="lowestProductPrice30D"><div data-value="true">23,90€</div></div>
+    </div></body></html>`);
+  const c = extract(fromPrice, 'www.aboutyou.at');
+  assert.deepEqual([c.adapter, c.sku, c.price, c.oldPrice, c.oldKind, c.shopLow30], ['aboutyou', '27951470', 23.9, 29.9, 'rrp', 23.9]);
+  const inflated = evaluate({ price: c.price, oldPrice: c.oldPrice, oldKind: c.oldKind, shopLow30: c.shopLow30, history: [] });
+  assert.equal(inflated.status, 'inflated');
+  assert.equal(inflated.low30, 23.9);
+});
+
+test('Morele: 30-day low is separate from the barred price and the price without a code', () => {
+  const deal = extract(load('morele-deal-live.html'), 'www.morele.net');
+  assert.deepEqual([deal.adapter, deal.sku, deal.price, deal.oldPrice, deal.oldKind, deal.shopLow30, deal.currency], ['morele', '5626721', 89, 95.01, 'previous', 95.01, 'PLN']);
+  assert.match(deal.name, /JBL Tune 500/);
+  const v = evaluate({ price: deal.price, oldPrice: deal.oldPrice, oldKind: deal.oldKind, shopLow30: deal.shopLow30, history: [] });
+  assert.equal(v.status, 'real');
+  assert.equal(v.source, 'shop');
+  assert.equal(v.low30, 95.01);
+
+  const code = extract(load('morele-code-live.html'), 'www.morele.net');
+  assert.deepEqual([code.adapter, code.sku, code.price, code.oldPrice, code.oldKind, code.shopLow30, code.currency], ['morele', '6624711', 319, 420, 'previous', 344.35, 'PLN']);
+  assert.match(code.name, /Verbatim Vi560/);
+  const w = evaluate({ price: code.price, oldPrice: code.oldPrice, oldKind: code.oldKind, shopLow30: code.shopLow30, history: [] });
+  assert.equal(w.status, 'inflated');
+  assert.equal(w.source, 'shop');
+  assert.equal(w.low30, 344.35);
+});
+
 test("Alternate: live product pages with UVP popover and 30-day Bestpreis popover", () => {
   const uvp = extract(load("alternate-uvp-live.html"), "www.alternate.de");
   assert.deepEqual([uvp.adapter, uvp.sku, uvp.price, uvp.oldPrice, uvp.oldKind, uvp.shopLow30], ["alternate", "100074063", 209.9, 269.9, "rrp", null]);

@@ -89,6 +89,16 @@ export const ADAPTERS = [
   // the lowest price charged in the 30 days before the promotion. "prezzo consigliato" is only the
   // manufacturer's recommended price. A later compare column repeats other prices.
   { id: 'euronics', host: /(^|\.)euronics\.it$/, name: ['h1'] },
+  // Buy box is [data-testid="priceBox"] in the final view. finalPrice is the price on screen
+  // ("Ab" or "From" is the price before a size is chosen). lowestProductPrice30D is the last
+  // lowest price of the 30 days before the reduction. originalPrice ("Ursprünglich" or "Originally")
+  // is the catalogue price, not that 30-day price. A hidden previous view repeats an older price.
+  { id: 'aboutyou', host: /(^|\.)aboutyou\.(at|be|bg|com\.cy|cz|de|dk|ee|es|fi|fr|gr|hr|hu|it|lt|lu|lv|nl|pl|pt|ro|se|si|sk)$/, name: ['h1'] },
+  // Buy box is .product-box-main__prices. The 30-day low is the "najniższa cena" line
+  // (tooltip: "Najniższa cena z 30 dni przed obniżką"). A barred price is that same previous
+  // price when the promotion shows one. "cena bez kodu" is the price without a discount code,
+  // not the 30-day low. Another offer column repeats other prices.
+  { id: 'morele', host: /(^|\.)morele\.net$/, name: ['h1'] },
 ];
 
 // Text labels shops put next to a reference price, in the main EU languages.
@@ -190,13 +200,96 @@ function euronicsRead(doc) {
   return { price, oldPrice, oldKind, shopLow30 };
 }
 
+// Symbol next to the price. "kr" is shared by several currencies, so it is left to JSON-LD.
+function currencyIn(text) {
+  const t = String(text || '');
+  if (/zł|\bPLN\b/i.test(t)) return 'PLN';
+  if (/\bCHF\b/.test(t)) return 'CHF';
+  if (/Kč|\bCZK\b/.test(t)) return 'CZK';
+  if (/\bFt\b|\bHUF\b/.test(t)) return 'HUF';
+  if (/\blei\b|\bRON\b/i.test(t)) return 'RON';
+  if (/\bSEK\b/.test(t)) return 'SEK';
+  if (/\bDKK\b/.test(t)) return 'DKK';
+  if (/€|\bEUR\b/.test(t)) return 'EUR';
+  return null;
+}
+
+function aboutyouBox(doc) {
+  const view = doc.querySelector('[data-view-state="data-final-view"]');
+  const boxed = view?.querySelector('[data-testid="priceBox"]');
+  if (boxed) return boxed;
+  for (const box of doc.querySelectorAll('[data-testid="priceBox"]')) {
+    let hidden = false;
+    for (let n = box; n; n = n.parentElement) {
+      if (n.getAttribute?.('data-view-state') === 'data-previous-view') { hidden = true; break; }
+    }
+    if (!hidden) return box;
+  }
+  return null;
+}
+
+function aboutyouRead(doc) {
+  const box = aboutyouBox(doc);
+  if (!box) return null;
+  const priceEl = box.querySelector('[data-testid="finalPrice"]');
+  const price = priceEl ? firstPrice(priceEl.textContent) : null;
+  if (price == null) return null;
+  const near = v => typeof v === 'number' && v >= price * 0.2 && v <= price * 20;
+  const lowEl = box.querySelector('[data-testid="lowestProductPrice30D"] [data-value="true"]');
+  const lowRaw = lowEl ? firstPrice(lowEl.textContent) : null;
+  const low = near(lowRaw) ? lowRaw : null;
+  const origEl = box.querySelector('[data-testid="originalPrice"]');
+  const original = origEl && near(firstPrice(origEl.textContent)) ? firstPrice(origEl.textContent) : null;
+  let oldPrice = null, oldKind = null;
+  // A struck price inside the 30-day row is the reference for the percentage. The original
+  // price is a catalogue price and stays out of the 30-day comparison.
+  const struck = !!(lowEl && lowEl.querySelector('s, del'));
+  if (low != null && low > price && struck) {
+    oldPrice = low; oldKind = 'previous';
+  } else if (original != null && original > price && (low == null || Math.abs(original - low) > 0.009)) {
+    oldPrice = original; oldKind = 'rrp';
+  } else if (low != null && low > price) {
+    oldPrice = low; oldKind = 'previous';
+  }
+  const canon = doc.querySelector('link[rel="canonical"]')?.getAttribute('href') || '';
+  return {
+    price, oldPrice, oldKind, shopLow30: low,
+    currency: currencyIn(box.textContent),
+    sku: canon.match(/-(\d+)\/?(?:[?#].*)?$/)?.[1] || null,
+  };
+}
+
+function moreleRead(doc) {
+  const box = doc.querySelector('.product-box-main__prices .price-box');
+  if (!box) return null;
+  const priceEl = box.querySelector('#product_price, [data-testid="product-price"]');
+  const price = priceEl ? (parsePrice(priceEl.getAttribute('data-price')) ?? firstPrice(priceEl.textContent)) : null;
+  if (price == null) return null;
+  const near = v => typeof v === 'number' && v >= price * 0.2 && v <= price * 20;
+  const lowEl = box.querySelector('[data-testid="product-lowest-price"]');
+  const lowRaw = lowEl ? firstPrice(lowEl.textContent) : null;
+  const shopLow30 = near(lowRaw) ? lowRaw : null;
+  const crossed = firstPrice(box.querySelector('.product-price-old')?.textContent);
+  const regular = firstPrice(box.querySelector('[data-testid="product-regular-price"]')?.textContent);
+  let oldPrice = null, oldKind = null;
+  if (near(crossed) && crossed > price) { oldPrice = crossed; oldKind = 'previous'; }
+  else if (near(regular) && regular > price && (shopLow30 == null || Math.abs(regular - shopLow30) > 0.009)) {
+    oldPrice = regular; oldKind = 'previous';
+  }
+  if (oldPrice == null && shopLow30 != null && shopLow30 > price) { oldPrice = shopLow30; oldKind = 'previous'; }
+  const sku = doc.querySelector('[data-mini-golden-box-product-id-value]')?.getAttribute('data-mini-golden-box-product-id-value') || null;
+  return { price, oldPrice, oldKind, shopLow30, currency: currencyIn(box.textContent), sku };
+}
+
 export function extract(doc, host) {
   const adapter = ADAPTERS.find(a => a.host.test(host)) || null;
   const base = fromJsonLd(doc) || fromMicrodata(doc) || {};
   const notino = adapter?.id === 'notino' ? notinoRead(doc) : null;
   const euronics = adapter?.id === 'euronics' ? euronicsRead(doc) : null;
-  let price = euronics?.price ?? notino?.price ?? base.price ?? null;
-  if (!notino && !euronics && adapter?.price) price = firstPrice(text(doc, adapter.price)) ?? price;
+  const aboutyou = adapter?.id === 'aboutyou' ? aboutyouRead(doc) : null;
+  const morele = adapter?.id === 'morele' ? moreleRead(doc) : null;
+  let price = morele?.price ?? aboutyou?.price ?? euronics?.price ?? notino?.price ?? base.price ?? null;
+  if (!notino && !euronics && !aboutyou && !morele && adapter?.price) price = firstPrice(text(doc, adapter.price)) ?? price;
   if (price == null) price = genericPrice(doc);
   if (price == null) return null;
   const sels = [...(adapter?.old || []), ...GENERIC_OLD];
@@ -229,12 +322,14 @@ export function extract(doc, host) {
   if (notino && oldPrice != null && oldPrice === base.listPrice) { oldPrice = null; oldKind = null; }
   // The buy box is the price on screen. A compare column is not the reference for this product.
   if (euronics) { oldPrice = euronics.oldPrice; oldKind = euronics.oldKind; }
+  if (aboutyou) { oldPrice = aboutyou.oldPrice; oldKind = aboutyou.oldKind; }
+  if (morele) { oldPrice = morele.oldPrice; oldKind = morele.oldKind; }
   const name = (adapter?.name && text(doc, adapter.name)?.trim()) || base.name || null;
-  const shopLow30 = euronics ? euronics.shopLow30 : (notino?.shopLow30 ?? shopLowest30(doc, price) ?? (oldPrice && isLow30Label(oldHint) ? oldPrice : null));
+  const shopLow30 = morele ? morele.shopLow30 : aboutyou ? aboutyou.shopLow30 : euronics ? euronics.shopLow30 : (notino?.shopLow30 ?? shopLowest30(doc, price) ?? (oldPrice && isLow30Label(oldHint) ? oldPrice : null));
   return {
     adapter: adapter?.id || 'generic', name, price, oldPrice, oldKind, shopLow30,
-    sku: notino?.sku || base.sku || null,
-    currency: notino?.currency || base.currency || 'EUR',
+    sku: morele?.sku || aboutyou?.sku || notino?.sku || base.sku || null,
+    currency: morele?.currency || aboutyou?.currency || notino?.currency || base.currency || 'EUR',
   };
 }
 
