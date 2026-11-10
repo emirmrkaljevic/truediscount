@@ -72,7 +72,7 @@ English and German. The extension follows your browser language. Translations ar
 
 ## Supported shops
 
-Built-in (MediaMarkt, MediaWorld IT, Zalando, Coolblue, Alternate and Lidl checked against live product pages in October and November 2026): Amazon (DE, FR, IT, ES, NL, PL, SE, BE, IE), Zalando (21 countries incl. SK, HU, RO, SI, HR and the Baltics), MediaMarkt / Saturn / MediaWorld (incl. CH and Italy as mediaworld.it), Otto, eMAG, Allegro, bol.com, Coolblue (NL, BE, DE), Alternate (DE, NL, BE, AT), Lidl online shops in 20 EU countries. Full table with test status: [Supported shops](https://emirmrkaljevic.github.io/truediscount/supported-shops.html).
+Built-in (MediaMarkt, MediaWorld IT, Zalando, Coolblue, Alternate, Lidl and Notino checked against live product pages in October and November 2026): Amazon (DE, FR, IT, ES, NL, PL, SE, BE, IE), Zalando (21 countries incl. SK, HU, RO, SI, HR and the Baltics), MediaMarkt / Saturn / MediaWorld (incl. CH and Italy as mediaworld.it), Otto, eMAG, Allegro, bol.com, Coolblue (NL, BE, DE), Alternate (DE, NL, BE, AT), Lidl online shops in 20 EU countries, Notino (25 countries, incl. DE, FR, IT, ES, PL, CZ and CH). Full table with test status: [Supported shops](https://emirmrkaljevic.github.io/truediscount/supported-shops.html).
 
 Badge missing or wrong? Click **Report a problem** in the popup. It opens a prefilled GitHub issue with just the shop's domain and what was detected, so you can add a product link and submit it.
 

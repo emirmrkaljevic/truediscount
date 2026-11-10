@@ -12,6 +12,7 @@ const cases = [
   ['lidl-fr-deal-live.html', 'www.lidl.fr', 'https://www.lidl.fr/p/1'],
   ['mediamarkt-live.html', 'www.mediamarkt.de', 'https://www.mediamarkt.de/de/product/1.html'],
   ['zalando-live.html', 'www.zalando.de', 'https://www.zalando.de/x.html'],
+  ['notino-sale-live.html', 'www.notino.de', 'https://www.notino.de/jil-sander/no4-eau-de-parfum-fur-damen/p-62121/'],
 ];
 
 async function runOn(file, hostname, href, gm = new Map()) {
