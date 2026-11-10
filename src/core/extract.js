@@ -85,6 +85,10 @@ export const ADAPTERS = [
   // recentMinPrice on the selected variant (printed as "Mindestpreis" or "Letzter niedrigster Preis").
   // The recommended price in that state is not crossed out, and JSON-LD lists every size.
   { id: 'notino', host: /(^|\.)notino\.(at|be|bg|ch|cz|de|dk|ee|es|fi|fr|gr|hr|hu|ie|it|lt|lv|nl|pl|pt|ro|se|si|sk)$/, name: ['h1'] },
+  // Buy box is .price-section. "prezzo precedente" is the barred price, and the page defines it as
+  // the lowest price charged in the 30 days before the promotion. "prezzo consigliato" is only the
+  // manufacturer's recommended price. A later compare column repeats other prices.
+  { id: 'euronics', host: /(^|\.)euronics\.it$/, name: ['h1'] },
 ];
 
 // Text labels shops put next to a reference price, in the main EU languages.
@@ -159,12 +163,40 @@ function notinoRead(doc) {
   };
 }
 
+const EURONICS_PREVIOUS = /(?<!\p{L})precedente(?!\p{L})/iu;
+const EURONICS_RRP = /(?<!\p{L})consigliato(?!\p{L})/iu;
+
+function euronicsRead(doc) {
+  const box = doc.querySelector('.price-section');
+  if (!box) return null;
+  const priceEl = box.querySelector('.pcs-price');
+  const price = priceEl ? (parsePrice(priceEl.getAttribute('data-price')) ?? firstPrice(priceEl.textContent)) : null;
+  if (price == null) return null;
+  const near = v => typeof v === 'number' && v >= price * 0.2 && v <= price * 20;
+  let previous = null, rrp = null;
+  for (const el of box.querySelectorAll('.recomanded-pricebook')) {
+    const label = el.textContent.replace(/\s+/g, ' ').trim();
+    const v = firstPrice(label);
+    if (!near(v)) continue;
+    if (EURONICS_PREVIOUS.test(label)) previous = v;
+    else if (EURONICS_RRP.test(label)) rrp = v;
+  }
+  let oldPrice = null, oldKind = null, shopLow30 = null;
+  if (previous != null) {
+    shopLow30 = previous;
+    if (previous > price) { oldPrice = previous; oldKind = 'previous'; }
+  }
+  if (oldPrice == null && rrp != null && rrp > price) { oldPrice = rrp; oldKind = 'rrp'; }
+  return { price, oldPrice, oldKind, shopLow30 };
+}
+
 export function extract(doc, host) {
   const adapter = ADAPTERS.find(a => a.host.test(host)) || null;
   const base = fromJsonLd(doc) || fromMicrodata(doc) || {};
   const notino = adapter?.id === 'notino' ? notinoRead(doc) : null;
-  let price = notino?.price ?? base.price ?? null;
-  if (!notino && adapter?.price) price = firstPrice(text(doc, adapter.price)) ?? price;
+  const euronics = adapter?.id === 'euronics' ? euronicsRead(doc) : null;
+  let price = euronics?.price ?? notino?.price ?? base.price ?? null;
+  if (!notino && !euronics && adapter?.price) price = firstPrice(text(doc, adapter.price)) ?? price;
   if (price == null) price = genericPrice(doc);
   if (price == null) return null;
   const sels = [...(adapter?.old || []), ...GENERIC_OLD];
@@ -195,8 +227,10 @@ export function extract(doc, host) {
   // Notino's first JSON-LD offer is often another size, or the price before a code. That strikethrough
   // is not the selected size's earlier shop price. A recommended price kept only in page state is ignored too.
   if (notino && oldPrice != null && oldPrice === base.listPrice) { oldPrice = null; oldKind = null; }
+  // The buy box is the price on screen. A compare column is not the reference for this product.
+  if (euronics) { oldPrice = euronics.oldPrice; oldKind = euronics.oldKind; }
   const name = (adapter?.name && text(doc, adapter.name)?.trim()) || base.name || null;
-  const shopLow30 = notino?.shopLow30 ?? shopLowest30(doc, price) ?? (oldPrice && isLow30Label(oldHint) ? oldPrice : null);
+  const shopLow30 = euronics ? euronics.shopLow30 : (notino?.shopLow30 ?? shopLowest30(doc, price) ?? (oldPrice && isLow30Label(oldHint) ? oldPrice : null));
   return {
     adapter: adapter?.id || 'generic', name, price, oldPrice, oldKind, shopLow30,
     sku: notino?.sku || base.sku || null,

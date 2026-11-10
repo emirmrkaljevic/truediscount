@@ -13,6 +13,7 @@ const cases = [
   ['mediamarkt-live.html', 'www.mediamarkt.de', 'https://www.mediamarkt.de/de/product/1.html'],
   ['zalando-live.html', 'www.zalando.de', 'https://www.zalando.de/x.html'],
   ['notino-sale-live.html', 'www.notino.de', 'https://www.notino.de/jil-sander/no4-eau-de-parfum-fur-damen/p-62121/'],
+  ['euronics-deal-live.html', 'www.euronics.it', 'https://www.euronics.it/elettrodomestici/grandi-elettrodomestici/lavatrici/lavatrici-standard/electrolux---lavatrice-serie-600-ew6f19bgz-9kg-1400g-classe-a-bianco/262000523.html'],
 ];
 
 async function runOn(file, hostname, href, gm = new Map()) {

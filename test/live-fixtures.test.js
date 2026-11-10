@@ -132,6 +132,23 @@ test('Notino: 30-day label still counts when the page state is missing, and a Cz
   assert.equal(evaluate({ price: b.price, oldPrice: b.oldPrice, shopLow30: b.shopLow30, history: [] }).status, 'higher');
 });
 
+test('Euronics Italy: barred previous price is the 30-day low, recommended price is not', () => {
+  const deal = extract(load('euronics-deal-live.html'), 'www.euronics.it');
+  assert.deepEqual([deal.adapter, deal.sku, deal.price, deal.oldPrice, deal.oldKind, deal.shopLow30, deal.currency], ['euronics', '262000523', 399, 549.99, 'previous', 549.99, 'EUR']);
+  assert.match(deal.name, /Lavatrice Serie 600/);
+  const v = evaluate({ price: deal.price, oldPrice: deal.oldPrice, oldKind: deal.oldKind, shopLow30: deal.shopLow30, history: [] });
+  assert.equal(v.status, 'real');
+  assert.equal(v.source, 'shop');
+  assert.equal(v.low30, 549.99);
+
+  const plain = extract(load('euronics-plain-live.html'), 'www.euronics.it');
+  assert.deepEqual([plain.adapter, plain.sku, plain.price, plain.oldPrice, plain.oldKind, plain.shopLow30], ['euronics', '242001377', 329.99, 499.99, 'rrp', null]);
+  assert.match(plain.name, /CANDY/);
+  const w = evaluate({ price: plain.price, oldPrice: plain.oldPrice, oldKind: plain.oldKind, shopLow30: plain.shopLow30, history: [] });
+  assert.equal(w.status, 'nodata');
+  assert.match(message(w), /RRP/);
+});
+
 test("Alternate: live product pages with UVP popover and 30-day Bestpreis popover", () => {
   const uvp = extract(load("alternate-uvp-live.html"), "www.alternate.de");
   assert.deepEqual([uvp.adapter, uvp.sku, uvp.price, uvp.oldPrice, uvp.oldKind, uvp.shopLow30], ["alternate", "100074063", 209.9, 269.9, "rrp", null]);

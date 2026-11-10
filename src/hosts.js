@@ -6,6 +6,7 @@ export const SHOP_MATCHES = [
   'mediaworld.it',
   'otto.de', 'emag.ro', 'emag.bg', 'emag.hu', 'allegro.pl', 'allegro.cz', 'allegro.sk', 'bol.com',
   'notino.at', 'notino.be', 'notino.bg', 'notino.ch', 'notino.cz', 'notino.de', 'notino.dk', 'notino.ee', 'notino.es', 'notino.fi', 'notino.fr', 'notino.gr', 'notino.hr', 'notino.hu', 'notino.ie', 'notino.it', 'notino.lt', 'notino.lv', 'notino.nl', 'notino.pl', 'notino.pt', 'notino.ro', 'notino.se', 'notino.si', 'notino.sk',
+  'euronics.it',
   'coolblue.nl', 'coolblue.be', 'coolblue.de',
   'lidl.de', 'lidl.at', 'lidl.fr', 'lidl.nl', 'lidl.be', 'lidl.it', 'lidl.es', 'lidl.pl', 'lidl.cz', 'lidl.sk', 'lidl.hu', 'lidl.ro', 'lidl.bg', 'lidl.hr', 'lidl.si', 'lidl.pt', 'lidl.ie', 'lidl.dk', 'lidl.se', 'lidl.fi',
   'alternate.de', 'alternate.nl', 'alternate.be', 'alternate.at',
