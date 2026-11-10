@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Runs on About You in 25 EU countries and reads the 30-day lowest price, separate from the original price.
+- Runs on Morele and reads the 30-day lowest price, separate from the price without a discount code.
+
 ## 0.13.3 (2026-11-10)
 
 - Runs on Notino in 25 countries (including DE, FR, IT, ES, PL, CZ and CH) and reads the selected size's 30-day lowest price.
