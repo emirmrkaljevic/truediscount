@@ -1,9 +1,10 @@
 # Changelog
 
-## Unreleased
+## 0.13.4 (2026-11-11)
 
-- Runs on About You in 25 EU countries and reads the 30-day lowest price, separate from the original price.
-- Runs on Morele and reads the 30-day lowest price, separate from the price without a discount code.
+- Runs on Euronics Italy (euronics.it) and treats the barred prezzo precedente as the 30-day lowest price. Prezzo consigliato is an RRP only when there is no previous price.
+- Runs on About You in 25 EU countries and reads the 30-day lowest price, separate from the original catalogue price.
+- Runs on Morele.net and reads the 30-day lowest price (Najniższa cena z 30 dni), separate from the price without a discount code.
 
 ## 0.13.3 (2026-11-10)
 
