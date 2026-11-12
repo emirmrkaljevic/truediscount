@@ -44,7 +44,7 @@ Open the popup and click **Backup / restore** to see a full table of your tracke
 
 **Firefox:** [Install for Firefox](https://addons.mozilla.org/en-US/firefox/addon/truediscount/) from addons.mozilla.org, one click, updates automatically.
 
-Chrome-based browsers are not in a store yet, so you load it yourself. It takes about a minute.
+A Chrome Web Store listing is coming later. Until then, Chrome-based browsers load the zip in about a minute, or you can use the userscript.
 
 **Chrome, Edge, Brave, Opera, Vivaldi**
 1. Download `truediscount-chrome-<version>.zip` from the [latest release](https://github.com/emirmrkaljevic/truediscount/releases/latest) and unzip it.
@@ -55,12 +55,21 @@ Chrome-based browsers are not in a store yet, so you load it yourself. It takes 
 
 Keep the folder where it is: the browser loads the extension from it. To update, unzip the new version over it and click the reload icon on the extension card.
 
+**Userscript (Tampermonkey, Violentmonkey)**
+1. Install [Tampermonkey](https://www.tampermonkey.net/) or [Violentmonkey](https://violentmonkey.github.io/).
+2. Open [truediscount.user.js](https://github.com/emirmrkaljevic/truediscount/releases/latest/download/truediscount.user.js) from the [latest release](https://github.com/emirmrkaljevic/truediscount/releases/latest) and click Install. It is also on [Greasy Fork](https://greasyfork.org/en/scripts/602599).
+
 **Firefox (manual install)**
 1. Download `truediscount-firefox-<version>.zip` from the [latest release](https://github.com/emirmrkaljevic/truediscount/releases/latest) (no need to unzip).
 2. Open `about:debugging#/runtime/this-firefox`.
 3. Click **Load Temporary Add-on…** and select the zip.
 
 Temporary add-ons are removed when Firefox restarts, so the [addons.mozilla.org version](https://addons.mozilla.org/en-US/firefox/addon/truediscount/) is the easier choice. If you want the manual zip anyway, Firefox Developer Edition, Nightly and ESR can keep it installed: set `xpinstall.signatures.required` to `false` in `about:config`, then install the zip from `about:addons` → gear menu → **Install Add-on From File**. Requires Firefox 140 or newer (Firefox for Android 142 or newer).
+
+## FAQ
+
+**Is it on the Chrome Web Store?**
+Not yet. A listing is coming later. Until then, load the Chrome zip from the [latest release](https://github.com/emirmrkaljevic/truediscount/releases/latest) with the steps above, or install the [userscript](https://github.com/emirmrkaljevic/truediscount/releases/latest/download/truediscount.user.js) with Tampermonkey or Violentmonkey, also available on [Greasy Fork](https://greasyfork.org/en/scripts/602599).
 
 ## Privacy
 

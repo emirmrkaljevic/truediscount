@@ -33,6 +33,7 @@
 {"@type":"Question","name":"How do I know if a Black Friday discount is fake?","acceptedAnswer":{"@type":"Answer","text":"In the EU, the crossed-out price of a sale must be the lowest price the shop charged in the previous 30 days. If the product was cheaper in that period, the advertised discount is inflated. truediscount checks this automatically on the product page."}},
 {"@type":"Question","name":"What is the EU Omnibus 30-day rule?","acceptedAnswer":{"@type":"Answer","text":"Directive (EU) 2019/2161 amended the Price Indication Directive: any announced price reduction must state the prior price, defined as the lowest price applied during at least 30 days before the reduction."}},
 {"@type":"Question","name":"Does truediscount collect my data?","acceptedAnswer":{"@type":"Answer","text":"No. Prices are stored only in your browser. The extension makes no network requests and has no account or analytics."}},
+{"@type":"Question","name":"Is truediscount on the Chrome Web Store?","acceptedAnswer":{"@type":"Answer","text":"Not yet. A Chrome Web Store listing is coming later. Until then, load the Chrome zip from the GitHub releases page, or install the userscript with Tampermonkey or Violentmonkey."}},
 {"@type":"Question","name":"Which shops are supported?","acceptedAnswer":{"@type":"Answer","text":"Amazon EU stores, Zalando, MediaMarkt, Saturn and MediaWorld, Otto, eMAG, Allegro, bol.com, Coolblue, Alternate, Lidl, Notino, Euronics Italy, About You, Morele and Unieuro out of the box, and any other shop after one click in the popup."}}
 ]}]}
 </script>
@@ -75,10 +76,10 @@ footer{color:var(--mute);font-size:14px;margin-top:48px}a{color:#1d4ed8}
 <a class="s" href="#install">Install in 60 seconds</a>
 <a class="s" href="#demo">Try the demo</a>
 </div>
-<p class="note">Works on Amazon EU, Zalando, MediaMarkt, Saturn, MediaWorld, Otto, bol.com, Coolblue, Lidl, Notino, Euronics Italy, About You, Morele, Unieuro and more. <a href="https://addons.mozilla.org/en-US/firefox/addon/truediscount/">Firefox has a one-click install</a> from addons.mozilla.org. On Chrome and Edge you load the zip yourself (three clicks below); the Edge store listing is still pending.</p>
+<p class="note">Works on Amazon EU, Zalando, MediaMarkt, Saturn, MediaWorld, Otto, bol.com, Coolblue, Lidl, Notino, Euronics Italy, About You, Morele, Unieuro and more. <a href="https://addons.mozilla.org/en-US/firefox/addon/truediscount/">Firefox has a one-click install</a> from addons.mozilla.org. On Chrome and Edge you load the zip yourself (three clicks below), or use the userscript. A Chrome Web Store listing is coming later.</p>
 </header>
 <h2 id="install">Install in 60 seconds</h2>
-<p>Firefox users can install truediscount from addons.mozilla.org. On Chrome-based browsers (the Edge listing is pending) you load it yourself:</p>
+<p>Firefox users can install truediscount from addons.mozilla.org. A Chrome Web Store listing is coming later; until then, Chrome-based browsers load the zip or the userscript:</p>
 <div class="grid">
 <div class="card"><b>Chrome, Edge, Brave</b><ol>
 <li>Download the Chrome zip from the <a href="https://github.com/emirmrkaljevic/truediscount/releases/latest">latest release</a> and unzip it.</li>
@@ -216,6 +217,7 @@ footer{color:var(--mute);font-size:14px;margin-top:48px}a{color:#1d4ed8}
 <details><summary>What is the EU Omnibus 30-day rule?</summary><p>Directive (EU) 2019/2161 requires that any announced price reduction shows the prior price, defined as the lowest price the trader applied in at least the 30 days before the reduction.</p></details>
 <details><summary>Is the verdict legal advice?</summary><p>No. It is information based on prices seen in your browser and on what the shop discloses. To report a shop, contact your national consumer authority.</p></details>
 <details><summary>Does truediscount collect my data?</summary><p>No. See the <a href="privacy.html">privacy policy</a>.</p></details>
+<details><summary>Is it on the Chrome Web Store?</summary><p>Not yet. A listing is coming later. Until then, load the Chrome zip from the <a href="https://github.com/emirmrkaljevic/truediscount/releases/latest">latest release</a> (steps above), or install the <a href="https://github.com/emirmrkaljevic/truediscount/releases/latest/download/truediscount.user.js">userscript</a> with Tampermonkey or Violentmonkey. The userscript is also on <a href="https://greasyfork.org/en/scripts/602599">Greasy Fork</a>.</p></details>
 <details><summary>Is it free?</summary><p>Yes, free and open source (MIT). You can support development through <a href="https://github.com/sponsors/emirmrkaljevic">GitHub Sponsors</a>.</p></details>
 
 <footer>truediscount is open source under the MIT license · <a href="guides/omnibus-enforcement-cases.html">Fake discount fines in the EU</a> · <a href="guides/fake-discount-tricks.html">Fake discount tricks</a> · <a href="guides/report-a-fake-discount.html">Report a fake discount</a> · <a href="black-friday-discount-check.html">How to check if a Black Friday discount is real</a> · <a href="eu-30-day-lowest-price-rule.html">The 30-day rule by country</a> · <a href="supported-shops.html">Supported shops</a> · <a href="https://dev.to/emirmrkaljevic/catching-fake-black-friday-discounts-with-a-400-line-browser-extension-and-the-eus-30-day-rule-541e">How it works (DEV article)</a> · <a href="https://github.com/emirmrkaljevic/truediscount/issues">Report a shop that doesn't work</a></footer>
