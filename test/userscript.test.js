@@ -16,6 +16,7 @@ const cases = [
   ['euronics-deal-live.html', 'www.euronics.it', 'https://www.euronics.it/elettrodomestici/grandi-elettrodomestici/lavatrici/lavatrici-standard/electrolux---lavatrice-serie-600-ew6f19bgz-9kg-1400g-classe-a-bianco/262000523.html'],
   ['aboutyou-sale-live.html', 'www.aboutyou.de', 'https://www.aboutyou.de/p/converse/sneaker-wave-motion-32423052'],
   ['morele-deal-live.html', 'www.morele.net', 'https://www.morele.net/sluchawki-jbl-tune-500-biale-5626721/'],
+  ['unieuro-deal-live.html', 'www.unieuro.it', 'https://www.unieuro.it/online/Monitor/Studio-Display-Vetro-nanotexture-Sostegno-a-altezza-e-inclinazione-regolabile-pidAPLMFF04TA'],
 ];
 
 async function runOn(file, hostname, href, gm = new Map()) {

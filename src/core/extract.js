@@ -99,6 +99,11 @@ export const ADAPTERS = [
   // price when the promotion shows one. "cena bez kodu" is the price without a discount code,
   // not the 30-day low. Another offer column repeats other prices.
   { id: 'morele', host: /(^|\.)morele\.net$/, name: ['h1'] },
+  // Buy box is app-product-prices .custom-price-container. "Prezzo precedente"
+  // is the lowest price charged in the 30 days before the promotion. "Prezzo
+  // consigliato" is only the manufacturer's recommended price. A compare
+  // column or related offer can repeat other prices.
+  { id: 'unieuro', host: /(^|\.)unieuro\.it$/, name: ['h1'] },
 ];
 
 // Text labels shops put next to a reference price, in the main EU languages.
@@ -259,6 +264,36 @@ function aboutyouRead(doc) {
   };
 }
 
+function unieuroBox(doc) {
+  return doc.querySelector('app-product-prices[inproductdetail] .custom-price-container')
+    || doc.querySelector('app-product-prices .custom-price-container')
+    || doc.querySelector('.custom-price-container');
+}
+
+function unieuroRead(doc) {
+  const box = unieuroBox(doc);
+  if (!box) return null;
+  const price = firstPrice(box.querySelector('.current-price')?.textContent);
+  if (price == null) return null;
+  const near = v => typeof v === 'number' && v >= price * 0.2 && v <= price * 20;
+  const previous = firstPrice(box.querySelector('.previous-price')?.textContent);
+  const suggested = firstPrice(box.querySelector('.suggested-price')?.textContent);
+  let oldPrice = null, oldKind = null, shopLow30 = null;
+  if (near(previous)) {
+    shopLow30 = previous;
+    if (previous > price) { oldPrice = previous; oldKind = 'previous'; }
+  }
+  if (oldPrice == null && near(suggested) && suggested > price) {
+    oldPrice = suggested; oldKind = 'rrp';
+  }
+  const canon = doc.querySelector('link[rel="canonical"]')?.getAttribute('href') || '';
+  return {
+    price, oldPrice, oldKind, shopLow30,
+    currency: currencyIn(box.textContent) || 'EUR',
+    sku: canon.match(/-pid([A-Za-z0-9]+)\/?(?:[?#].*)?$/i)?.[1] || null,
+  };
+}
+
 function moreleRead(doc) {
   const box = doc.querySelector('.product-box-main__prices .price-box');
   if (!box) return null;
@@ -288,8 +323,9 @@ export function extract(doc, host) {
   const euronics = adapter?.id === 'euronics' ? euronicsRead(doc) : null;
   const aboutyou = adapter?.id === 'aboutyou' ? aboutyouRead(doc) : null;
   const morele = adapter?.id === 'morele' ? moreleRead(doc) : null;
-  let price = morele?.price ?? aboutyou?.price ?? euronics?.price ?? notino?.price ?? base.price ?? null;
-  if (!notino && !euronics && !aboutyou && !morele && adapter?.price) price = firstPrice(text(doc, adapter.price)) ?? price;
+  const unieuro = adapter?.id === 'unieuro' ? unieuroRead(doc) : null;
+  let price = unieuro?.price ?? morele?.price ?? aboutyou?.price ?? euronics?.price ?? notino?.price ?? base.price ?? null;
+  if (!notino && !euronics && !aboutyou && !morele && !unieuro && adapter?.price) price = firstPrice(text(doc, adapter.price)) ?? price;
   if (price == null) price = genericPrice(doc);
   if (price == null) return null;
   const sels = [...(adapter?.old || []), ...GENERIC_OLD];
@@ -324,12 +360,13 @@ export function extract(doc, host) {
   if (euronics) { oldPrice = euronics.oldPrice; oldKind = euronics.oldKind; }
   if (aboutyou) { oldPrice = aboutyou.oldPrice; oldKind = aboutyou.oldKind; }
   if (morele) { oldPrice = morele.oldPrice; oldKind = morele.oldKind; }
+  if (unieuro) { oldPrice = unieuro.oldPrice; oldKind = unieuro.oldKind; }
   const name = (adapter?.name && text(doc, adapter.name)?.trim()) || base.name || null;
-  const shopLow30 = morele ? morele.shopLow30 : aboutyou ? aboutyou.shopLow30 : euronics ? euronics.shopLow30 : (notino?.shopLow30 ?? shopLowest30(doc, price) ?? (oldPrice && isLow30Label(oldHint) ? oldPrice : null));
+  const shopLow30 = unieuro ? unieuro.shopLow30 : morele ? morele.shopLow30 : aboutyou ? aboutyou.shopLow30 : euronics ? euronics.shopLow30 : (notino?.shopLow30 ?? shopLowest30(doc, price) ?? (oldPrice && isLow30Label(oldHint) ? oldPrice : null));
   return {
     adapter: adapter?.id || 'generic', name, price, oldPrice, oldKind, shopLow30,
-    sku: morele?.sku || aboutyou?.sku || notino?.sku || base.sku || null,
-    currency: morele?.currency || aboutyou?.currency || notino?.currency || base.currency || 'EUR',
+    sku: unieuro?.sku || morele?.sku || aboutyou?.sku || notino?.sku || base.sku || null,
+    currency: unieuro?.currency || morele?.currency || aboutyou?.currency || notino?.currency || base.currency || 'EUR',
   };
 }
 

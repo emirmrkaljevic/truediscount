@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Runs on Unieuro Italy (unieuro.it) and treats the prezzo precedente as the 30-day lowest price. Prezzo consigliato is an RRP only when there is no previous price.
+
 ## 0.13.4 (2026-11-11)
 
 - Runs on Euronics Italy (euronics.it) and treats the barred prezzo precedente as the 30-day lowest price. Prezzo consigliato is an RRP only when there is no previous price.

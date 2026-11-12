@@ -7,6 +7,7 @@ export const SHOP_MATCHES = [
   'otto.de', 'emag.ro', 'emag.bg', 'emag.hu', 'allegro.pl', 'allegro.cz', 'allegro.sk', 'bol.com',
   'notino.at', 'notino.be', 'notino.bg', 'notino.ch', 'notino.cz', 'notino.de', 'notino.dk', 'notino.ee', 'notino.es', 'notino.fi', 'notino.fr', 'notino.gr', 'notino.hr', 'notino.hu', 'notino.ie', 'notino.it', 'notino.lt', 'notino.lv', 'notino.nl', 'notino.pl', 'notino.pt', 'notino.ro', 'notino.se', 'notino.si', 'notino.sk',
   'euronics.it',
+  'unieuro.it',
   'aboutyou.at', 'aboutyou.be', 'aboutyou.bg', 'aboutyou.com.cy', 'aboutyou.cz', 'aboutyou.de', 'aboutyou.dk', 'aboutyou.ee', 'aboutyou.es', 'aboutyou.fi', 'aboutyou.fr', 'aboutyou.gr', 'aboutyou.hr', 'aboutyou.hu', 'aboutyou.it', 'aboutyou.lt', 'aboutyou.lu', 'aboutyou.lv', 'aboutyou.nl', 'aboutyou.pl', 'aboutyou.pt', 'aboutyou.ro', 'aboutyou.se', 'aboutyou.si', 'aboutyou.sk',
   'morele.net',
   'coolblue.nl', 'coolblue.be', 'coolblue.de',
