@@ -216,6 +216,25 @@ test('Unieuro Italy: previous price is the 30-day low, recommended price is not'
   assert.match(message(w2), /RRP/);
 });
 
+
+test('Komputronik: 30-day low is separate from the price without the promotion', () => {
+  const deal = extract(load('komputronik-deal-live.html'), 'www.komputronik.pl');
+  assert.deepEqual([deal.adapter, deal.sku, deal.price, deal.oldPrice, deal.oldKind, deal.shopLow30, deal.currency], ['komputronik', '1033005', 1399, 1689, 'previous', 1429, 'PLN']);
+  assert.match(deal.name, /70mai A900/);
+  const v = evaluate({ price: deal.price, oldPrice: deal.oldPrice, oldKind: deal.oldKind, shopLow30: deal.shopLow30, history: [] });
+  assert.equal(v.status, 'inflated');
+  assert.equal(v.source, 'shop');
+  assert.equal(v.low30, 1429);
+
+  const real = extract(load('komputronik-real-live.html'), 'www.komputronik.pl');
+  assert.deepEqual([real.adapter, real.sku, real.price, real.oldPrice, real.oldKind, real.shopLow30, real.currency], ['komputronik', '1023066', 339, 399, 'previous', 399, 'PLN']);
+  assert.match(real.name, /Silk-épil 7/);
+  const w = evaluate({ price: real.price, oldPrice: real.oldPrice, oldKind: real.oldKind, shopLow30: real.shopLow30, history: [] });
+  assert.equal(w.status, 'real');
+  assert.equal(w.source, 'shop');
+  assert.equal(w.low30, 399);
+});
+
 test("Alternate: live product pages with UVP popover and 30-day Bestpreis popover", () => {
   const uvp = extract(load("alternate-uvp-live.html"), "www.alternate.de");
   assert.deepEqual([uvp.adapter, uvp.sku, uvp.price, uvp.oldPrice, uvp.oldKind, uvp.shopLow30], ["alternate", "100074063", 209.9, 269.9, "rrp", null]);

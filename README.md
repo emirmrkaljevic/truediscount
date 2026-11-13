@@ -44,7 +44,7 @@ Local-first. Prices are stored only in your browser (`storage.local`). No accoun
 
 ## Supported shops
 
-Built-in on Amazon (DE, FR, IT, ES, NL, PL, SE, BE, IE), Zalando (21 countries), MediaMarkt / Saturn / MediaWorld (incl. CH and Italy), Otto, eMAG, Allegro, bol.com, Coolblue, Alternate, Lidl, Notino (25 countries), Euronics (IT), About You (25 EU countries), Morele (PL) and Unieuro (IT). MediaMarkt, MediaWorld, Zalando, Coolblue, Alternate, Lidl, Notino, Euronics Italy, About You, Morele and Unieuro were checked against live product pages in October and November 2026.
+Built-in on Amazon (DE, FR, IT, ES, NL, PL, SE, BE, IE), Zalando (21 countries), MediaMarkt / Saturn / MediaWorld (incl. CH and Italy), Otto, eMAG, Allegro, bol.com, Coolblue, Alternate, Lidl, Notino (25 countries), Euronics (IT), About You (25 EU countries), Morele (PL), Unieuro (IT) and Komputronik (PL). MediaMarkt, MediaWorld, Zalando, Coolblue, Alternate, Lidl, Notino, Euronics Italy, About You, Morele, Unieuro and Komputronik were checked against live product pages in October and November 2026.
 
 Badge missing or wrong? Click **Report a problem** in the popup. It opens a prefilled GitHub issue with just the shop's domain and what was detected, so you can add a product link and submit it.
 

@@ -104,6 +104,12 @@ export const ADAPTERS = [
   // consigliato" is only the manufacturer's recommended price. A compare
   // column or related offer can repeat other prices.
   { id: 'unieuro', host: /(^|\.)unieuro\.it$/, name: ['h1'] },
+  // Buy box is [data-name="productPrice"] in the product column, not a related
+  // product card. The 30-day low is data-price-type="omnibus" ("najniższa z 30 dni").
+  // "bez promocji" (data-price-type="base") is the price before the current
+  // promotion, not the 30-day low. A coupon price and other offer cards
+  // are ignored.
+  { id: 'komputronik', host: /(^|\.)komputronik\.pl$/, name: ['h1'] },
 ];
 
 // Text labels shops put next to a reference price, in the main EU languages.
@@ -316,6 +322,35 @@ function moreleRead(doc) {
   return { price, oldPrice, oldKind, shopLow30, currency: currencyIn(box.textContent), sku };
 }
 
+
+function komputronikBox(doc) {
+  for (const box of doc.querySelectorAll('[data-name="productPrice"]')) {
+    if (box.closest('[data-name="cardProduct"]')) continue;
+    return box;
+  }
+  return null;
+}
+
+function komputronikRead(doc) {
+  const box = komputronikBox(doc);
+  if (!box) return null;
+  const price = firstPrice(box.querySelector('[data-price-type="final"]')?.textContent);
+  if (price == null) return null;
+  const near = v => typeof v === 'number' && v >= price * 0.2 && v <= price * 20;
+  const lowRaw = firstPrice(box.querySelector('[data-price-type="omnibus"]')?.textContent);
+  const shopLow30 = near(lowRaw) ? lowRaw : null;
+  const base = firstPrice(box.querySelector('[data-price-type="base"]')?.textContent);
+  let oldPrice = null, oldKind = null;
+  if (near(base) && base > price) { oldPrice = base; oldKind = 'previous'; }
+  if (oldPrice == null && shopLow30 != null && shopLow30 > price) { oldPrice = shopLow30; oldKind = 'previous'; }
+  const canon = doc.querySelector('link[rel="canonical"]')?.getAttribute('href') || '';
+  return {
+    price, oldPrice, oldKind, shopLow30,
+    currency: currencyIn(box.textContent) || 'PLN',
+    sku: canon.match(/\/product\/(\d+)\b/)?.[1] || null,
+  };
+}
+
 export function extract(doc, host) {
   const adapter = ADAPTERS.find(a => a.host.test(host)) || null;
   const base = fromJsonLd(doc) || fromMicrodata(doc) || {};
@@ -324,8 +359,9 @@ export function extract(doc, host) {
   const aboutyou = adapter?.id === 'aboutyou' ? aboutyouRead(doc) : null;
   const morele = adapter?.id === 'morele' ? moreleRead(doc) : null;
   const unieuro = adapter?.id === 'unieuro' ? unieuroRead(doc) : null;
-  let price = unieuro?.price ?? morele?.price ?? aboutyou?.price ?? euronics?.price ?? notino?.price ?? base.price ?? null;
-  if (!notino && !euronics && !aboutyou && !morele && !unieuro && adapter?.price) price = firstPrice(text(doc, adapter.price)) ?? price;
+  const komputronik = adapter?.id === 'komputronik' ? komputronikRead(doc) : null;
+  let price = komputronik?.price ?? unieuro?.price ?? morele?.price ?? aboutyou?.price ?? euronics?.price ?? notino?.price ?? base.price ?? null;
+  if (!notino && !euronics && !aboutyou && !morele && !unieuro && !komputronik && adapter?.price) price = firstPrice(text(doc, adapter.price)) ?? price;
   if (price == null) price = genericPrice(doc);
   if (price == null) return null;
   const sels = [...(adapter?.old || []), ...GENERIC_OLD];
@@ -361,12 +397,13 @@ export function extract(doc, host) {
   if (aboutyou) { oldPrice = aboutyou.oldPrice; oldKind = aboutyou.oldKind; }
   if (morele) { oldPrice = morele.oldPrice; oldKind = morele.oldKind; }
   if (unieuro) { oldPrice = unieuro.oldPrice; oldKind = unieuro.oldKind; }
+  if (komputronik) { oldPrice = komputronik.oldPrice; oldKind = komputronik.oldKind; }
   const name = (adapter?.name && text(doc, adapter.name)?.trim()) || base.name || null;
-  const shopLow30 = unieuro ? unieuro.shopLow30 : morele ? morele.shopLow30 : aboutyou ? aboutyou.shopLow30 : euronics ? euronics.shopLow30 : (notino?.shopLow30 ?? shopLowest30(doc, price) ?? (oldPrice && isLow30Label(oldHint) ? oldPrice : null));
+  const shopLow30 = komputronik ? komputronik.shopLow30 : unieuro ? unieuro.shopLow30 : morele ? morele.shopLow30 : aboutyou ? aboutyou.shopLow30 : euronics ? euronics.shopLow30 : (notino?.shopLow30 ?? shopLowest30(doc, price) ?? (oldPrice && isLow30Label(oldHint) ? oldPrice : null));
   return {
     adapter: adapter?.id || 'generic', name, price, oldPrice, oldKind, shopLow30,
-    sku: unieuro?.sku || morele?.sku || aboutyou?.sku || notino?.sku || base.sku || null,
-    currency: unieuro?.currency || morele?.currency || aboutyou?.currency || notino?.currency || base.currency || 'EUR',
+    sku: komputronik?.sku || unieuro?.sku || morele?.sku || aboutyou?.sku || notino?.sku || base.sku || null,
+    currency: komputronik?.currency || unieuro?.currency || morele?.currency || aboutyou?.currency || notino?.currency || base.currency || 'EUR',
   };
 }
 
