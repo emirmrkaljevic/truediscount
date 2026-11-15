@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Runs on LDLC (ldlc.com, including the French, Spanish, Italian, Belgian, Swiss and Luxembourg sites) and reads the 30-day lowest price. The JSON-LD list price is not that 30-day price.
 - Runs on Unieuro Italy (unieuro.it) and treats the prezzo precedente as the 30-day lowest price. Prezzo consigliato is an RRP only when there is no previous price.
 - Runs on Komputronik (komputronik.pl) and reads the 30-day lowest price (najniższa z 30 dni), separate from the price before the current promotion.
 

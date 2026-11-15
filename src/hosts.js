@@ -11,6 +11,7 @@ export const SHOP_MATCHES = [
   'aboutyou.at', 'aboutyou.be', 'aboutyou.bg', 'aboutyou.com.cy', 'aboutyou.cz', 'aboutyou.de', 'aboutyou.dk', 'aboutyou.ee', 'aboutyou.es', 'aboutyou.fi', 'aboutyou.fr', 'aboutyou.gr', 'aboutyou.hr', 'aboutyou.hu', 'aboutyou.it', 'aboutyou.lt', 'aboutyou.lu', 'aboutyou.lv', 'aboutyou.nl', 'aboutyou.pl', 'aboutyou.pt', 'aboutyou.ro', 'aboutyou.se', 'aboutyou.si', 'aboutyou.sk',
   'morele.net',
   'komputronik.pl',
+  'ldlc.com',
   'coolblue.nl', 'coolblue.be', 'coolblue.de',
   'lidl.de', 'lidl.at', 'lidl.fr', 'lidl.nl', 'lidl.be', 'lidl.it', 'lidl.es', 'lidl.pl', 'lidl.cz', 'lidl.sk', 'lidl.hu', 'lidl.ro', 'lidl.bg', 'lidl.hr', 'lidl.si', 'lidl.pt', 'lidl.ie', 'lidl.dk', 'lidl.se', 'lidl.fi',
   'alternate.de', 'alternate.nl', 'alternate.be', 'alternate.at',

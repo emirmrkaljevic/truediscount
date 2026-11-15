@@ -18,6 +18,7 @@ const cases = [
   ['morele-deal-live.html', 'www.morele.net', 'https://www.morele.net/sluchawki-jbl-tune-500-biale-5626721/'],
   ['unieuro-deal-live.html', 'www.unieuro.it', 'https://www.unieuro.it/online/Monitor/Studio-Display-Vetro-nanotexture-Sostegno-a-altezza-e-inclinazione-regolabile-pidAPLMFF04TA'],
   ['komputronik-deal-live.html', 'www.komputronik.pl', 'https://www.komputronik.pl/product/1033005/wideorejestrator-70mai-a900-ultra-rc43s.html'],
+  ['ldlc-deal-live.html', 'www.ldlc.com', 'https://www.ldlc.com/fiche/PB00725234.html'],
 ];
 
 async function runOn(file, hostname, href, gm = new Map()) {

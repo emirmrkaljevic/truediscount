@@ -110,6 +110,13 @@ export const ADAPTERS = [
   // promotion, not the 30-day low. A coupon price and other offer cards
   // are ignored.
   { id: 'komputronik', host: /(^|\.)komputronik\.pl$/, name: ['h1'] },
+  // Buy box is #productPriceStock. The asterisked .old-price is the lowest
+  // price charged in the 30 days before the promotion (footnote:
+  // "Prix le plus bas sur LDLC au cours des 30 jours précédents la
+  // promotion", and the same wording in Spanish and Italian). The
+  // JSON-LD ListPrice can be a higher catalogue price, not that
+  // 30-day low. A related product card or eco-contribution is ignored.
+  { id: 'ldlc', host: /(^|\.)ldlc\.com$/, name: ['h1'] },
 ];
 
 // Text labels shops put next to a reference price, in the main EU languages.
@@ -351,6 +358,39 @@ function komputronikRead(doc) {
   };
 }
 
+
+function ldlcBox(doc) {
+  return doc.querySelector('#productPriceStock') || doc.querySelector('.product-infoPrice');
+}
+
+// LDLC prints 125€96, with the euro sign as the decimal separator.
+function ldlcAmount(text) {
+  return firstPrice(String(text || '').replace(/\u00a0/g, ' ').replace(/\*/g, '').replace(/€/, ','));
+}
+
+function ldlcRead(doc) {
+  const box = ldlcBox(doc);
+  if (!box) return null;
+  const price = parsePrice(box.getAttribute('data-price')) ?? ldlcAmount(box.querySelector('.new-price')?.textContent) ?? ldlcAmount(box.querySelector('.product-price .price')?.textContent);
+  if (price == null) return null;
+  const near = v => typeof v === 'number' && v >= price * 0.2 && v <= price * 20;
+  const oldEl = box.querySelector('.product-price .old-price');
+  const previous = oldEl ? ldlcAmount(oldEl.textContent) : null;
+  const mention = doc.querySelector('.previous-price--mention')?.textContent || '';
+  const is30 = /30/.test(mention) && /(plus bas|más bajo|più basso|lowest)/i.test(mention) || !!(oldEl && /\*/.test(oldEl.textContent));
+  let oldPrice = null, oldKind = null, shopLow30 = null;
+  if (near(previous)) {
+    if (is30) shopLow30 = previous;
+    if (previous > price) { oldPrice = previous; oldKind = 'previous'; }
+  }
+  const canon = doc.querySelector('link[rel="canonical"]')?.getAttribute('href') || '';
+  return {
+    price, oldPrice, oldKind, shopLow30,
+    currency: currencyIn(box.textContent) || 'EUR',
+    sku: canon.match(/\/(?:fiche|ficha|scheda)\/(PB\d+)\b/i)?.[1] || null,
+  };
+}
+
 export function extract(doc, host) {
   const adapter = ADAPTERS.find(a => a.host.test(host)) || null;
   const base = fromJsonLd(doc) || fromMicrodata(doc) || {};
@@ -360,8 +400,9 @@ export function extract(doc, host) {
   const morele = adapter?.id === 'morele' ? moreleRead(doc) : null;
   const unieuro = adapter?.id === 'unieuro' ? unieuroRead(doc) : null;
   const komputronik = adapter?.id === 'komputronik' ? komputronikRead(doc) : null;
-  let price = komputronik?.price ?? unieuro?.price ?? morele?.price ?? aboutyou?.price ?? euronics?.price ?? notino?.price ?? base.price ?? null;
-  if (!notino && !euronics && !aboutyou && !morele && !unieuro && !komputronik && adapter?.price) price = firstPrice(text(doc, adapter.price)) ?? price;
+  const ldlc = adapter?.id === 'ldlc' ? ldlcRead(doc) : null;
+  let price = ldlc?.price ?? komputronik?.price ?? unieuro?.price ?? morele?.price ?? aboutyou?.price ?? euronics?.price ?? notino?.price ?? base.price ?? null;
+  if (!notino && !euronics && !aboutyou && !morele && !unieuro && !komputronik && !ldlc && adapter?.price) price = firstPrice(text(doc, adapter.price)) ?? price;
   if (price == null) price = genericPrice(doc);
   if (price == null) return null;
   const sels = [...(adapter?.old || []), ...GENERIC_OLD];
@@ -398,12 +439,13 @@ export function extract(doc, host) {
   if (morele) { oldPrice = morele.oldPrice; oldKind = morele.oldKind; }
   if (unieuro) { oldPrice = unieuro.oldPrice; oldKind = unieuro.oldKind; }
   if (komputronik) { oldPrice = komputronik.oldPrice; oldKind = komputronik.oldKind; }
+  if (ldlc) { oldPrice = ldlc.oldPrice; oldKind = ldlc.oldKind; }
   const name = (adapter?.name && text(doc, adapter.name)?.trim()) || base.name || null;
-  const shopLow30 = komputronik ? komputronik.shopLow30 : unieuro ? unieuro.shopLow30 : morele ? morele.shopLow30 : aboutyou ? aboutyou.shopLow30 : euronics ? euronics.shopLow30 : (notino?.shopLow30 ?? shopLowest30(doc, price) ?? (oldPrice && isLow30Label(oldHint) ? oldPrice : null));
+  const shopLow30 = ldlc ? ldlc.shopLow30 : komputronik ? komputronik.shopLow30 : unieuro ? unieuro.shopLow30 : morele ? morele.shopLow30 : aboutyou ? aboutyou.shopLow30 : euronics ? euronics.shopLow30 : (notino?.shopLow30 ?? shopLowest30(doc, price) ?? (oldPrice && isLow30Label(oldHint) ? oldPrice : null));
   return {
     adapter: adapter?.id || 'generic', name, price, oldPrice, oldKind, shopLow30,
-    sku: komputronik?.sku || unieuro?.sku || morele?.sku || aboutyou?.sku || notino?.sku || base.sku || null,
-    currency: komputronik?.currency || unieuro?.currency || morele?.currency || aboutyou?.currency || notino?.currency || base.currency || 'EUR',
+    sku: ldlc?.sku || komputronik?.sku || unieuro?.sku || morele?.sku || aboutyou?.sku || notino?.sku || base.sku || null,
+    currency: ldlc?.currency || komputronik?.currency || unieuro?.currency || morele?.currency || aboutyou?.currency || notino?.currency || base.currency || 'EUR',
   };
 }
 

@@ -235,6 +235,35 @@ test('Komputronik: 30-day low is separate from the price without the promotion',
   assert.equal(w.low30, 399);
 });
 
+
+test('LDLC: asterisked previous price is the 30-day low, JSON-LD list price is not', () => {
+  const deal = extract(load('ldlc-deal-live.html'), 'www.ldlc.com');
+  assert.deepEqual([deal.adapter, deal.sku, deal.price, deal.oldPrice, deal.oldKind, deal.shopLow30, deal.currency], ['ldlc', 'PB00725234', 109.95, 125.96, 'previous', 125.96, 'EUR']);
+  assert.match(deal.name, /MAG 245C/);
+  const v = evaluate({ price: deal.price, oldPrice: deal.oldPrice, oldKind: deal.oldKind, shopLow30: deal.shopLow30, history: [] });
+  assert.equal(v.status, 'real');
+  assert.equal(v.source, 'shop');
+  assert.equal(v.low30, 125.96);
+
+  const plain = extract(load('ldlc-plain-live.html'), 'www.ldlc.com');
+  assert.deepEqual([plain.adapter, plain.sku, plain.price, plain.oldPrice, plain.oldKind, plain.shopLow30], ['ldlc', 'PB00762778', 199.95, null, null, null]);
+  assert.match(plain.name, /ThinkPad USB4 Dock/);
+  const w = evaluate({ price: plain.price, oldPrice: plain.oldPrice, oldKind: plain.oldKind, shopLow30: plain.shopLow30, history: [] });
+  assert.equal(w.status, 'nodiscount');
+
+  const { document: es } = parseHTML(`<html><head>
+    <link rel="canonical" href="https://www.ldlc.com/es-es/ficha/PB00725234.html">
+    </head><body>
+    <h1>MSI MAG 245C X24</h1>
+    <div class="product-infoPrice" id="productPriceStock" data-price="109.95">
+      <div class="product-price"><div class="price"><div class="old-price">116€96*</div><div class="new-price">109€<sup>95</sup></div></div></div>
+    </div>
+    <div class="previous-price--mention">* Precio más bajo en LDLC en los últimos 30 días antes de la promoción.</div>
+    </body></html>`);
+  const spain = extract(es, 'www.ldlc.com');
+  assert.deepEqual([spain.adapter, spain.sku, spain.price, spain.oldPrice, spain.shopLow30], ['ldlc', 'PB00725234', 109.95, 116.96, 116.96]);
+});
+
 test("Alternate: live product pages with UVP popover and 30-day Bestpreis popover", () => {
   const uvp = extract(load("alternate-uvp-live.html"), "www.alternate.de");
   assert.deepEqual([uvp.adapter, uvp.sku, uvp.price, uvp.oldPrice, uvp.oldKind, uvp.shopLow30], ["alternate", "100074063", 209.9, 269.9, "rrp", null]);
