@@ -12,6 +12,7 @@ export const SHOP_MATCHES = [
   'morele.net',
   'komputronik.pl',
   'ldlc.com',
+  'topachat.com',
   'coolblue.nl', 'coolblue.be', 'coolblue.de',
   'lidl.de', 'lidl.at', 'lidl.fr', 'lidl.nl', 'lidl.be', 'lidl.it', 'lidl.es', 'lidl.pl', 'lidl.cz', 'lidl.sk', 'lidl.hu', 'lidl.ro', 'lidl.bg', 'lidl.hr', 'lidl.si', 'lidl.pt', 'lidl.ie', 'lidl.dk', 'lidl.se', 'lidl.fi',
   'alternate.de', 'alternate.nl', 'alternate.be', 'alternate.at',

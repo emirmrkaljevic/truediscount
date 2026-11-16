@@ -264,6 +264,23 @@ test('LDLC: asterisked previous price is the 30-day low, JSON-LD list price is n
   assert.deepEqual([spain.adapter, spain.sku, spain.price, spain.oldPrice, spain.shopLow30], ['ldlc', 'PB00725234', 109.95, 116.96, 116.96]);
 });
 
+
+test('TopAchat: 30-day low is the previous lowest price, not the usual catalogue price', () => {
+  const deal = extract(load('topachat-deal-live.html'), 'www.topachat.com');
+  assert.deepEqual([deal.adapter, deal.sku, deal.price, deal.oldPrice, deal.oldKind, deal.shopLow30, deal.currency], ['topachat', 'in20032771', 1599.99, 1999.99, 'previous', 1999.99, 'EUR']);
+  assert.match(deal.name, /BLACKSTONE/);
+  const v = evaluate({ price: deal.price, oldPrice: deal.oldPrice, oldKind: deal.oldKind, shopLow30: deal.shopLow30, history: [] });
+  assert.equal(v.status, 'real');
+  assert.equal(v.source, 'shop');
+  assert.equal(v.low30, 1999.99);
+
+  const plain = extract(load('topachat-plain-live.html'), 'www.topachat.com');
+  assert.deepEqual([plain.adapter, plain.sku, plain.price, plain.oldPrice, plain.oldKind, plain.shopLow30], ['topachat', 'in20025379', 489.99, null, null, null]);
+  assert.match(plain.name, /Ryzen 7 9800X3D/);
+  const w = evaluate({ price: plain.price, oldPrice: plain.oldPrice, oldKind: plain.oldKind, shopLow30: plain.shopLow30, history: [] });
+  assert.equal(w.status, 'nodiscount');
+});
+
 test("Alternate: live product pages with UVP popover and 30-day Bestpreis popover", () => {
   const uvp = extract(load("alternate-uvp-live.html"), "www.alternate.de");
   assert.deepEqual([uvp.adapter, uvp.sku, uvp.price, uvp.oldPrice, uvp.oldKind, uvp.shopLow30], ["alternate", "100074063", 209.9, 269.9, "rrp", null]);

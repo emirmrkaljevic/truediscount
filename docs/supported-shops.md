@@ -17,6 +17,7 @@ Where truediscount works out of the box, and how well each shop has been tested.
 | Unieuro | IT | Built-in, reads the previous price as the 30-day lowest price and flags the recommended price | Live product page fixtures from unieuro.it (promotion with a previous price, and a recommended price with no 30-day price) |
 | Komputronik | PL | Built-in, reads the 30-day lowest price and keeps the price before the promotion separate | Live product page fixtures from komputronik.pl (promotion whose "bez promocji" price is not the 30-day low, and a promotion whose 30-day low matches) |
 | LDLC | FR, ES, IT, BE, CH, LU | Built-in, reads the 30-day lowest price and ignores the JSON-LD list price | Live product page fixtures from ldlc.com (promotion whose asterisked previous price is the 30-day low, and a product with no 30-day price). The same price markup was checked on the Spanish and Italian sites |
+| TopAchat | FR | Built-in, reads the 30-day lowest price and keeps the usual catalogue price separate | Live product page fixtures from topachat.com (promotion whose previous lowest price is the 30-day low and differs from the usual catalogue price, and a product with no 30-day price) |
 | Otto | DE | Built-in, generic fallback | Not yet checked on a live page |
 | eMAG | RO, HU, BG | Built-in, generic fallback | Not yet checked on a live page |
 | Allegro | PL, CZ, SK | Built-in, generic fallback | Not yet checked on a live page |
@@ -29,6 +30,6 @@ If the badge is missing or wrong, click **Report a problem** in the popup. It op
 
 Any other shop: open the popup and click **Enable on this site**. Works on pages with schema.org `Product` data (JSON-LD, including `StrikethroughPrice` / `ListPrice`), Open Graph price tags, strike-through markup, or labelled reference prices such as "statt", "UVP", "van", "przed obniżką" or "PRP".
 
-Built-in shops checked against live product pages in October and November 2026: MediaMarkt, MediaWorld IT, Zalando, Coolblue, Alternate, Lidl, Notino, Euronics Italy, About You, Morele, Unieuro, Komputronik and LDLC.
+Built-in shops checked against live product pages in October and November 2026: MediaMarkt, MediaWorld IT, Zalando, Coolblue, Alternate, Lidl, Notino, Euronics Italy, About You, Morele, Unieuro, Komputronik, LDLC and TopAchat.
 
-Back to the [README](../README.md). Last updated 15 November 2026.
+Back to the [README](../README.md). Last updated 16 November 2026.
