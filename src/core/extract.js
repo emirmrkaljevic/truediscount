@@ -124,6 +124,17 @@ export const ADAPTERS = [
   // usual catalogue price, not that 30-day price. A coupon label may
   // sit next to the price on screen. A related product card is ignored.
   { id: 'topachat', host: /(^|\.)topachat\.com$/, name: ['h1'] },
+  // Buy box is .product-actions-container (or .c-product__cart-zone
+  // when there is no promotion). "Prix le + bas sur 30j"
+  // (data-lowest-price-lowest-price-last30-days-value) is the
+  // lowest price charged in the 30 days before the promotion.
+  // "Prix avant promo" (data-lowest-price-original-price-value)
+  // and the JSON-LD ListPrice can be a higher catalogue price,
+  // not that 30-day low. The 30-day figure is also printed
+  // inside .o-product__last-best-price, so that span is not
+  // the price on screen. An eco-contribution or related
+  // product card is ignored.
+  { id: 'materiel', host: /(^|\.)materiel\.net$/, name: ['h1'] },
 ];
 
 
@@ -434,6 +445,36 @@ function topachatRead(doc) {
   };
 }
 
+
+function materielBox(doc) {
+  return doc.querySelector('.product-actions-container') || doc.querySelector('.c-product__cart-zone');
+}
+
+function materielRead(doc) {
+  const box = materielBox(doc);
+  const info = doc.querySelector('[data-controller="lowest-price"]');
+  const price = parsePrice(info?.getAttribute('data-lowest-price-discounted-price-value'))
+    ?? parsePrice(box?.querySelector('[data-controller="payments"]')?.getAttribute('data-price'))
+    ?? parsePrice(box?.getAttribute('data-price'));
+  if (price == null) return null;
+  const near = v => typeof v === 'number' && v >= price * 0.2 && v <= price * 20;
+  const low30 = parsePrice(info?.getAttribute('data-lowest-price-lowest-price-last30-days-value'));
+  const original = parsePrice(info?.getAttribute('data-lowest-price-original-price-value'));
+  let oldPrice = null, oldKind = null, shopLow30 = null;
+  if (near(low30)) shopLow30 = low30;
+  if (near(original) && original > price) { oldPrice = original; oldKind = 'previous'; }
+  if (oldPrice == null && shopLow30 != null && shopLow30 > price) { oldPrice = shopLow30; oldKind = 'previous'; }
+  const sku = doc.querySelector('#c-product__id [data-id], .product-sticky[data-id]')?.getAttribute('data-id')
+    || (doc.querySelector('link[rel="canonical"]')?.getAttribute('href') || '').match(/\/produit\/(\d+)\b/)?.[1]
+    || null;
+  return {
+    price, oldPrice, oldKind, shopLow30,
+    currency: currencyIn(box?.textContent) || 'EUR',
+    sku,
+  };
+}
+
+
 export function extract(doc, host) {
   const adapter = ADAPTERS.find(a => a.host.test(host)) || null;
   const base = fromJsonLd(doc) || fromMicrodata(doc) || {};
@@ -445,8 +486,9 @@ export function extract(doc, host) {
   const komputronik = adapter?.id === 'komputronik' ? komputronikRead(doc) : null;
   const ldlc = adapter?.id === 'ldlc' ? ldlcRead(doc) : null;
   const topachat = adapter?.id === 'topachat' ? topachatRead(doc) : null;
-  let price = topachat?.price ?? ldlc?.price ?? komputronik?.price ?? unieuro?.price ?? morele?.price ?? aboutyou?.price ?? euronics?.price ?? notino?.price ?? base.price ?? null;
-  if (!notino && !euronics && !aboutyou && !morele && !unieuro && !komputronik && !ldlc && !topachat && adapter?.price) price = firstPrice(text(doc, adapter.price)) ?? price;
+  const materiel = adapter?.id === 'materiel' ? materielRead(doc) : null;
+  let price = materiel?.price ?? topachat?.price ?? ldlc?.price ?? komputronik?.price ?? unieuro?.price ?? morele?.price ?? aboutyou?.price ?? euronics?.price ?? notino?.price ?? base.price ?? null;
+  if (!notino && !euronics && !aboutyou && !morele && !unieuro && !komputronik && !ldlc && !topachat && !materiel && adapter?.price) price = firstPrice(text(doc, adapter.price)) ?? price;
   if (price == null) price = genericPrice(doc);
   if (price == null) return null;
   const sels = [...(adapter?.old || []), ...GENERIC_OLD];
@@ -485,12 +527,13 @@ export function extract(doc, host) {
   if (komputronik) { oldPrice = komputronik.oldPrice; oldKind = komputronik.oldKind; }
   if (ldlc) { oldPrice = ldlc.oldPrice; oldKind = ldlc.oldKind; }
   if (topachat) { oldPrice = topachat.oldPrice; oldKind = topachat.oldKind; }
+  if (materiel) { oldPrice = materiel.oldPrice; oldKind = materiel.oldKind; }
   const name = (adapter?.name && text(doc, adapter.name)?.trim()) || base.name || null;
-  const shopLow30 = topachat ? topachat.shopLow30 : ldlc ? ldlc.shopLow30 : komputronik ? komputronik.shopLow30 : unieuro ? unieuro.shopLow30 : morele ? morele.shopLow30 : aboutyou ? aboutyou.shopLow30 : euronics ? euronics.shopLow30 : (notino?.shopLow30 ?? shopLowest30(doc, price) ?? (oldPrice && isLow30Label(oldHint) ? oldPrice : null));
+  const shopLow30 = materiel ? materiel.shopLow30 : topachat ? topachat.shopLow30 : ldlc ? ldlc.shopLow30 : komputronik ? komputronik.shopLow30 : unieuro ? unieuro.shopLow30 : morele ? morele.shopLow30 : aboutyou ? aboutyou.shopLow30 : euronics ? euronics.shopLow30 : (notino?.shopLow30 ?? shopLowest30(doc, price) ?? (oldPrice && isLow30Label(oldHint) ? oldPrice : null));
   return {
     adapter: adapter?.id || 'generic', name, price, oldPrice, oldKind, shopLow30,
-    sku: topachat?.sku || ldlc?.sku || komputronik?.sku || unieuro?.sku || morele?.sku || aboutyou?.sku || notino?.sku || base.sku || null,
-    currency: topachat?.currency || ldlc?.currency || komputronik?.currency || unieuro?.currency || morele?.currency || aboutyou?.currency || notino?.currency || base.currency || 'EUR',
+    sku: materiel?.sku || topachat?.sku || ldlc?.sku || komputronik?.sku || unieuro?.sku || morele?.sku || aboutyou?.sku || notino?.sku || base.sku || null,
+    currency: materiel?.currency || topachat?.currency || ldlc?.currency || komputronik?.currency || unieuro?.currency || morele?.currency || aboutyou?.currency || notino?.currency || base.currency || 'EUR',
   };
 }
 

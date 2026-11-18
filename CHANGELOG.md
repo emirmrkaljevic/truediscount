@@ -2,6 +2,7 @@
 
 ## Unreleased
 
+- Runs on Materiel.net and reads the 30-day lowest price. The price before the promotion and the JSON-LD list price are not that 30-day price.
 - Runs on TopAchat (topachat.com) and reads the 30-day lowest price. The usual catalogue price is not that 30-day price.
 - Runs on LDLC (ldlc.com, including the French, Spanish, Italian, Belgian, Swiss and Luxembourg sites) and reads the 30-day lowest price. The JSON-LD list price is not that 30-day price.
 - Runs on Unieuro Italy (unieuro.it) and treats the prezzo precedente as the 30-day lowest price. Prezzo consigliato is an RRP only when there is no previous price.

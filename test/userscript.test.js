@@ -20,6 +20,7 @@ const cases = [
   ['komputronik-deal-live.html', 'www.komputronik.pl', 'https://www.komputronik.pl/product/1033005/wideorejestrator-70mai-a900-ultra-rc43s.html'],
   ['ldlc-deal-live.html', 'www.ldlc.com', 'https://www.ldlc.com/fiche/PB00725234.html'],
   ['topachat-deal-live.html', 'www.topachat.com', 'https://www.topachat.com/pages/detail2_cat_est_ordinateurs_puis_rubrique_est_w_pcgam_ta_puis_ref_est_in20032771.html'],
+  ['materiel-deal-live.html', 'www.materiel.net', 'https://www.materiel.net/produit/202504180060.html'],
 ];
 
 async function runOn(file, hostname, href, gm = new Map()) {

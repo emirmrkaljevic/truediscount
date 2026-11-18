@@ -281,6 +281,31 @@ test('TopAchat: 30-day low is the previous lowest price, not the usual catalogue
   assert.equal(w.status, 'nodiscount');
 });
 
+
+test('Materiel.net: 30-day low is separate from the price before the promotion', () => {
+  const deal = extract(load('materiel-deal-live.html'), 'www.materiel.net');
+  assert.deepEqual([deal.adapter, deal.sku, deal.price, deal.oldPrice, deal.oldKind, deal.shopLow30, deal.currency], ['materiel', 'AR202504180060', 629.95, 799.95, 'previous', 599.95, 'EUR']);
+  assert.match(deal.name, /AG276UZD/);
+  const v = evaluate({ price: deal.price, oldPrice: deal.oldPrice, oldKind: deal.oldKind, shopLow30: deal.shopLow30, history: [] });
+  assert.equal(v.status, 'higher');
+  assert.equal(v.source, 'shop');
+  assert.equal(v.low30, 599.95);
+
+  const real = extract(load('materiel-real-live.html'), 'www.materiel.net');
+  assert.deepEqual([real.adapter, real.sku, real.price, real.oldPrice, real.oldKind, real.shopLow30, real.currency], ['materiel', 'AR202402060218', 399.95, 579.95, 'previous', 579.95, 'EUR']);
+  assert.match(real.name, /Vero CB343/);
+  const w = evaluate({ price: real.price, oldPrice: real.oldPrice, oldKind: real.oldKind, shopLow30: real.shopLow30, history: [] });
+  assert.equal(w.status, 'real');
+  assert.equal(w.source, 'shop');
+  assert.equal(w.low30, 579.95);
+
+  const plain = extract(load('materiel-plain-live.html'), 'www.materiel.net');
+  assert.deepEqual([plain.adapter, plain.sku, plain.price, plain.oldPrice, plain.oldKind, plain.shopLow30], ['materiel', 'AR202606250022', 1699.95, null, null, null]);
+  assert.match(plain.name, /Player One/);
+  const x = evaluate({ price: plain.price, oldPrice: plain.oldPrice, oldKind: plain.oldKind, shopLow30: plain.shopLow30, history: [] });
+  assert.equal(x.status, 'nodiscount');
+});
+
 test("Alternate: live product pages with UVP popover and 30-day Bestpreis popover", () => {
   const uvp = extract(load("alternate-uvp-live.html"), "www.alternate.de");
   assert.deepEqual([uvp.adapter, uvp.sku, uvp.price, uvp.oldPrice, uvp.oldKind, uvp.shopLow30], ["alternate", "100074063", 209.9, 269.9, "rrp", null]);
