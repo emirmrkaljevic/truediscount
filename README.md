@@ -52,13 +52,19 @@ Prices are stored only in your browser. You can clear everything from the popup,
 
 ## Docs
 
-- [Supported shops](docs/supported-shops.md) (also on the [website](https://emirmrkaljevic.github.io/truediscount/supported-shops.html))
-- [The EU 30-day lowest price rule](docs/omnibus.md)
-- [Development](docs/development.md)
-- [Privacy](PRIVACY.md)
-- [Changelog](CHANGELOG.md)
-- Website: https://emirmrkaljevic.github.io/truediscount/
-- How I built it: [Catching fake Black Friday discounts with a 400-line browser extension (and the EU's 30-day rule)](https://dev.to/emirmrkaljevic/catching-fake-black-friday-discounts-with-a-400-line-browser-extension-and-the-eus-30-day-rule-541e) on DEV
+- [Supported shops](docs/supported-shops.md): every built-in shop, its countries and how it was tested
+- [The EU 30-day lowest price rule](docs/omnibus.md): what the rule says, first-visit verdicts, alerts, watchlist and backup
+- [Development](docs/development.md): build, test, add a shop and sideload in Firefox
+- [Guides](docs/guides/README.md): short guides on fake discounts
+  - [How to check if a Black Friday discount is real](docs/guides/black-friday-check.md): a one-minute check and a checklist
+  - [Fake discount tricks](docs/guides/fake-discount-tricks.md): seven tricks and how to spot them
+  - [Fake discount fines in the EU](docs/guides/omnibus-enforcement-cases.md): court rulings and fines with sources
+  - [Where to report a fake discount](docs/guides/report-a-fake-discount.md): authorities by country
+  - [30-day price labels by country](docs/guides/price-labels.md): the wording shops use in each language
+- [Privacy](PRIVACY.md): what is stored, where, and for how long
+- [Changelog](CHANGELOG.md): what changed in each release
+- [Website](https://emirmrkaljevic.github.io/truediscount/): live demo and the guides as web pages (source in `site/`)
+- [How I built it](https://dev.to/emirmrkaljevic/catching-fake-black-friday-discounts-with-a-400-line-browser-extension-and-the-eus-30-day-rule-541e): a write-up on DEV
 
 ## License
 
