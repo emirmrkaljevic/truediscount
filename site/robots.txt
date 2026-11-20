@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://emirmrkaljevic.github.io/truediscount/sitemap.xml
