@@ -1,6 +1,6 @@
 # Supported shops
 
-Where truediscount works out of the box, and how well each shop has been tested. This is the same table as the [website page](supported-shops.html).
+Where truediscount works out of the box, and how well each shop has been tested. Back to the [README](../README.md). The same table is on the [website](https://emirmrkaljevic.github.io/truediscount/supported-shops.html).
 
 | Shop | Countries | Support | Tested against |
 | --- | --- | --- | --- |

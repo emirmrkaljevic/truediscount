@@ -1,8 +1,10 @@
 # The EU 30-day lowest price rule
 
+What the rule says and how truediscount uses it on a product page. For install steps, see the [README](../README.md).
+
 Under the EU Omnibus Directive (2019/2161), a shop announcing a price reduction must use the lowest price of the previous 30 days as the reference "old price". Many Black Friday deals don't. truediscount remembers the prices you see while browsing and tells you, right on the product page, whether the claimed discount holds up.
 
-A longer country-by-country guide lives on the website: [The EU 30-day lowest price rule](eu-30-day-lowest-price-rule.html). Related pages: [How to check if a Black Friday discount is real](black-friday-discount-check.html), [Fake discount tricks](guides/fake-discount-tricks.html), [Fake discount fines in the EU](guides/omnibus-enforcement-cases.html), [Report a fake discount](guides/report-a-fake-discount.html).
+The shop labels for this price in each EU language are in [30-day price labels by country](guides/price-labels.md). More background is in the [guides](guides/README.md).
 
 ## Works on the first visit
 

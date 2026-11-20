@@ -1,5 +1,7 @@
 # Development
 
+How to build and test truediscount, add a shop and sideload it in Firefox. For normal installs, see the [README](../README.md#install).
+
 ```sh
 npm install
 npm test        # unit tests on HTML fixtures
@@ -21,6 +23,8 @@ Temporary add-ons are removed when Firefox restarts, so the [addons.mozilla.org 
 3. Click **Load Temporary Add-on…** and select the zip.
 
 If you want the manual zip to survive a restart, Firefox Developer Edition, Nightly and ESR can keep it installed: set `xpinstall.signatures.required` to `false` in `about:config`, then install the zip from `about:addons` → gear menu → **Install Add-on From File**.
+
+The website is plain HTML in `site/` and is deployed to GitHub Pages by `.github/workflows/pages.yml` on every push to `main` that touches `site/` or `docs/`.
 
 Translations are in `_locales/<lang>/messages.json`. Pull requests for more EU languages are welcome.
 
